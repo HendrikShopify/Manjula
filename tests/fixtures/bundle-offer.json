@@ -1,0 +1,24 @@
+{
+  "snippet": "bundle-offer",
+  "figma": "Sections / Bundle offer (2098:26426)",
+  "matrix": {},
+  "params": {
+    "product": {
+      "title": "ESSENTIALS SET",
+      "available": true,
+      "selected_or_first_available_variant": { "id": 1, "price": 25000, "compare_at_price": 27500, "available": true }
+    },
+    "items": [
+      { "settings": { "title": "Hair oil", "size": "100ml", "description": "Softens, Strengthens, Smooths", "product": { "title": "HAIR OIL" } } },
+      { "settings": { "title": "Face oil", "size": "30ml", "description": "Brightens, Calms, Hydrates", "product": { "title": "FACE OIL" } } },
+      { "settings": { "title": "Body oil", "size": "100ml", "description": "Softens, Smooths, Hydrates", "product": { "title": "BODY OIL" } } }
+    ],
+    "eyebrow": "The complete MANJULA ritual",
+    "heading": "All three oils, $25 off",
+    "button_label": "Add all three to cart",
+    "note_text": "Not sure yet?",
+    "note_link_label": "Try all three essentials oils in discovery size",
+    "note_link_url": "#"
+  },
+  "extras": []
+}

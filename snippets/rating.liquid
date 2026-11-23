@@ -2,7 +2,7 @@
   Figma: Components Atoms / Rating
   value        0 to 5, drives the stars and the score text   (Figma: Score)
   count        number of reviews                             (Figma: Count)
-  size         sm | md                                       (Figma: Size)
+  size         sm | md | compact   compact = one Ink star, score · "156 reviews" at 50% (Manjula PDP)   (Figma: Size)
   show_score   boolean, default true                         (Figma: Show score)
   show_count   boolean, default true                         (Figma: Show count)
   class        placement only
@@ -23,6 +23,18 @@
     assign count_text = 'text-body-sm'
   endif
 -%}
+{%- if size == 'compact' -%}
+  {%- assign count_label = 'products.product.rating_count' | t: count: count -%}
+  <div class="rating inline-flex items-center gap-2 text-label-base text-text {{ class }}" data-size="compact">
+    <span class="size-3 shrink-0 [&>svg]:size-full" aria-hidden="true">{{ 'icon__star.svg' | inline_asset_content }}</span>
+    <span class="sr-only">{{ 'products.product.rating_stars' | t: value: value }}</span>
+    {%- if show_score %}<span aria-hidden="true">{{ value | times: 1.0 | round: 1 }}</span>{% endif -%}
+    {%- if show_count -%}
+      <span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
+      <span class="opacity-50">{{ count_label }}</span>
+    {%- endif -%}
+  </div>
+{%- else -%}
 <div class="rating inline-flex items-center gap-2 {{ class }}" data-size="{{ size }}">
   {%- render 'rating-stars', value: value, size: size -%}
   {%- if show_score or show_count -%}
@@ -32,3 +44,4 @@
     </span>
   {%- endif -%}
 </div>
+{%- endif -%}

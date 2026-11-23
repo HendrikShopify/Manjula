@@ -1,0 +1,45 @@
+{%- comment -%}
+  Figma: Components Molecules / Before after slider (2112:23379), with Slider handle (2112:23376)
+  before, after   image objects (empty renders the Media placeholder)
+  start           seam position in percent, default 44 (Figma: Reveal at 43.57%)
+  sizes           sizes attribute for both images
+  show_labels     boolean, default true                       (Figma: Show labels)
+  class           placement and height (the parent sets the size)
+  The before photo fills the frame; the after photo shows to the right of the seam. A native range input covers the
+  frame, so drag, click and the arrow keys all move the seam. JS: before-after-slider.js sets --position.
+{%- endcomment -%}
+{%- liquid
+  assign start = start | default: 44
+  assign sizes = sizes | default: '100vw'
+  unless show_labels == false
+    assign show_labels = true
+  endunless
+  assign before_label = 'sections.trial_results.before' | t
+  assign after_label = 'sections.trial_results.after' | t
+  assign range_label = 'sections.trial_results.slider' | t
+-%}
+<script src="{{ 'before-after-slider.js' | asset_url }}" defer="defer"></script>
+<before-after-slider class="before-after-slider relative block overflow-hidden bg-surface-alt {{ class }}" style="--position: {{ start }}%;">
+  {% render 'media', media: before, ratio: 'fill', sizes: sizes, class: 'absolute! inset-0 size-full' %}
+  <div class="absolute inset-0 [clip-path:inset(0_0_0_var(--position))]" data-after>
+    {% render 'media', media: after, ratio: 'fill', sizes: sizes, class: 'absolute! inset-0 size-full' %}
+  </div>
+  {%- if show_labels -%}
+    {% render 'badge', label: before_label, style: 'glass', class: 'pointer-events-none absolute top-1.5 left-1.5' %}
+    {% render 'badge', label: after_label, style: 'glass', class: 'pointer-events-none absolute top-1.5 right-1.5' %}
+  {%- endif -%}
+  <span class="pointer-events-none absolute top-1/2 left-(--position) flex size-10.25 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-background/40 bg-background/7 text-background backdrop-blur-sm" aria-hidden="true" data-handle>
+    <span class="w-3.75 [&>svg]:block [&>svg]:h-auto [&>svg]:w-full">{{ 'icon__slider-arrows.svg' | inline_asset_content }}</span>
+  </span>
+  <input
+    type="range"
+    min="0"
+    max="100"
+    step="1"
+    value="{{ start }}"
+    aria-label="{{ range_label | escape }}"
+    class="peer absolute inset-0 size-full cursor-ew-resize appearance-none opacity-0"
+    data-before-after-range
+  >
+  <span class="pointer-events-none absolute inset-0 outline-1 -outline-offset-2 outline-focus not-peer-focus-visible:hidden" aria-hidden="true"></span>
+</before-after-slider>

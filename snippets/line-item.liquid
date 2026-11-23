@@ -2,9 +2,20 @@
   Figma: Components Atoms / Cart line item
   item      cart line item
   layout    drawer | page | drawer-row                              (Figma: Layout)
+  Drawer (Manjula, Cart line item 150:4153): Surface card (20/24 padding), 90x110 image, title (heading/4) • size, price
+    top right. Plan is derived: One-time (Delivered once selector when the product has selling plans, xs quantity, Remove,
+    and the Subscribe & save upsell for the first plan), Subscription (plan price with the one-time price struck through,
+    plan selector, Subscription • n% off tag) and Gift (gift: true, the free mini: Surface alt, note and Free gift badge, no
+    quantity or Remove; the theme adds and removes it, see cart-drawer). Size = product custom.size, then the
+    variant title (the Google Shopping size is for the feed only).
+    Image = product custom.packaging_image (Bottle with packaging, Hendrik 23 Nov), else the line's own image.
+    Delivery is a custom-select (custom-select.js) over a hidden input[data-cart-plan][data-index] (value '' = one-time); hooks for cart.js, button[data-cart-subscribe][data-index]
+    [data-plan].
+  gift      true for the free mini line (drawer layout)
   show_options, show_selling_plan, show_discount, show_error       booleans, default true (Figma: Show …)
   id_prefix id prefix, e.g. CartDrawer-Item or CartItem
-  Keeps the hooks cart.js relies on: quantity input with name="updates[]", data-index, data-quantity-variant-id;
+  Keeps the hooks cart.js relies on: quantity input with name="updates[<line key>]" (keyed, so line order in the markup
+  does not matter), data-index, data-quantity-variant-id;
   <cart-remove-button data-index>; per-line error with data-cart-item-error.
 {%- endcomment -%}
 {%- liquid
@@ -44,12 +55,172 @@
   assign qty_label = 'products.product.quantity.input_label' | t: product: item.product.title
   assign cart_qty = cart | item_count_for_variant: item.variant.id
   assign qty_attrs = 'data-index="' | append: line | append: '" data-quantity-variant-id="' | append: item.variant.id | append: '"'
+  assign qty_name = 'updates[' | append: item.key | append: ']'
   assign remove_label = 'sections.cart.remove' | t
   assign error_id = id_prefix | append: '-error-' | append: line
 -%}
+{%- assign line_image = item.product.metafields.custom.packaging_image.value | default: item.image -%}
+{%- if layout == 'drawer' -%}
+  {%- liquid
+    assign is_gift = false
+    if gift
+      assign is_gift = true
+    endif
+    assign size_label = item.product.metafields.custom.size.value
+    if size_label == blank and item.product.has_only_default_variant == false
+      assign size_label = item.variant.title
+    endif
+    assign plan_allocation = item.selling_plan_allocation
+    assign has_plans = false
+    if item.product.selling_plan_groups.size > 0 and is_gift == false
+      assign has_plans = true
+    endif
+    assign upsell_allocation = nil
+    if has_plans and plan_allocation == nil
+      assign upsell_allocation = item.variant.selling_plan_allocations | first
+    endif
+    assign card = 'bg-surface px-6 py-5'
+    if is_gift
+      assign card = 'bg-surface-alt p-2'
+    endif
+  -%}
+  {%- if plan_allocation -%}
+    {%- liquid
+      assign plan_percent = 0
+      if plan_allocation.compare_at_price > 0
+        assign plan_percent = plan_allocation.compare_at_price | minus: plan_allocation.price | times: 100.0 | divided_by: plan_allocation.compare_at_price | round
+      endif
+    -%}
+    {%- capture plan_tag -%}
+      <span class="size-4 shrink-0 [&>svg]:size-full" aria-hidden="true">{{ 'icon__coupon.svg' | inline_asset_content }}</span>
+      <span>{{- 'sections.cart.subscription' | t -}}</span>
+      {%- if plan_percent > 0 -%}
+        <span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span><span>{{ 'sections.cart.percent_off' | t: percent: plan_percent }}</span>
+      {%- endif -%}
+    {%- endcapture -%}
+  {%- endif -%}
+  <li class="line-item flex flex-col gap-3 {{ card }}" id="{{ id_prefix }}-{{ line }}" data-line="{{ line }}" data-layout="drawer"{% if is_gift %} data-gift{% endif %}>
+    <div class="flex items-start gap-5">
+      {%- comment -%} The free mini has no page of its own (it redirects to the full oil), so a gift line does not link. {%- endcomment -%}
+      {%- if is_gift -%}
+        <div class="h-27.5 w-22.5 shrink-0 bg-surface-alt">
+          {% render 'media', media: line_image, ratio: 'fill', sizes: '90px', class: 'size-full' %}
+        </div>
+      {%- else -%}
+        <a href="{{ item.url }}" class="h-27.5 w-22.5 shrink-0 bg-surface-alt" tabindex="-1" aria-hidden="true">
+          {% render 'media', media: line_image, ratio: 'fill', sizes: '90px', class: 'size-full' %}
+        </a>
+      {%- endif -%}
+      <div class="flex min-w-0 flex-1 gap-5 self-stretch py-3 {% if is_gift %}items-center{% else %}items-start{% endif %}">
+        <div class="flex min-w-0 flex-1 flex-col items-start gap-3">
+          <p class="flex flex-wrap items-center gap-1.5 text-text">
+            {%- if is_gift -%}
+              <span class="text-heading-4">{{ item.product.title | escape }}</span>
+            {%- else -%}
+              <a href="{{ item.url }}" class="text-heading-4 decoration-1 underline-offset-[0.15em] hover:underline">{{ item.product.title | escape }}</a>
+            {%- endif -%}
+            {%- if size_label != blank -%}
+              <span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
+              <span class="text-label-base">{{ size_label | escape }}</span>
+            {%- endif -%}
+          </p>
+          {%- if is_gift -%}
+            <p class="text-body-sm text-text-muted">{{ 'sections.cart.gift_note' | t }}</p>
+            {%- assign gift_label = 'sections.cart.free_gift' | t -%}
+            {% render 'badge', label: gift_label, type: 'new', size: 'sm' %}
+            <input type="hidden" name="{{ qty_name }}" value="{{ item.quantity }}">
+          {%- else -%}
+            {%- if has_plans -%}
+              {%- assign once_label = 'sections.cart.delivered_once' | t -%}
+              {%- liquid
+                assign plan_id = id_prefix | append: '-plan-' | append: line
+                assign plan_listbox = plan_id | append: '-listbox'
+                assign current_plan = plan_allocation.selling_plan.id | default: ''
+                assign delivery_label = 'sections.cart.delivery_label' | t: product: item.product.title
+              -%}
+              {%- capture plan_items -%}
+                {%- assign option_id = plan_id | append: '-once' -%}
+                {%- if current_plan == '' %}{% assign once_selected = true %}{% else %}{% assign once_selected = false %}{% endif -%}
+                {% render 'menu-item', label: once_label, value: '', selected: once_selected, id: option_id, size: 'sm' %}
+                {%- for group in item.product.selling_plan_groups -%}
+                  {%- for plan in group.selling_plans -%}
+                    {%- liquid
+                      assign option_id = plan_id | append: '-' | append: plan.id
+                      assign plan_selected = false
+                      if plan.id == current_plan
+                        assign plan_selected = true
+                      endif
+                    -%}
+                    {%- comment -%} Plan name minus its savings suffix (", 15% off"); the tag below shows the saving {%- endcomment -%}
+                    {%- assign plan_label = plan.name | split: ', ' | first -%}
+                    {% render 'menu-item', label: plan_label, value: plan.id, selected: plan_selected, id: option_id, size: 'sm' %}
+                  {%- endfor -%}
+                {%- endfor -%}
+              {%- endcapture -%}
+              {%- comment -%} Below md a long plan name wraps; the button turns into a block so the caret follows the last word. {%- endcomment -%}
+              <custom-select class="relative inline-flex">
+                <button type="button" class="inline-flex h-5.5 cursor-pointer items-center gap-1 py-1 text-label-base max-md:block max-md:h-auto max-md:text-left text-text underline outline-none transition-colors hover:text-text-muted focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus" id="{{ plan_id }}" aria-haspopup="listbox" aria-expanded="false" aria-controls="{{ plan_listbox }}">
+                  <span class="sr-only">{{ delivery_label }}:</span>
+                  <span data-selected-label>{% if plan_allocation %}{{ plan_allocation.selling_plan.name | split: ', ' | first | escape }}{% else %}{{ once_label }}{% endif %}</span>
+                  <span class="select__chevron inline-flex transition-transform max-md:ml-1 max-md:align-middle [&>svg]:h-0.75 [&>svg]:w-1.25" aria-hidden="true">{{ 'icon__caret-down.svg' | inline_asset_content }}</span>
+                </button>
+                {%- comment -%} Below md the menu starts at the image's left edge (image w-22.5 + gap-5 = 27.5) so the plan names fit. {%- endcomment -%}
+                {% render 'dropdown-menu', items: plan_items, id: plan_listbox, labelledby: plan_id, width: 'w-max min-w-60', class: 'max-md:-left-27.5' %}
+                <input type="hidden" value="{{ current_plan }}" data-cart-plan data-index="{{ line }}">
+              </custom-select>
+            {%- endif -%}
+            <div class="flex items-center gap-3">
+              {% render 'quantity-selector', id: qty_id, name: qty_name, value: item.quantity, min: item.variant.quantity_rule.min, max: item.variant.quantity_rule.max, step: item.variant.quantity_rule.increment, size: 'xs', product_title: item.product.title, label: qty_label, cart_qty: cart_qty, attributes: qty_attrs %}
+              <cart-remove-button data-index="{{ line }}" class="inline-flex">
+                {% render 'link', label: remove_label, size: 'inline' %}
+              </cart-remove-button>
+            </div>
+            {%- if plan_allocation %}<p class="flex items-center gap-1 text-label-base text-text md:hidden">{{ plan_tag }}</p>{% endif -%}
+            {%- if show_error %}{% render 'helper-text', text: '', type: 'error', id: error_id, attributes: 'hidden data-cart-item-error' %}{% endif -%}
+          {%- endif -%}
+        </div>
+        {%- if is_gift == false or item.final_line_price > 0 -%}
+          {%- comment -%} Below md the column is as wide as its longest price, so a plan price and the struck one-time price stack. {%- endcomment -%}
+          <div class="flex shrink-0 flex-col items-end justify-between gap-2 self-stretch max-md:w-min">
+            {%- if plan_allocation -%}
+              {%- assign plan_compare = plan_allocation.compare_at_price | times: item.quantity -%}
+              {% render 'price', price: item.final_line_price, compare_at_price: plan_compare, size: 'sm' %}
+              <p class="flex items-center gap-1 text-label-base text-text max-md:hidden">{{ plan_tag }}</p>
+            {%- else -%}
+              {% render 'price', price: item.final_line_price, compare_at_price: item.original_line_price, size: 'sm' %}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+    {%- if upsell_allocation -%}
+      {%- liquid
+        assign plan_line_price = upsell_allocation.price | times: item.quantity
+        assign upsell_saving = item.final_line_price | minus: plan_line_price
+      -%}
+      {%- if upsell_saving > 0 -%}
+        {%- liquid
+          assign saving_money = upsell_saving | money
+          assign one_time_money = item.final_line_price | money
+          assign versus_label = 'sections.cart.versus' | t: price: one_time_money
+          assign subscribe_label = 'sections.cart.subscribe_save' | t: amount: saving_money
+          assign subscribe_attrs = 'data-cart-subscribe data-index="' | append: line | append: '" data-plan="' | append: upsell_allocation.selling_plan.id | append: '"'
+        -%}
+        <div class="flex flex-col gap-2">
+          {% render 'button', label: subscribe_label, style: 'secondary', size: 'md', type: 'button', class: 'w-full', attributes: subscribe_attrs %}
+          <p class="flex flex-wrap items-center justify-center gap-2 text-label-sm">
+            <span class="text-text">{{ plan_line_price | money }} <span class="text-text-muted">{{ versus_label }}</span></span>
+            <span class="size-1 shrink-0 rounded-full bg-text-muted" aria-hidden="true"></span>
+            <span class="text-text-muted">{{ 'sections.cart.subscription_note' | t }}</span>
+          </p>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </li>
+{%- else -%}
 {%- capture actions_html -%}
   <div class="{{ actions }}">
-    {% render 'quantity-selector', id: qty_id, name: 'updates[]', value: item.quantity, min: item.variant.quantity_rule.min, max: item.variant.quantity_rule.max, step: item.variant.quantity_rule.increment, size: 'sm', product_title: item.product.title, label: qty_label, cart_qty: cart_qty, attributes: qty_attrs %}
+    {% render 'quantity-selector', id: qty_id, name: qty_name, value: item.quantity, min: item.variant.quantity_rule.min, max: item.variant.quantity_rule.max, step: item.variant.quantity_rule.increment, size: 'sm', product_title: item.product.title, label: qty_label, cart_qty: cart_qty, attributes: qty_attrs %}
     <cart-remove-button data-index="{{ line }}" class="inline-flex">
       {% render 'link', label: remove_label, size: 'sm' %}
     </cart-remove-button>
@@ -57,7 +228,7 @@
 {%- endcapture -%}
 <li class="line-item flex flex-wrap lg:flex-nowrap {{ gap }}" id="{{ id_prefix }}-{{ line }}" data-line="{{ line }}" data-layout="{{ layout }}">
   <a href="{{ item.url }}" class="{{ image }} shrink-0" tabindex="-1" aria-hidden="true">
-    {% render 'media', media: item.image, ratio: '1:1', sizes: '140px' %}
+    {% render 'media', media: line_image, ratio: '1:1', sizes: '140px' %}
   </a>
 
   <div class="flex min-w-0 flex-1 flex-col gap-3">
@@ -85,7 +256,7 @@
           </dl>
         {%- endif -%}
       {%- endif -%}
-      {%- if show_selling_plan and item.selling_plan_allocation %}<span class="text-body-xs text-text-muted">{{ item.selling_plan_allocation.selling_plan.name }}</span>{% endif -%}
+      {%- if show_selling_plan and item.selling_plan_allocation %}<span class="text-body-xs text-text-muted">{{ item.selling_plan_allocation.selling_plan.name | split: ', ' | first }}</span>{% endif -%}
     </div>
 
     <div class="flex flex-col items-start gap-2">
@@ -104,3 +275,4 @@
 
   {%- unless actions_in_content %}{{ actions_html }}{% endunless -%}
 </li>
+{%- endif -%}

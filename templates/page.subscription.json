@@ -1,0 +1,109 @@
+{
+  "sections": {
+    "hero": {
+      "type": "video-statement",
+      "settings": {
+        "heading": "The best routine is the one you keep.",
+        "text": "Your oils arrive before you run out, so the routine never breaks.",
+        "media_type": "image",
+        "image": "shopify://shop_images/subscription-hero.jpg"
+      }
+    },
+    "benefits": {
+      "type": "horizontal-scroll",
+      "blocks": {
+        "save": {
+          "type": "step",
+          "settings": {
+            "title": "Save on every order",
+            "text": "15% off every delivery, plus free shipping. Cheaper than buying one bottle at a time.",
+            "image": "shopify://shop_images/subscription-step1.jpg"
+          }
+        },
+        "never-run-out": {
+          "type": "step",
+          "settings": {
+            "title": "Never run out",
+            "text": "Your oil arrives before the last bottle is empty. Pick every 2, 3 or 4 months.",
+            "image": "shopify://shop_images/subscription-step2.jpg"
+          }
+        },
+        "skip": {
+          "type": "step",
+          "settings": {
+            "title": "Skip, swap or pause anytime",
+            "text": "Your oil arrives before the last bottle is empty. Pick every 2, 3 or 4 months.",
+            "image": "shopify://shop_images/subscription-step3.jpg"
+          }
+        },
+        "cancel": {
+          "type": "step",
+          "settings": {
+            "title": "Cancel in two clicks",
+            "text": "No calls, no emails, no minimum term. If it isn't working for you, stop whenever you want.",
+            "image": "shopify://shop_images/subscription-step4.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "save",
+        "never-run-out",
+        "skip",
+        "cancel"
+      ],
+      "settings": {}
+    },
+    "testimonial": {
+      "type": "testimonial-quote",
+      "settings": {
+        "quote": "\"The one habit I've actually kept. The oil arrives, I use it, my skin looks better. That's it.\"",
+        "author": "Sarah K.",
+        "role": "Face Oil subscriber",
+        "image": "shopify://shop_images/subscription-portrait.png"
+      }
+    },
+    "products": {
+      "type": "featured-collection-tiles",
+      "settings": {
+        "products": [
+          "hair-oil",
+          "face-oil",
+          "body-oil",
+          "discovery-set"
+        ],
+        "show_heading": true,
+        "eyebrow": "The MANJULA Essentials",
+        "title": "We create thoughtful hair and skincare powered by nature. Our formulas bring together time-honoured ingredients and modern science to nourish your skin and strengthen your hair."
+      }
+    },
+    "founder_note": {
+      "type": "image-with-text-founder-note",
+      "settings": {
+        "image": "shopify://shop_images/subscription-founder.jpg"
+      }
+    },
+    "faq": {
+      "type": "faq-offset",
+      "settings": {
+        "heading": "Questions\nand answers",
+        "questions": [
+          "subscription-how",
+          "subscription-often",
+          "subscription-skip",
+          "subscription-charged",
+          "subscription-save",
+          "subscription-discount",
+          "subscription-notice"
+        ]
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "benefits",
+    "testimonial",
+    "products",
+    "founder_note",
+    "faq"
+  ]
+}

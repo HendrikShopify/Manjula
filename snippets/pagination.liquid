@@ -25,7 +25,7 @@
   endif
 -%}
 {%- if paginate.pages > 1 -%}
-  <nav class="pagination flex items-center justify-center {% if style == 'compact' %}gap-3{% else %}gap-1{% endif %} {{ class }}" role="navigation" aria-label="{{ nav_label | escape }}" data-style="{{ style }}" data-pagination>
+  <nav class="pagination flex items-center justify-center {% if style == 'compact' %}gap-3{% endif %} {{ class }}" role="navigation" aria-label="{{ nav_label | escape }}" data-style="{{ style }}" data-pagination>
     {% render 'pagination-item', type: prev_type, href: prev_url %}
     {%- if style == 'compact' -%}
       <span class="text-body-sm text-text-muted">{{ 'general.pagination.status' | t: current: paginate.current_page, total: paginate.pages }}</span>

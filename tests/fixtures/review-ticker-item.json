@@ -1,0 +1,15 @@
+{
+  "snippet": "review-ticker-item",
+  "figma": "Components Molecules / Review ticker item (175:6528)",
+  "matrix": {
+    "tone": [
+      "inverse",
+      "default"
+    ]
+  },
+  "params": {
+    "quote": "Obsessed with this hair oil",
+    "name": "Jake"
+  },
+  "extras": []
+}

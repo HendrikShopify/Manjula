@@ -1,0 +1,20 @@
+{%- comment -%}
+  Figma: Components Molecules / Composition bar (2117:21605)
+  Vertical bar: a faded Other segment over an Ink Plant oils segment.
+  share    plant oil share in percent, the Ink part (Typical about 7, Manjula about 76)
+  type     typical | manjula                    (Figma: Type; typical keeps the fade light until 85%)
+  class    placement and size (Figma 40x496 desktop)
+  Decorative: the list next to it carries the meaning.
+{%- endcomment -%}
+{%- liquid
+  assign share = share | default: 10
+  if type == 'manjula'
+    assign fade = 'from-border/50'
+  else
+    assign fade = 'from-border/30 from-85%'
+  endif
+-%}
+<span class="composition-bar flex shrink-0 flex-col {{ class }}" aria-hidden="true">
+  <span class="min-h-px w-full flex-1 bg-linear-to-b {{ fade }} to-text"></span>
+  <span class="w-full shrink-0 bg-text" style="height: {{ share }}%"></span>
+</span>

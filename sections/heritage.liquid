@@ -1,0 +1,59 @@
+{%- comment -%}
+  Figma: Sections / Heritage (Templates FEEDBACK About us "Heritage" 2701:25886, mobile 2701:25896)
+  Own section (one section per layout) on the breakout grid.
+  Desktop: archival photo from the left edge over tracks 0 to 7 (851px tall); bracketed content over columns 8 to 12,
+  as tall as the photo: heading and small photo at the top, Sabon quote and note at the bottom.
+  Mobile: the photo edge to edge (400px), then the bracketed content stacked.
+  Both photos can be a video instead (Hendrik, 23 Nov): a video plays muted and looped and wins over its photo.
+  Text is balanced (text-balance on the section, inherited).
+  No parallax: the photos stay still (Hendrik, 23 Nov; the <paralax-img> effect was removed site wide).
+{%- endcomment -%}
+{%- liquid
+  assign main_media = section.settings.video | default: section.settings.image
+  assign small_media = section.settings.video_small | default: section.settings.image_small
+-%}
+<section class="heritage section-shell bg-background text-balance text-text max-lg:pt-0!" data-padding-top="sm" data-padding-bottom="lg">
+  <div class="section-breakout">
+    <div data-bleed="left" style="--start-mobile: 1; --span-mobile: 4; --start: 1; --span: 7;" class="max-lg:col-[full-start/full-end]!">
+      <div class="relative h-100 w-full overflow-hidden rounded-media bg-surface-alt lg:h-212.75">
+        {% render 'media', media: main_media, ratio: 'fill', autoplay: true, sizes: '(min-width: 1024px) 60vw, 100vw', class: 'absolute! inset-0 size-full' %}
+      </div>
+    </div>
+    <div class="relative flex flex-col gap-16 p-3 lg:justify-between lg:gap-10" style="--start-mobile: 1; --span-mobile: 4; --start: 8; --span: 5;">
+      {% render 'bracket', side: 'left', size: 'md', strength: 'light' %}
+      <div class="flex flex-col gap-6">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="max-w-97 text-heading-1">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if small_media != blank -%}
+          {% render 'media', media: small_media, ratio: 'fill', autoplay: true, sizes: '194px', class: 'h-34.25 w-48.5' %}
+        {%- endif -%}
+      </div>
+      <div class="flex max-w-108.5 flex-col gap-8 lg:gap-10">
+        {%- if section.settings.quote != blank -%}
+          <p class="text-serif-base lg:text-serif-lg">{{ section.settings.quote }}</p>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <p class="text-body-sm opacity-60 lg:text-justify">{{ section.settings.text }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Heritage",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Archival photo" },
+    { "type": "video", "id": "video", "label": "Archival video", "info": "Optional. Plays muted and looped instead of the photo; the photo is not needed then." },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Rooted in heritage, made in Toronto." },
+    { "type": "image_picker", "id": "image_small", "label": "Small photo" },
+    { "type": "video", "id": "video_small", "label": "Small video", "info": "Optional. Plays muted and looped instead of the photo; the photo is not needed then." },
+    { "type": "textarea", "id": "quote", "label": "Quote" },
+    { "type": "textarea", "id": "text", "label": "Note", "default": "The oils are made in Toronto, where MANJULA was founded and where Karishma and Mamta still work together on every formulation. Two places and a few thousand years between them, held together by one recipe passed from a grandmother to a mother to a daughter." }
+  ],
+  "presets": [{ "name": "Heritage" }]
+}
+{% endschema %}

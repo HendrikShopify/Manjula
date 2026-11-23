@@ -1,0 +1,74 @@
+{%- comment -%}
+  Figma: Ingredient modal (Desktop 2160:26193, Mobile 2362:677; open state on Sections FINAL / Ingredient explorer)
+  Ingredient detail panel opened from the Ingredient explorer: photo, Close, name, facts (function, botanical,
+  Ayurvedic name), description and research source links. A fact, the description or the sources without data
+  are left out.
+  Mobile: full screen, 24px sides. Desktop: a 620px panel floating 40px from the right and bottom edge, as high as
+  its content (scrolls when the screen is lower).
+  Shell, focus trap, Escape and overlay come from side-drawer (opens from [data-drawer-trigger="id"]).
+
+  ingredient  ingredient metaobject (name, image, function, botanical_name, ayurvedic_name, description, research_sources)
+  id          required, unique drawer id
+{%- endcomment -%}
+{%- liquid
+  assign image = ingredient.image.value
+  assign sources = ingredient.research_sources.value
+  assign label_class = 'w-30 shrink-0 opacity-60 lg:w-48'
+-%}
+{%- capture content -%}
+  <div class="flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto px-6 py-10 lg:gap-10 lg:p-10">
+    <div class="flex items-start gap-3">
+      {% render 'media', media: image, ratio: '1:1', sizes: '(min-width: 1024px) 180px, 120px', class: 'size-30 shrink-0 lg:size-45' %}
+      <div class="flex h-30 min-w-0 flex-1 flex-col items-start justify-between lg:h-45">
+        <button type="button" class="cursor-pointer self-end text-label-caps-lg text-text hover:text-text-muted focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus" data-drawer-close>
+          {{- 'accessibility.close' | t -}}
+        </button>
+        <h2 id="{{ id }}-title" class="text-heading-2 text-text uppercase">{{ ingredient.name.value }}</h2>
+      </div>
+    </div>
+
+    {%- if ingredient.function != blank or ingredient.botanical_name != blank or ingredient.ayurvedic_name != blank -%}
+      <dl class="flex flex-col gap-4 text-body-sm text-text">
+        {%- if ingredient.function != blank -%}
+          <div class="flex items-start"><dt class="{{ label_class }}">{{ 'sections.ingredient_explorer.function' | t }}</dt><dd class="min-w-0 flex-1">{{ ingredient.function.value }}</dd></div>
+        {%- endif -%}
+        {%- if ingredient.botanical_name != blank -%}
+          <div class="flex items-start"><dt class="{{ label_class }}">{{ 'sections.ingredient_explorer.botanical' | t }}</dt><dd class="min-w-0 flex-1">{{ ingredient.botanical_name.value }}</dd></div>
+        {%- endif -%}
+        {%- if ingredient.ayurvedic_name != blank -%}
+          <div class="flex items-start"><dt class="{{ label_class }}">{{ 'sections.ingredient_explorer.ayurvedic_name' | t }}</dt><dd class="min-w-0 flex-1">{{ ingredient.ayurvedic_name.value }}</dd></div>
+        {%- endif -%}
+      </dl>
+    {%- endif -%}
+
+    {%- if ingredient.description != blank -%}
+      <div class="flex flex-col gap-3 text-body-sm text-text lg:flex-row lg:gap-0">
+        <p class="opacity-60 lg:w-48 lg:shrink-0">{{ 'sections.ingredient_explorer.description' | t }}</p>
+        <div class="min-w-0 flex-1 [&_p+p]:mt-[1lh]">{{ ingredient.description | metafield_tag }}</div>
+      </div>
+    {%- endif -%}
+
+    {%- if sources != blank -%}
+      <div class="flex flex-col gap-1.5 max-lg:pt-8">
+        <p class="text-label-sm text-text">{{ 'sections.ingredient_explorer.research_sources' | t }}</p>
+        <ul class="flex flex-col items-start gap-1.5" role="list">
+          {%- for source in sources -%}
+            <li class="max-lg:w-full">
+              <a href="{{ source.url.value }}" target="_blank" rel="noopener" class="flex items-center gap-1 border-b border-text-muted py-1 text-body-xs text-text-muted transition-colors hover:text-text focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus">
+                <span class="min-w-0 break-words max-lg:flex-1">{{ source.label.value | default: source.url.value }}</span>
+                <span class="size-2.5 shrink-0 [&>svg]:size-full" aria-hidden="true">{{ 'icon__external-link.svg' | inline_asset_content }}</span>
+                <span class="sr-only">{{ 'sections.ingredient_explorer.opens_new_tab' | t }}</span>
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+  </div>
+{%- endcapture -%}
+{% render 'side-drawer',
+  id: id,
+  title: ingredient.name.value,
+  content: content,
+  width_class: 'max-w-none lg:absolute lg:right-10 lg:bottom-10 lg:h-auto lg:max-h-[calc(100dvh_-_var(--spacing)*20)] lg:max-w-155'
+%}

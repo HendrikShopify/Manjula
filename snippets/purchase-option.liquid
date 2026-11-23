@@ -1,32 +1,35 @@
 {%- comment -%}
-  Figma: Components Atoms / Purchase option
-  One selectable choice in the buy box: one-time purchase or subscription.
+  Figma: Components Atoms / Purchase option (152:5207)
+  One selectable row in the buy box: one-time purchase or subscription.
   type               one-time | subscription                   (Figma: Type)
   label              title                                     (Figma: Title)
   price              amount in cents                           (Figma: Price)
   compare_at_price   amount in cents, shown struck through
-  badge              text of the saving badge, subscription only (Figma: Saving)
-  content            captured markup shown while selected: description, frequency, benefits   (Figma: Show details)
+  badge              savings text, subscription only, e.g. "15% off"; shown before the price behind a dot   (Figma: Savings)
+  content            captured markup shown while selected: frequencies and note   (Figma: Frequency=List)
   price_key          data-purchase-price value, so purchase-options.js can swap the price
   name, value, id, checked, class
-  The radio carries data-purchase-type; the card reads it with :has(). Frequency=Dropdown|Buttons is decided by what the parent passes in content.
+  Manjula: 1px border, Ink outline and Surface alt fill when selected, square radio. Rows stack with a shared border (-1px); the selected row paints on top.
+  The radio carries data-purchase-type; the row reads it with :has().
   States: Hover = :hover, Selected = radio :checked, Focus = :focus-visible on the radio
 {%- endcomment -%}
 {%- liquid
   assign type = type | default: 'one-time'
-  assign card = 'purchase-option group/option relative block rounded-input border border-border bg-background p-4 transition-colors hover:border-border-strong has-[[data-purchase-type]:checked]:border-accent has-[[data-purchase-type]:checked]:bg-surface has-[[data-purchase-type]:checked]:shadow-[inset_0_0_0_1px_var(--color-accent)] has-[[data-purchase-type]:focus-visible]:border-focus'
-  assign radio_attributes = 'data-purchase-type'
+  assign row = 'purchase-option group/option relative -mb-px flex flex-col gap-5 border border-border p-4 transition-colors last:mb-0 hover:z-[1] hover:border-border-medium has-[[data-purchase-type]:checked]:z-[2] has-[[data-purchase-type]:checked]:border-text has-[[data-purchase-type]:checked]:bg-surface-alt'
 -%}
-<div class="{{ card }} {{ class }}" data-type="{{ type }}">
+<div class="{{ row }} {{ class }}" data-type="{{ type }}">
   <div class="flex items-center gap-3">
-    {% render 'radio', id: id, name: name, value: value, checked: checked, attributes: radio_attributes, class: 'shrink-0' %}
-    <label for="{{ id }}" class="flex flex-1 items-center gap-2 text-label-base text-text cursor-pointer after:absolute after:inset-0">
-      <span>{{ label }}</span>
-      {%- if badge != blank -%}{% render 'badge', label: badge, type: 'sale', style: 'subtle', size: 'sm' %}{%- endif -%}
-    </label>
-    <span class="relative" data-purchase-price="{{ price_key }}">{% render 'price', price: price, compare_at_price: compare_at_price, size: 'md' %}</span>
+    {% render 'radio', id: id, name: name, value: value, checked: checked, attributes: 'data-purchase-type', shape: 'square', class: 'shrink-0' %}
+    <label for="{{ id }}" class="flex-1 cursor-pointer text-label-base text-text after:absolute after:inset-0">{{ label }}</label>
+    <span class="flex shrink-0 items-center gap-2">
+      {%- if badge != blank -%}
+        <span class="text-label-base text-text">{{ badge }}</span>
+        <span class="size-1 shrink-0 rounded-full bg-text" aria-hidden="true"></span>
+      {%- endif -%}
+      <span class="relative" data-purchase-price="{{ price_key }}">{% render 'price', price: price, compare_at_price: compare_at_price, size: 'sm' %}</span>
+    </span>
   </div>
   {%- if content != blank -%}
-    <div class="relative z-[1] mt-3 hidden flex-col gap-3 pl-8 group-has-[[data-purchase-type]:checked]/option:flex">{{ content }}</div>
+    <div class="relative z-[1] hidden flex-col gap-4 group-has-[[data-purchase-type]:checked]/option:flex">{{ content }}</div>
   {%- endif -%}
 </div>

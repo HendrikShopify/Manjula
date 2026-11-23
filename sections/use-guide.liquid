@@ -1,0 +1,150 @@
+{%- comment -%}
+  Figma: Sections / Use guide (2109:27536; Templates FINAL PDP / Face oil 2526:26025, mobile 2526:26036)
+  Step-by-step carousel. Desktop: title, progress bar, step counter and title, instruction, pager arrows and usage notes
+  on 4 columns; the photos on 7 columns as one grid row of 4:5 photos, 4px apart: the active photo 4fr, the others
+  1fr and dimmed (use-guide.js sets grid-template-columns; it eases over 0.8s, like the Blanc product page reference).
+  Mobile: a Swiper row of 290:356 photos first, sized in vw (290px on a 390px screen), others dimmed; one glass Next
+  button on the right page margin of the screen (like the UGC slider), which fades out after the first step; then the text.
+  From lg the row has a fixed height: the height of the active 4:5 photo at 4fr (from --count and the row width,
+  a container query), so the page below does not move while the columns change.
+  The step title and instruction change without animation (Hendrik, 21 Nov). All step texts sit in one grid cell and
+  only the active one is visible, so the text block is as tall as the longest step and the page below never moves
+  (Hendrik, 22 Nov).
+  The guide moves on to the next step every 5 seconds while it is on screen (not with reduced motion); a click on a
+  photo or an arrow restarts the timer. A step has a photo, a video or both. A video plays muted over the photo (the
+  photo is the poster and the fallback; without a photo the video's first frame is used) and the guide moves on when
+  the video ends; only the active step's video plays.
+  Steps come from the product: product.metafields.custom.use_steps (list of use_step metaobjects: title, text,
+  image, video). Without steps the section renders nothing. Usage notes are blocks. JS: use-guide.js, hooks data-use-guide-*.
+  The mobile photo row runs past the screen edge; the full-width section wrapper clips it (schema class
+  overflow-x-clip), so the page never scrolls sideways.
+{%- endcomment -%}
+{%- liquid
+  assign steps = product.metafields.custom.use_steps.value
+  assign step_count = steps.size | default: 0
+  assign previous_label = 'sections.use_guide.previous' | t
+  assign next_label = 'sections.use_guide.next' | t
+-%}
+{%- if step_count > 0 -%}
+  {%- assign first_value = 100 | divided_by: step_count -%}
+  <script src="{{ 'use-guide.js' | asset_url }}" defer="defer"></script>
+  <use-guide class="use-guide group/guide mx-auto flex w-full max-w-page flex-col gap-6 overflow-hidden bg-background px-page-margin py-section-sm lg:grid lg:grid-cols-12 lg:gap-x-gutter lg:gap-y-0 lg:overflow-visible lg:py-section-md" style="--count: {{ step_count }};" data-count="{{ step_count }}">
+    <div class="relative lg:col-span-7 lg:col-start-6 lg:row-start-1 lg:self-start lg:@container" data-use-guide-swiper>
+      <div class="use-guide__track flex items-start lg:grid lg:gap-1 lg:h-[calc((100cqw_-_var(--spacing)*(var(--count)_-_1))*5/(var(--count)_+_3))] lg:transition-[grid-template-columns] lg:duration-800 lg:ease-in-out-circ motion-reduce:transition-none" data-use-guide-track>
+        {%- for step in steps -%}
+          {%- assign step_label = 'sections.use_guide.go_to' | t: number: forloop.index, title: step.title -%}
+          <button
+            type="button"
+            class="use-guide__slide group/step relative aspect-[290/356] w-[74.36vw] shrink-0 cursor-pointer opacity-30 transition-opacity duration-500 aria-[current=true]:opacity-100 focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus lg:aspect-4/5 lg:h-auto lg:w-auto lg:opacity-20 lg:hover:opacity-40 lg:aria-[current=true]:opacity-100"
+            aria-label="{{ step_label | escape }}"
+            aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+            data-use-guide-thumb="{{ forloop.index0 }}"
+          >
+            {%- liquid
+              assign video = step.video.value
+              # a photo, a video or both: without a photo the video's first frame is the photo
+              assign step_image = step.image.value | default: video.preview_image
+            -%}
+            {% render 'media', media: step_image, ratio: 'fill', sizes: '(min-width: 1024px) 400px, 290px', class: 'absolute! inset-0 size-full' %}
+            {%- if video.sources != blank -%}
+              {%- comment -%} The storefront gives HLS (Safari, adaptive) and a 1080p mp4 (the rest); the browser takes the first it can play {%- endcomment -%}
+              <video class="pointer-events-none absolute inset-0 size-full object-cover opacity-0 transition-opacity duration-300 data-playing:opacity-100 motion-reduce:hidden" muted playsinline preload="none" aria-hidden="true" data-use-guide-video{% if step_count < 2 %} loop{% endif %}>
+                {%- for source in video.sources -%}
+                  <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                {%- endfor -%}
+              </video>
+            {%- endif -%}
+          </button>
+        {%- endfor -%}
+      </div>
+      {%- if step_count > 1 -%}
+        <button
+          type="button"
+          class="absolute top-1/2 right-0 z-10 flex size-12 -translate-y-1/2 cursor-pointer items-center justify-center border border-background/40 bg-text/30 text-background backdrop-blur-sm transition-[opacity,visibility] duration-300 group-data-past-first/guide:invisible group-data-past-first/guide:opacity-0 focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus lg:hidden [&>span>svg]:size-full"
+          aria-label="{{ next_label | escape }}"
+          data-use-guide-next="wrap"
+        >
+          <span class="size-6" aria-hidden="true">{{ 'icon__arrow-right.svg' | inline_asset_content }}</span>
+        </button>
+      {%- endif -%}
+    </div>
+
+    <div class="flex flex-col gap-12 lg:col-span-4 lg:col-start-1 lg:row-start-1 lg:justify-between lg:gap-10 lg:self-stretch">
+      <div class="flex flex-col gap-4 lg:gap-6">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="text-heading-3 text-text lg:text-heading-1">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {% render 'progress-bar', value: first_value, size: 'xs', label: section.settings.heading, attributes: 'data-use-guide-progress' %}
+        <div class="flex items-start justify-between gap-4">
+          <div class="grid min-w-0 flex-1" aria-live="polite">
+          {%- for step in steps -%}
+            <div class="invisible flex min-w-0 flex-col gap-6 text-text [grid-area:1/1] data-active:visible" {% if forloop.first %}data-active{% else %}aria-hidden="true"{% endif %} data-use-guide-panel="{{ forloop.index0 }}">
+              <p class="flex items-start text-body-sm">
+                <span class="w-15 shrink-0 text-text-muted">{{ forloop.index }} / {{ step_count }}</span>
+                <span>{{ step.title | escape }}</span>
+              </p>
+              {%- if step.text != blank -%}
+                <p class="text-body-lg">{{ step.text | escape | newline_to_br }}</p>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+          </div>
+          {%- if step_count > 1 -%}
+            {% render 'pager-arrows',
+              previous_label: previous_label,
+              next_label: next_label,
+              previous_attributes: 'data-use-guide-prev',
+              next_attributes: 'data-use-guide-next',
+              previous_disabled: true,
+              class: 'shrink-0 max-lg:hidden'
+            %}
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- assign notes = section.blocks | where: 'type', 'note' -%}
+      {%- if notes.size > 0 -%}
+        <dl class="flex flex-col gap-6 text-body-sm text-text">
+          {%- for block in notes -%}
+            <div class="flex items-start" {{ block.shopify_attributes }}>
+              <dt class="w-35 shrink-0 opacity-60">{{ block.settings.label }}</dt>
+              <dd class="min-w-0 flex-1">{{ block.settings.text }}</dd>
+            </div>
+          {%- endfor -%}
+        </dl>
+      {%- endif -%}
+    </div>
+  </use-guide>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Use guide",
+  "class": "overflow-x-clip",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "How to use guide" },
+    { "type": "paragraph", "content": "The steps come from the product metafield Use steps." }
+  ],
+  "blocks": [
+    {
+      "type": "note",
+      "name": "Usage note",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "When to use" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Morning: apply after water-based serums and before SPF. Evening: use as the final step in your routine." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Use guide",
+      "blocks": [
+        { "type": "note", "settings": { "label": "When to use", "text": "Morning: Apply after water-based serums and before SPF. Evening: Use as the final step in your skincare routine." } },
+        { "type": "note", "settings": { "label": "For best results", "text": "Use consistently and start with a small amount. If your skin feels oily, reduce the number of drops." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

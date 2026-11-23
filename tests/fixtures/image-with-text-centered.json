@@ -1,0 +1,12 @@
+{
+  "snippet": "image-with-text-centered",
+  "figma": "Sections / Image with text, Layout=Centered (2090:19562)",
+  "params": {
+    "eyebrow": "Rooted in heritage, made in Toronto.",
+    "heading": "(The rituals behind Manjula were passed down through generations. Today we make them in Toronto, keeping the recipes honest and the ingredients pure.)",
+    "text": "",
+    "button_label": "About Manjula",
+    "button_url": "#"
+  },
+  "matrix": {}
+}

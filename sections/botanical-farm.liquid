@@ -1,0 +1,39 @@
+{%- comment -%}
+  Figma: Sections / Botanical farm (Templates FEEDBACK Science "Botanical farm" 2701:25929, mobile 2701:25939)
+  Own section (one section per layout) on the breakout grid (.section-breakout, tailwind/tokens.css).
+  A full-bleed photo (661px tall on desktop, 560px on mobile, at least the panel's height) with the panel on top in
+  Text inverse: eyebrow lg and body/sm, 32px apart, 24px padding inside a cell with 24px padding. The panel sits top
+  left over columns 1 to 4 (all columns on mobile). No padding around the section: the photo touches its edges.
+  The panel is sticky (Hendrik, 23 Nov): it stays at the top of the screen while the section scrolls by, until the
+  section ends. The header hides on scroll down, so the panel sits at the very top (with its 24px cell padding); while
+  the header shows (scroll up) the panel moves down by the bar height (56px, 52px from lg), as fast as the header slides.
+  The photo can be a video instead (Hendrik, 23 Nov: use the farm video): it plays muted and looped and wins over the photo.
+{%- endcomment -%}
+{%- assign background = section.settings.video | default: section.settings.image -%}
+<section class="botanical-farm relative isolate flex min-h-140 flex-col overflow-clip bg-text text-text-inverse lg:min-h-165.25">
+  {% render 'media', media: background, ratio: 'fill', autoplay: true, sizes: '100vw', class: 'absolute! inset-0 -z-1 size-full' %}
+  <div class="section-breakout flex-1">
+    <div class="sticky top-0 self-start py-6 transition-[top] duration-300 [body:has([data-header]:not([data-hidden]))_&]:top-14 lg:[body:has([data-header]:not([data-hidden]))_&]:top-13" style="--start-mobile: 1; --span-mobile: 4; --start: 1; --span: 4;">
+      <div class="flex flex-col gap-8 p-6">
+        {% render 'eyebrow', label: section.settings.label, size: 'lg' %}
+        {%- if section.settings.text != blank -%}
+          <div class="rte text-body-sm [&_p+p]:mt-3.5">{{ section.settings.text }}</div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Botanical farm",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo", "info": "Fills the section edge to edge behind the text. Pick a dark photo so the light text stays readable." },
+    { "type": "video", "id": "video", "label": "Video", "info": "Optional. Plays muted and looped behind the text instead of the photo." },
+    { "type": "text", "id": "label", "label": "Label", "default": "The botanical farm" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Our herbs are grown and harvested on our formulators’ botanical farm. Each plant is picked in its own season, then dried and prepared by hand before it’s infused into oil, following methods that have been used in Ayurveda for centuries. From the farm, the herbs go to the lab, where the formulas are refined with cosmetic chemists.</p>" }
+  ],
+  "presets": [{ "name": "Botanical farm" }]
+}
+{% endschema %}

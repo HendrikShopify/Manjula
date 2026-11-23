@@ -1,0 +1,136 @@
+{%- comment -%}
+  Figma: Sections / UGC, Layout=Slider (2093:26210, mobile 2093:26246). Own section: Manjula keeps one section per
+  layout (Hendrik, 15 Nov), no layout select.
+  title            heading text
+  items            UGC video metaobjects (ugc_video: video, product), picked in the Videos setting; empty uses all
+                   entries. The product fills the UGC product card under the active video (no product = no card);
+                   size and benefits come from the product. No entries renders 5 placeholder clips without cards.
+  heading/3, heading/1 from lg, Pager arrows from lg. Full-width track of 260x346 videos (332x440 from lg), 4px apart,
+  clipped at the screen edge. On mobile the active video starts on the page margin and one 48px Next button sits over the
+  second video until the visitor moves past the first; from lg the active video is centred. Only the active video plays (muted, looped) and shows the Mute button,
+  the progress line and the UGC product card below it. 8 or more videos: the track loops. Fewer: no loop, the first
+  and last video stop on the page margin. assets/ugc-slider.js runs it (data-ugc-*).
+  Markup inline in this section (no snippet). The section settings are read into variables at the top.
+{%- endcomment -%}
+{%- liquid
+  assign items = section.settings.items
+  if items == blank
+    assign items = shop.metaobjects.ugc_video.values
+  endif
+  assign title = section.settings.title
+  assign section_id = section.id
+-%}
+{%- liquid
+  assign placeholders = 'cat,bunny,corgi' | split: ','
+  assign previous_label = 'sections.ugc.previous' | t
+  assign next_label = 'sections.ugc.next' | t
+  assign heading_id = 'UgcTitle-' | append: section_id
+-%}
+{%- liquid
+  assign mute_label = 'sections.ugc.mute' | t
+  assign unmute_label = 'sections.ugc.unmute' | t
+  assign progress_label = 'sections.ugc.progress' | t
+  assign card_link_label = 'sections.ugc.view_product' | t
+  # A metaobject list loops but has no index access, so the slides loop over the list itself; without
+  # entries they loop over 5 plain strings, which have no video or product and render placeholders.
+  assign slides = items
+  if items.size == 0
+    assign slides = '1,2,3,4,5' | split: ','
+  endif
+-%}
+<section class="ugc-slider overflow-hidden bg-background py-section-md" aria-labelledby="{{ heading_id }}">
+  <script src="{{ 'ugc-slider.js' | asset_url }}" defer="defer"></script>
+  <ugc-slider class="group/ugc flex flex-col gap-5 lg:gap-8">
+    <div class="mx-auto flex w-full max-w-page items-end justify-between gap-6 px-page-margin" data-ugc-edge>
+      <h2 id="{{ heading_id }}" class="text-heading-3 text-text lg:text-heading-1">{{ title }}</h2>
+      {% render 'pager-arrows',
+        previous_label: previous_label,
+        next_label: next_label,
+        previous_attributes: 'data-ugc-prev',
+        next_attributes: 'data-ugc-next',
+        class: 'shrink-0 max-lg:hidden'
+      %}
+    </div>
+    <div class="swiper relative w-full" data-ugc-track>
+      <ul class="swiper-wrapper flex items-start">
+        {%- for item in slides -%}
+          {%- liquid
+            assign video = item.video.value
+            assign product = item.product.value
+            assign clip = forloop.index0 | modulo: 3
+            assign placeholder_src = 'https://lorem.video/' | append: placeholders[clip] | append: '_720x900_10s.mp4'
+          -%}
+          <li class="swiper-slide group/slide flex w-[66.667vw] shrink-0 flex-col gap-2 lg:w-[23.056vw]" data-ugc-slide>
+            <div class="relative z-10 aspect-[83/110] w-full overflow-hidden bg-surface-alt">
+              {%- if video.media_type == 'video' -%}
+                {%- liquid
+                  # The card is at most 332px wide, so Shopify's 720p rendition (404px wide) is sharp enough and about
+                  # a third lighter than the 1080p one. Liquid only exposes the 1080p mp4, so the 720p URL follows
+                  # Shopify's file naming; the 1080p source after it plays if that ever fails.
+                  assign mp4 = video.sources | where: 'format', 'mp4' | first
+                  assign mp4_720 = mp4.url | replace: 'HD-1080p-2.5Mbps', 'HD-720p-1.6Mbps'
+                -%}
+                <video class="absolute inset-0 block size-full object-cover" poster="{{ video.preview_image | image_url: width: 720 }}" loop muted playsinline preload="metadata">
+                  {%- if mp4_720 != mp4.url -%}
+                    <source src="{{ mp4_720 }}" type="video/mp4">
+                  {%- endif -%}
+                  <source src="{{ mp4.url }}" type="video/mp4">
+                </video>
+              {%- else -%}
+                <video class="absolute inset-0 block size-full object-cover" src="{{ placeholder_src }}" loop muted playsinline preload="metadata"></video>
+              {%- endif -%}
+              <button type="button" class="group/sound absolute top-3 right-3 hidden size-6 cursor-pointer items-center justify-center border border-text-inverse/20 bg-text-inverse/10 text-text-inverse backdrop-blur-md group-data-[active=true]/slide:inline-flex focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-text-inverse [&>svg]:size-3.5" aria-label="{{ unmute_label | escape }}" aria-pressed="false" data-ugc-sound data-label-mute="{{ mute_label | escape }}" data-label-unmute="{{ unmute_label | escape }}">
+                <span class="contents group-aria-pressed/sound:hidden">{{ 'icon__sound-off.svg' | inline_asset_content }}</span>
+                <span class="hidden group-aria-pressed/sound:contents">{{ 'icon__sound-on.svg' | inline_asset_content }}</span>
+              </button>
+              <div class="absolute inset-x-0.5 bottom-0.5 hidden h-0.5 bg-text/5 group-data-[active=true]/slide:block" role="progressbar" aria-label="{{ progress_label | escape }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <div class="h-full w-0 bg-text-inverse" data-ugc-progress></div>
+              </div>
+            </div>
+            {%- if product != blank -%}
+              {%- comment -%} Tucked behind the video (z-10 above) and slid out from under it on the active slide. {%- endcomment -%}
+              <div class="invisible -translate-y-[calc(100%+--spacing(2))] transition-[translate,visibility] duration-300 ease-out group-data-[active=true]/slide:visible group-data-[active=true]/slide:translate-y-0 motion-reduce:transition-none">
+                {% render 'ugc-product-card', product: product, link_label: card_link_label %}
+              </div>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+      {%- comment -%}
+        Mobile only, once: sits on the right page margin of the screen (not tied to a card) and
+        fades out when the visitor is past the first video.
+      {%- endcomment -%}
+      <button type="button" class="absolute top-[calc(66.667vw*55/83)] right-page-margin z-20 inline-flex size-12 -translate-y-1/2 cursor-pointer items-center justify-center bg-text/3 text-text-inverse backdrop-blur-3xl transition-[opacity,visibility] duration-300 group-data-past-first/ugc:invisible group-data-past-first/ugc:opacity-0 focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-text-inverse lg:hidden [&>svg]:size-12" aria-label="{{ next_label | escape }}" data-ugc-next>
+        {{- 'icon__arrow-next-lg.svg' | inline_asset_content -}}
+      </button>
+    </div>
+  </ugc-slider>
+</section>
+
+{% schema %}
+{
+  "name": "UGC: Slider",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "MANJULA, Made Yours"
+    },
+    {
+      "type": "metaobject_list",
+      "id": "items",
+      "label": "Videos",
+      "metaobject_type": "ugc_video",
+      "limit": 12,
+      "info": "Empty shows all UGC videos. Each video can link a product, shown in the card under it."
+    }
+  ],
+  "presets": [
+    {
+      "name": "UGC: Slider"
+    }
+  ]
+}
+{% endschema %}

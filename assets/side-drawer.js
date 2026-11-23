@@ -3,7 +3,7 @@
     [data-modal="bg"]       overlay
     [data-modal="content"]  panel (role=dialog)
     [data-drawer-close]     any close control inside (delegated, survives section rendering)
-  Opens from [data-drawer-trigger="id"] anywhere in the document. open(trigger) / close() for scripts.
+  Opens from [data-drawer-trigger="id"] anywhere in the document, and on load when the URL hash is #id. open(trigger) / close() for scripts.
   Events (bubble): drawer:opening (panel starts sliding in), drawer:open (animation done, focus trapped), drawer:close.
 */
 class SideDrawer extends BaseComponent {
@@ -42,6 +42,11 @@ class SideDrawer extends BaseComponent {
       if (evt.code === 'Escape' && this.isOpen) this.close();
     });
     this.listen(document, 'click', this.onDocumentClick);
+    // A URL ending in #<drawer id> opens the drawer on load (the cart page redirects to /#cart-drawer).
+    if (window.location.hash === `#${this.modalId}`) {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+      requestAnimationFrame(() => this.open());
+    }
   }
 
   disconnectedCallback() {

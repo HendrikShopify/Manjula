@@ -1,0 +1,89 @@
+{%- comment -%}
+  Figma: Sections / Video statement (Templates FEEDBACK About us and Subscription)
+  Own section (one section per layout). Full-bleed background video (muted, looped) or a photo (setting Background),
+  a scrim from overlay 5% at the top to 60% at the bottom, and centred copy at the bottom: heading/2 and body/sm on
+  mobile, heading/1 and body/lg from lg; the heading's line breaks only show from lg. Play video link (video only)
+  opens the same video in a full-screen dialog (lightbox) with sound, in the Video atom with the control bar
+  (snippets/video.liquid, controls bar, as on the homepage); the background video pauses while it is open.
+  The lightbox video spans the full screen width below lg; from lg it is at most 80% of the screen width and
+  80% of the screen height; the backdrop is
+  overlay at 30%, as the side drawer; the close button sits in its top right corner.
+  The dialog fades in and out and the video scales down from 110% to 100% from its centre and comes into focus from a 12px blur (and back on close) (@starting-style, transition-discrete); a click outside
+  the video closes it. Background Video without a video falls back
+  to the photo.
+  No parallax: the photos stay still (Hendrik, 23 Nov; the <paralax-img> effect was removed site wide).
+  Pair with the transparent header: add the template to the header setting "Also transparent on templates".
+  JS: video-statement.js, hooks data-video-statement-open, -dialog, -close, -player, -background.
+{%- endcomment -%}
+{%- liquid
+  assign video = section.settings.video
+  if section.settings.media_type == 'image'
+    assign video = blank
+  endif
+  assign play_label = 'sections.video_statement.play' | t
+  assign close_label = 'sections.video_statement.close' | t
+  assign dialog_id = 'VideoStatement-' | append: section.id
+-%}
+<script src="{{ 'video-statement.js' | asset_url }}" defer="defer"></script>
+<video-statement class="relative isolate text-balance flex h-160 flex-col items-center justify-end overflow-hidden bg-surface-alt px-page-margin pb-section-md text-text-on-media lg:h-202.5">
+  {%- if video != blank -%}
+    <div class="absolute inset-0 -z-10 overflow-hidden" data-video-statement-background>
+      {{- video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, preload: 'metadata', class: 'absolute inset-0 size-full object-cover', image_size: '1920x' -}}
+    </div>
+  {%- else -%}
+    <div class="absolute inset-0 -z-10 overflow-hidden">
+      {% render 'media', media: section.settings.image, ratio: 'fill', loading: 'eager', sizes: '100vw', class: 'absolute! inset-0 size-full' %}
+    </div>
+  {%- endif -%}
+  <div class="pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-overlay/5 to-overlay/60" aria-hidden="true"></div>
+
+  <div class="flex w-full flex-col items-center gap-6 text-center lg:gap-12">
+    {%- if section.settings.heading != blank -%}
+      <h1 class="text-balance text-heading-2 max-lg:[&>br]:hidden lg:text-heading-1">{{ section.settings.heading | newline_to_br }}</h1>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <p class="max-w-140 text-balance text-body-sm lg:text-body-lg">{{ section.settings.text }}</p>
+    {%- endif -%}
+    {%- if video != blank -%}
+      {%- capture open_attrs -%}data-video-statement-open aria-haspopup="dialog" aria-controls="{{ dialog_id }}"{%- endcapture -%}
+      {% render 'link', label: play_label, size: 'lg', tone: 'inverse', attributes: open_attrs %}
+    {%- endif -%}
+  </div>
+
+  {%- if video != blank -%}
+    <dialog id="{{ dialog_id }}" class="group/lightbox m-0 size-full max-h-none max-w-none bg-overlay/30 p-0 text-text-on-media opacity-0 transition-[opacity,display,overlay] duration-300 ease-out-quint transition-discrete backdrop:bg-transparent open:opacity-100 starting:open:opacity-0 motion-reduce:transition-none" aria-label="{{ play_label | escape }}" data-video-statement-dialog data-scroll-lock="false">
+      <div class="flex size-full items-center justify-center lg:px-page-margin" data-video-statement-backdrop>
+        <div class="relative w-full lg:w-[min(80vw,calc(80dvh*16/9))] origin-center scale-110 blur-md transition-[scale,filter] duration-300 ease-out-quint group-open/lightbox:scale-100 group-open/lightbox:blur-none starting:group-open/lightbox:scale-110 starting:group-open/lightbox:blur-md motion-reduce:transition-none" data-video-statement-player>
+          {% render 'video', media: video, ratio: '16:9', controls: 'bar', class: 'w-full' %}
+          <button type="button" class="absolute top-2 right-2 flex size-10 cursor-pointer items-center justify-center text-text-on-media focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus [&>svg]:size-5" aria-label="{{ close_label | escape }}" data-video-statement-close>
+            {{- 'icon__close.svg' | inline_asset_content -}}
+          </button>
+        </div>
+      </div>
+    </dialog>
+  {%- endif -%}
+</video-statement>
+
+{% schema %}
+{
+  "name": "Video statement",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Background",
+      "options": [
+        { "value": "video", "label": "Video" },
+        { "value": "image", "label": "Photo" }
+      ],
+      "default": "video"
+    },
+    { "type": "video", "id": "video", "label": "Video", "info": "Plays muted in the background; Play video opens it with sound", "visible_if": "{{ section.settings.media_type == 'video' }}" },
+    { "type": "image_picker", "id": "image", "label": "Photo", "info": "With Background Video, the photo shows while there is no video" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Ayurveda wrote the formula.\nWe adjusted it for your skin." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "We keep things simple on purpose. Three oils, each doing one job, with an ingredient list you can read in full." }
+  ],
+  "presets": [{ "name": "Video statement" }]
+}
+{% endschema %}

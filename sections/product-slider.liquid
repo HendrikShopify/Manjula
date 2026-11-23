@@ -6,7 +6,7 @@
       <div class="swiper-wrapper flex">
         {% for product in collections.all.products limit: 10 %}
           <div class="swiper-slide w-[25%] flex-none">
-            {% render 'product-card', product: product, section_id: section.id, quick_add: 'button' %}
+            {% render 'product-card', product: product, section_id: section.id %}
           </div>
         {% endfor %}
       </div>

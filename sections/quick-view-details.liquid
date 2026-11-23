@@ -1,0 +1,100 @@
+{%- comment -%}
+  Figma: Components Molecules / Quick view content, Type=Details (Templates FINAL Quick view 2526:26013)
+  Fetched by quick-view.js (<product url>?section_id=quick-view-details) and shown in the quick view drawer
+  (snippets/quick-view.liquid). Read-only details of one product, opened from View details on a bundle item.
+  Top to bottom: square media carousel (product.media) with the close button top right and pager arrows bottom
+  right; title and compact rating; intro (custom.subtitle, else the first sentence of the description: the same line as the PDP); benefits
+  (custom.benefits); the product-details accordion (same as the PDP). Footer: Go back (closes) and View full product.
+  JS hooks: data-quick-view-track (scroll-snap row), data-quick-view-prev / -next, data-drawer-close.
+{%- endcomment -%}
+{%- liquid
+  assign intro = product.metafields.custom.subtitle.value | escape | newline_to_br
+  if intro == blank
+    assign intro = product.description | strip_html | split: '. ' | first | strip
+    if intro != blank
+      unless intro contains '.'
+        assign intro = intro | append: '.'
+      endunless
+    endif
+    assign intro = intro | escape
+  endif
+  assign rating_value = product.metafields.reviews.rating.value.rating
+  assign rating_count = product.metafields.reviews.rating_count.value
+  assign media_count = product.media.size
+  assign close_label = 'accessibility.close' | t
+  assign previous_label = 'sections.quick_view.previous_image' | t
+  assign next_label = 'sections.quick_view.next_image' | t
+  assign go_back_label = 'sections.quick_view.go_back' | t
+  assign full_label = 'sections.quick_view.view_full_product' | t
+-%}
+<div class="flex min-h-0 flex-1 flex-col" data-quick-view-content>
+  <div class="min-h-0 flex-1 overflow-y-auto pb-6">
+    <div class="relative aspect-square w-full bg-surface">
+      <ul class="flex size-full snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="list" data-quick-view-track>
+        {%- for media in product.media -%}
+          <li class="size-full shrink-0 snap-start">
+            {%- liquid
+              assign media_loading = 'lazy'
+              if forloop.first
+                assign media_loading = 'eager'
+              endif
+            -%}
+            {% render 'media', media: media, ratio: 'fill', sizes: '(min-width: 1024px) 640px, 100vw', loading: media_loading, class: 'size-full' %}
+          </li>
+        {%- else -%}
+          <li class="size-full shrink-0">{% render 'media', ratio: 'fill', class: 'size-full' %}</li>
+        {%- endfor -%}
+      </ul>
+      <button
+        type="button"
+        class="absolute top-3 right-3 inline-flex size-6 cursor-pointer items-center justify-center border border-text bg-background text-text transition-colors hover:bg-surface-alt focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus [&>svg]:size-4"
+        aria-label="{{ close_label | escape }}"
+        data-drawer-close
+      >
+        {{- 'icon__close.svg' | inline_asset_content -}}
+      </button>
+      {%- if media_count > 1 -%}
+        {% render 'pager-arrows',
+          previous_label: previous_label,
+          next_label: next_label,
+          previous_attributes: 'data-quick-view-prev',
+          next_attributes: 'data-quick-view-next',
+          previous_disabled: true,
+          class: 'absolute right-3 bottom-3 bg-background'
+        %}
+      {%- endif -%}
+    </div>
+
+    <div class="flex flex-col gap-10 px-6 pt-10">
+      <div class="flex flex-col gap-6">
+        <div class="flex items-start justify-between gap-4">
+          <h2 id="quick-view-title" class="text-heading-2 text-text">{{ product.title }}</h2>
+          {%- if rating_count > 0 -%}
+            {% render 'rating', value: rating_value, count: rating_count, size: 'compact', class: 'shrink-0' %}
+          {%- endif -%}
+        </div>
+        {%- if intro != blank -%}
+          <p class="max-w-120 text-body-lg text-text">{{ intro }}</p>
+        {%- endif -%}
+      </div>
+
+      {% render 'product-benefits', product: product, column: 'compact' %}
+
+      {% render 'product-details', product: product %}
+    </div>
+  </div>
+
+  <div class="shrink-0 border-t border-border bg-surface p-6">
+    <div class="flex flex-col gap-2">
+      {% render 'button', label: go_back_label, style: 'primary', size: 'sm', type: 'button', class: 'w-full', attributes: 'data-drawer-close' %}
+      {% render 'button', label: full_label, style: 'secondary', size: 'sm', href: product.url, class: 'w-full' %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Quick view details",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,19 @@
+{%- comment -%}
+  The cart page is not used (Hendrik, 19 Nov): /cart sends visitors to the home page with the cart drawer open
+  (side-drawer.js opens a drawer whose id is the URL hash). Checkout still posts to /cart, which never renders this.
+{%- endcomment -%}
+{%- layout none -%}
+{%- assign target = routes.root_url | append: '#cart-drawer' -%}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    <meta http-equiv="refresh" content="0; url={{ target }}">
+    <title>{{ 'sections.cart.title' | t }}</title>
+    <script>location.replace({{ target | json }});</script>
+  </head>
+  <body>
+    <a href="{{ target }}">{{ 'sections.cart.title' | t }}</a>
+  </body>
+</html>

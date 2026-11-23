@@ -3,20 +3,32 @@
   count, active (1-based)
   type    dots | line | counter                                    (Figma: Type)
   tone    default | inverse                                        (Figma: Tone)
+  size    md (6px squares, 4px apart) | sm (4px squares, 2px apart, community strip)   dots only
+  Manjula: dots are squares; idle at 10% (inverse 50%), active full strength. No wider active pill.
   Buttons for dots and line so a carousel script can wire them (data-carousel-to="n"); the active one is [aria-selected=true], a script only flips that attribute.
 {%- endcomment -%}
 {%- liquid
   assign type = type | default: 'dots'
   assign tone = tone | default: 'default'
   assign active = active | default: 1
+  assign size = size | default: 'md'
   if tone == 'inverse'
     assign idle = 'bg-background/50'
     assign on = 'aria-selected:bg-background'
+    assign dot = 'bg-background opacity-50 aria-selected:opacity-100'
     assign text = 'text-text-inverse'
   else
     assign idle = 'bg-disabled'
     assign on = 'aria-selected:bg-accent'
+    assign dot = 'bg-accent opacity-10 aria-selected:opacity-100'
     assign text = 'text-text'
+  endif
+  if size == 'sm'
+    assign dot_size = 'size-1'
+    assign dot_gap = 'gap-0.5'
+  else
+    assign dot_size = 'size-1.5'
+    assign dot_gap = 'gap-1'
   endif
   assign slide_label = 'general.slider.go_to' | t
 -%}
@@ -30,9 +42,9 @@
       {%- endfor -%}
     </div>
   {%- else -%}
-    <div class="carousel-indicators flex items-center gap-2 {{ class }}" role="tablist" data-type="dots">
+    <div class="carousel-indicators flex items-center {{ dot_gap }} {{ class }}" role="tablist" data-type="dots">
       {%- for i in (1..count) -%}
-        <button type="button" role="tab" class="h-2 w-2 cursor-pointer rounded-full transition-all aria-selected:w-5 {{ idle }} {{ on }}" aria-selected="{% if i == active %}true{% else %}false{% endif %}" aria-label="{{ slide_label }} {{ i }}" data-carousel-to="{{ i }}"></button>
+        <button type="button" role="tab" class="{{ dot_size }} cursor-pointer transition-opacity {{ dot }}" aria-selected="{% if i == active %}true{% else %}false{% endif %}" aria-label="{{ slide_label }} {{ i }}" data-carousel-to="{{ i }}"></button>
       {%- endfor -%}
     </div>
 {%- endcase -%}

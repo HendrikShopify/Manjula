@@ -54,7 +54,7 @@
       {%- capture items -%}
         {%- for product in products -%}
           {%- assign option_id = 'predictive-search-option-product-' | append: forloop.index -%}
-          {% render 'search-product-result', product: product, id: option_id, show_rating: true, show_quick_add: true, section_id: section.id %}
+          {% render 'search-product-result', product: product, id: option_id, show_rating: true, section_id: section.id %}
         {%- endfor -%}
       {%- endcapture -%}
       {%- assign group_title = 'templates.search.products' | t -%}

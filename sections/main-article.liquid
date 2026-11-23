@@ -13,7 +13,7 @@
   assign share_url = shop.url | append: article.url
   assign subject = article.title | url_param_escape
   assign mail_href = 'mailto:?subject=' | append: subject | append: '&body=' | append: share_url
-  assign card_sizes = '(min-width: 1440px) 445px, (min-width: 1024px) 33vw, 100vw'
+  assign card_sizes = '(min-width: 1728px) 541px, (min-width: 1024px) 33vw, 100vw'
 -%}
 <script src="{{ 'article-share.js' | asset_url }}" defer="defer"></script>
 <article class="mx-auto w-full max-w-page px-page-margin pt-8 pb-12 lg:pt-12 lg:pb-20 flex flex-col items-center gap-8 lg:gap-12">
@@ -27,7 +27,7 @@
   </header>
 
   {%- if article.image -%}
-    {% render 'media', media: article.image, ratio: '4:3', loading: 'eager', sizes: '(min-width: 1440px) 1360px, 100vw', class: 'w-full lg:aspect-[21/9]' %}
+    {% render 'media', media: article.image, ratio: '4:3', loading: 'eager', sizes: '(min-width: 1728px) 1648px, 100vw', class: 'w-full lg:aspect-[21/9]' %}
   {%- endif -%}
 
   {% render 'rich-text', content: article.content, class: 'w-full max-w-prose-width' %}

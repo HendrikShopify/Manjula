@@ -1,0 +1,27 @@
+{%- comment -%}
+  Figma: Components Molecules / Product form / Tags (Marquee, 2102:7221)
+  tags    comma separated list, e.g. "Light natural scent, Safe for acne-prone skin, Vegan & cruelty-free"
+  class   placement only
+  One line of caps tags (label/caps-sm, muted), each behind a dot, scrolling sideways with faded edges.
+  Runs on marquee-slider (stops for reduced motion). Renders nothing without tags.
+{%- endcomment -%}
+{%- assign tag_list = tags | split: ',' -%}
+{%- if tag_list.size > 0 -%}
+  {%- assign per_copy = 12 | divided_by: tag_list.size | plus: 1 -%}
+  <marquee-slider class="product-tags flex h-3 w-full items-center overflow-hidden text-label-caps-sm text-text-muted [mask-image:linear-gradient(90deg,transparent_0%,black_10%,black_90%,transparent_100%)] {{ class }}" data-pixels-per-second="30">
+    {%- for copy in (1..2) -%}
+      <ul class="flex shrink-0 items-center gap-4 pr-4" role="list" data-marquee-wrapper{% if copy == 2 %} aria-hidden="true"{% endif %}>
+        {%- for i in (1..per_copy) -%}
+          {%- for tag in tag_list -%}
+            {%- assign tag_text = tag | strip -%}
+            {%- if tag_text != blank -%}
+              <li class="flex shrink-0 items-center gap-1.5 whitespace-nowrap"{% if i > 1 %} aria-hidden="true"{% endif %}>
+                <span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span><span>{{ tag_text | escape }}</span>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endfor -%}
+      </ul>
+    {%- endfor -%}
+  </marquee-slider>
+{%- endif -%}

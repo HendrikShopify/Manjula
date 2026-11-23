@@ -1,0 +1,151 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+        "popular_frequency": "Deliver every 3 months",
+        "community_title": "",
+        "expert_quote": "“High quality Ayurvedic oils, like those from Manjula, are a powerful way to support healthy skin and hair using time-tested botanical ingredients.”",
+        "expert_name": "Dr. Anika Sharma",
+        "expert_role": "Ayurvedic Practitioner"
+      }
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {
+        "heading": "Customer reviews",
+        "recommend_label": "Would recommend this body oil."
+      }
+    },
+    "trial_results": {
+      "type": "trial-results",
+      "blocks": {
+        "result-1": {
+          "type": "result",
+          "settings": {
+            "title": "New growth",
+            "text": "Fine baby hairs along the hairline and part"
+          }
+        },
+        "result-2": {
+          "type": "result",
+          "settings": {
+            "title": "Visible density",
+            "text": "Less scalp showing through when you tie it back"
+          }
+        },
+        "result-3": {
+          "type": "result",
+          "settings": {
+            "title": "Calmer scalp",
+            "text": "Less itch, less tightness, less flaking after washing"
+          }
+        }
+      },
+      "block_order": [
+        "result-1",
+        "result-2",
+        "result-3"
+      ],
+      "settings": {
+        "heading": "Effects after 4 week consistent use trial",
+        "text": "Participants used the body oil every day for four weeks. Photos were taken at the start and at the end, in the same light.",
+        "case_label": "",
+        "case_text": "Aged 41, dry skin with rough patches on the arms and legs. The oil on damp skin after every shower, with no other changes to the routine.",
+        "show_labels": true,
+        "disclaimer": "*Individual results shown, from participants using Manjula Hair Oil twice weekly for four weeks. Results vary from person to person and depend on factors including diet, stress, sleep and underlying health. Not intended to treat or prevent any condition."
+      }
+    },
+    "differentiator": {
+      "type": "comparison-composition",
+      "settings": {
+        "heading": "The base isn't filler.\nIt's the formula.",
+        "text": "Most body oils are a cheap carrier with a few drops of the oil on the front of the box. Ours is six active plant oils, from the first drop to the last. You pay for the treatment, not the filler.",
+        "left_title": "Typical body oils",
+        "left_sub": "The base consists mainly of filler, with plant oils listed last.",
+        "left_share": 7,
+        "left_top": "Mineral oils\nWater\nSilicones\nSynthetics\nFragrance",
+        "left_bottom": "Plant oils last",
+        "right_title": "MANJULA",
+        "right_sub": "The base consists of six active plant oils",
+        "right_share": 76,
+        "right_top": "Alma\nSweet Almond\nSesame\nArgan\nEvening Primrose\nRoseship",
+        "right_bottom": "Licorice\nAshwagandha\nShatavari\nNeroli"
+      }
+    },
+    "use_guide": {
+      "type": "use-guide",
+      "blocks": {
+        "note-1": {
+          "type": "note",
+          "settings": {
+            "label": "When to use",
+            "text": "Morning: Apply after water-based serums and before SPF. Evening: Use as the final step in your skincare routine."
+          }
+        },
+        "note-2": {
+          "type": "note",
+          "settings": {
+            "label": "For best results",
+            "text": "Use consistently and start with a small amount. If your skin feels oily, reduce the number of drops."
+          }
+        }
+      },
+      "block_order": [
+        "note-1",
+        "note-2"
+      ],
+      "settings": {
+        "heading": "How to use guide"
+      }
+    },
+    "ingredients": {
+      "type": "ingredient-explorer",
+      "settings": {
+        "heading": "Explore all ingredients",
+        "functions": "Brightens, Nourishes, Smoothes, Protects, Barrier support",
+        "products": [
+          "face-oil",
+          "hair-oil",
+          "body-oil"
+        ]
+      }
+    },
+    "founder_note": {
+      "type": "image-with-text-founder-note",
+      "settings": {
+        "image": "shopify://shop_images/subscription-founder.jpg"
+      }
+    },
+    "faq": {
+      "type": "faq-image",
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+        "heading": "Questions\nand answers",
+        "image": "shopify://shop_images/contact-faq-smile.jpg"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "trial_results",
+    "differentiator",
+    "use_guide",
+    "ingredients",
+    "reviews",
+    "founder_note",
+    "faq"
+  ]
+}

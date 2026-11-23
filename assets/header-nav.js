@@ -5,7 +5,6 @@ class HeaderNav extends BaseComponent {
         this.openedBy = null;
         this.closeTimer = null;
         this.hoverSuppressed = null;
-        this.lastPointerType = null;
         this.pointerGesture = false;
         this.openController = null;
         this.removeOpenAbort = null;
@@ -21,6 +20,8 @@ class HeaderNav extends BaseComponent {
         this.onFocusOut = this.onFocusOut.bind(this);
         this.onBreakpoint = this.onBreakpoint.bind(this);
         this.onDocumentPointerDown = this.onDocumentPointerDown.bind(this);
+        this.onPanelLink = this.onPanelLink.bind(this);
+        this.onLinkEnter = this.onLinkEnter.bind(this);
     }
 
     init() {
@@ -32,11 +33,25 @@ class HeaderNav extends BaseComponent {
         this.listen(this, 'focusin', this.onFocusIn);
         this.listen(this, 'focusout', this.onFocusOut);
         this.listen(this.desktopMedia, 'change', this.onBreakpoint);
+        this.listen(this, 'pointerover', this.onPanelLink);
+        this.listen(this, 'focusin', this.onPanelLink);
 
         this.$$('[data-nav-item]').forEach((item) => {
             this.listen(item, 'pointerenter', this.onPointerEnter);
             this.listen(item, 'pointerleave', this.onPointerLeave);
         });
+
+        // A plain link next to an open dropdown closes it at once, like moving to another dropdown does.
+        this.$$('[data-nav-link]').forEach((link) => {
+            this.listen(link, 'pointerenter', this.onLinkEnter);
+        });
+    }
+
+    onLinkEnter(event) {
+        if (event.pointerType !== 'mouse' || this.openedBy !== 'hover' || !this.openItem) return;
+        const item = this.openItem;
+        this.close();
+        this.snapClosed(item);
     }
 
     disconnectedCallback() {
@@ -47,14 +62,26 @@ class HeaderNav extends BaseComponent {
         super.disconnectedCallback();
     }
 
+    // Dropdown panel (Type=Image): show the image of the hovered or focused link; keep the last one when the link has none.
+    onPanelLink(event) {
+        const link = event.target.closest('[data-panel-link]');
+        if (!link || !this.contains(link)) return;
+        const panel = link.closest('[data-nav-panel]');
+        const image = panel?.querySelector(`[data-panel-image="${link.dataset.panelLink}"]`);
+        if (!image) return;
+        panel.querySelectorAll('[data-panel-image]').forEach((el) => {
+            el.dataset.active = String(el === image);
+        });
+    }
+
     get prefersReducedMotion() {
         return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     }
 
     onPointerDown(event) {
-        this.lastPointerType = event.pointerType;
         const toggle = event.target.closest('[data-nav-toggle]');
         this.pointerGesture = Boolean(toggle && this.contains(toggle));
+        this.lastPointerType = event.pointerType;
     }
 
     onPointerEnter(event) {
@@ -89,6 +116,17 @@ class HeaderNav extends BaseComponent {
     }
 
     onClick(event) {
+        // Touch has no hover: the first tap on a dropdown's own link opens its panel, a second tap follows the link.
+        const label = event.target.closest('[data-nav-item] > a, [data-nav-item] > * > a');
+        if (label && !label.closest('[data-nav-panel]') && this.lastPointerType && this.lastPointerType !== 'mouse') {
+            const labelItem = label.closest('[data-nav-item]');
+            if (this.openItem !== labelItem) {
+                event.preventDefault();
+                this.open(labelItem, 'click');
+                return;
+            }
+        }
+
         const toggle = event.target.closest('[data-nav-toggle]');
         if (!toggle || !this.contains(toggle)) return;
 
@@ -191,19 +229,15 @@ class HeaderNav extends BaseComponent {
             paused: true,
             defaults: { duration: 0.2, ease: 'smooth' },
         });
-        timeline.fromTo(inner, { autoAlpha: 0, y: 0 }, { autoAlpha: 1, y: 0 });
+        timeline.fromTo(inner, { autoAlpha: 0 }, { autoAlpha: 1 });
         this.timelines.set(item, timeline);
         return timeline;
     }
 
+    // The panel shows instantly (Hendrik, 18 Nov); only closing fades out.
     playIn(item) {
         const timeline = this.timelineFor(item);
-        if (!timeline || this.prefersReducedMotion) {
-            timeline?.progress(1);
-            return;
-        }
-        if (timeline.progress() === 0) timeline.restart();
-        else timeline.play();
+        timeline?.progress(1).pause();
     }
 
     playOut(item) {
@@ -238,7 +272,7 @@ class HeaderNav extends BaseComponent {
         const timeline = this.timelines.get(item);
         timeline?.pause(0);
         const inner = this.panelInner(item);
-        if (inner && typeof gsap !== 'undefined') gsap.set(inner, { clearProps: 'opacity,visibility,transform' });
+        if (inner && typeof gsap !== 'undefined') gsap.set(inner, { clearProps: 'opacity,visibility' });
     }
 
     clearTimer() {

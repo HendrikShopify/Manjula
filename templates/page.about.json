@@ -1,0 +1,128 @@
+{
+  "sections": {
+    "hero": {
+      "type": "video-statement",
+      "settings": {
+        "heading": "Ayurveda wrote the formula.\nWe adjusted it for your skin.",
+        "text": "We keep things simple on purpose. Three oils, each doing one job, with an ingredient list you can read in full.",
+        "media_type": "video",
+        "video": "shopify://files/videos/D48F1185-6396-48FA-A98D-14EC3EB65F05 2.mov"
+      }
+    },
+    "origin_story": {
+      "type": "origin-story",
+      "settings": {
+        "label": "MANJULA’s origin story",
+        "heading": "It started with eczema, and a recipe from my grandmother",
+        "text": "<p>I've had eczema since I was a baby: steroid creams, ingredient lists that made things worse, and a constant awareness of my skin. The answer had been in my family all along. My mother, Mamta, is an Ayurvedic practitioner, and her mother, Manjula, made her own hair oil at home.</p><p>Together with Canadian cosmetic chemists, my mother and I turned that recipe into three oils for hair, body and face, made for skin like mine. The brand carries my grandmother's name: it's a love letter to my maternal lineage.</p>",
+        "image_1": "shopify://shop_images/origin-story-manjula.jpg",
+        "image_2": "shopify://shop_images/origin-story-hair-ritual.jpg",
+        "portrait": "shopify://shop_images/origin-story-portrait.jpg"
+      }
+    },
+    "timeline": {
+      "type": "timeline",
+      "blocks": {
+        "entry-2020": {
+          "type": "entry",
+          "settings": {
+            "year": "2020",
+            "event": "First formula experiments",
+            "image": "shopify://shop_images/formula-philosophy-bottle-detail.jpg"
+          }
+        },
+        "entry-2021": {
+          "type": "entry",
+          "settings": {
+            "year": "2021",
+            "event": "Cosmetics collaboration",
+            "image": "shopify://shop_images/offer-body-oil-hands.jpg"
+          }
+        },
+        "entry-2022": {
+          "type": "entry",
+          "settings": {
+            "year": "2022",
+            "event": "MANJULA Essentials launches",
+            "image": "shopify://shop_images/MANJULA_Product-Shot_5_68511327-e1d2-490b-a252-5101929600c5.jpg"
+          }
+        },
+        "entry-2024a": {
+          "type": "entry",
+          "settings": {
+            "year": "2024",
+            "event": "Featured by media",
+            "image": "shopify://shop_images/formula-philosophy-body-oil.jpg"
+          }
+        },
+        "entry-2024b": {
+          "type": "entry",
+          "settings": {
+            "year": "2024",
+            "event": "Featured on CP24 Breakfast",
+            "image": "shopify://shop_images/R1-06147-0008-Edit.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "entry-2020",
+        "entry-2021",
+        "entry-2022",
+        "entry-2024a",
+        "entry-2024b"
+      ],
+      "settings": {
+        "label": "MANJULA’s timeline",
+        "heading": "From tradition to modern routine"
+      }
+    },
+    "heritage": {
+      "type": "heritage",
+      "settings": {
+        "image": "shopify://shop_images/heritage-family.jpg",
+        "heading": "Rooted in heritage, made in Toronto.",
+        "image_small": "shopify://shop_images/heritage-grandmother.jpg",
+        "video_small": "shopify://files/videos/8mm-family-footage.mp4",
+        "quote": "A recipe kept in a family kitchen for generations, now poured into every bottle. The same oils, the same care, the same slow ritual of looking after yourself.",
+        "text": "The oils are made in Toronto, where MANJULA was founded and where Karishma and Mamta still work together on every formulation. Two places and a few thousand years between them, held together by one recipe passed from a grandmother to a mother to a daughter."
+      }
+    },
+    "press_grid": {
+      "type": "press-grid",
+      "settings": {
+        "heading": "",
+        "items": [
+          "gents-post",
+          "coveteur",
+          "sharp",
+          "fashion",
+          "s-magazine",
+          "cp24"
+        ],
+        "link_label": "Read article"
+      }
+    },
+    "products": {
+      "type": "featured-collection-tiles",
+      "settings": {
+        "products": [
+          "hair-oil",
+          "face-oil",
+          "body-oil",
+          "discovery-set"
+        ],
+        "show_heading": true,
+        "eyebrow": "The MANJULA Essentials",
+        "title": "We create thoughtful hair and skincare powered by nature. Our formulas bring together time-honoured ingredients and modern science to nourish your skin and strengthen your hair."
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "origin_story",
+    "timeline",
+    "heritage",
+    "press_grid",
+    "products"
+  ]
+}

@@ -40,15 +40,42 @@ class CustomSelect extends BaseComponent {
     if (this.isOpen || this.trigger.disabled) return;
     this.isOpen = true;
     this.listbox.hidden = false;
+    this.pinToViewport();
     this.trigger.setAttribute('aria-expanded', 'true');
     this.chevron?.classList.add('rotate-180');
     this.focusOption(this.activeIndex);
+  }
+
+  // Inside a row that scrolls sideways ([data-select-scroll], e.g. the review filter chips on mobile) an absolute
+  // menu is clipped by the row. There the menu opens fixed at the trigger's position and closes when anything scrolls.
+  pinToViewport() {
+    const scroller = this.closest('[data-select-scroll]');
+    if (!scroller || getComputedStyle(scroller).overflowX === 'visible') return;
+    const rect = this.trigger.getBoundingClientRect();
+    Object.assign(this.listbox.style, {
+      position: 'fixed',
+      top: `${rect.bottom}px`,
+      left: `${rect.left}px`,
+      minWidth: `${rect.width}px`,
+    });
+    this.onScrollClose = (e) => { if (!this.listbox.contains(e.target)) this.close(); };
+    window.addEventListener('scroll', this.onScrollClose, { capture: true, passive: true });
+    window.addEventListener('resize', this.onScrollClose, { passive: true });
+  }
+
+  unpin() {
+    if (!this.onScrollClose) return;
+    window.removeEventListener('scroll', this.onScrollClose, { capture: true });
+    window.removeEventListener('resize', this.onScrollClose);
+    this.onScrollClose = null;
+    ['position', 'top', 'left', 'minWidth'].forEach((key) => { this.listbox.style[key] = ''; });
   }
 
   close() {
     if (!this.isOpen) return;
     this.isOpen = false;
     this.listbox.hidden = true;
+    this.unpin();
     this.trigger.setAttribute('aria-expanded', 'false');
     this.chevron?.classList.remove('rotate-180');
   }

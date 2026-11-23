@@ -2,6 +2,7 @@
   Figma: Components Atoms / Media
   media       Shopify media object (image, video, external_video, model) or a plain image object
   ratio       1:1 | 4:5 | 3:4 | 2:3 | 4:3 | 3:2 | 16:9 | 21:9 | natural      (Figma: Ratio)
+              fill: no ratio, fills its parent (full-bleed backgrounds; the parent sets the size)
   sizes       the sizes attribute; the parent owns the layout so it passes this. Required for images.
   loading     lazy (default) | eager                 eager only for the first media in the viewport
   fit         cover (default) | contain
@@ -9,6 +10,9 @@
   alt         override for the image alt text
   class       placement only
   attributes  JS hooks on the wrapper
+  Focal point: images use the focal point set on the file in Shopify admin (Content > Files > Edit) as their
+  object-position, so a cropped frame (cover, fill or a ratio) keeps the subject in view. No focal point: centred.
+  Upload photos uncropped and let the frame crop them.
   No media renders the placeholder (Figma: Placeholder icon).
 {%- endcomment -%}
 {%- liquid
@@ -56,11 +60,15 @@
       {%- liquid
         assign image = media.preview_image | default: media
         assign image_alt = alt | default: image.alt | escape
+        assign focal_style = nil
+        if image.presentation.focal_point != blank
+          assign focal_style = 'object-position: ' | append: image.presentation.focal_point
+        endif
       -%}
       {%- if loading == 'eager' -%}
-        {{ image | image_url: width: 2048 | image_tag: widths: '360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048', sizes: sizes, alt: image_alt, width: image.width, height: image.height, class: inner, loading: 'eager', fetchpriority: 'high', decoding: 'async' }}
+        {{ image | image_url: width: 2048 | image_tag: widths: '360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048', sizes: sizes, alt: image_alt, width: image.width, height: image.height, class: inner, style: focal_style, loading: 'eager', fetchpriority: 'high', decoding: 'async' }}
       {%- else -%}
-        {{ image | image_url: width: 2048 | image_tag: widths: '360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048', sizes: sizes, alt: image_alt, width: image.width, height: image.height, class: inner, loading: 'lazy', decoding: 'async' }}
+        {{ image | image_url: width: 2048 | image_tag: widths: '360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048', sizes: sizes, alt: image_alt, width: image.width, height: image.height, class: inner, style: focal_style, loading: 'lazy', decoding: 'async' }}
       {%- endif -%}
     {%- when 'video' -%}
       {%- if autoplay -%}

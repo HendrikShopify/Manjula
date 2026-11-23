@@ -1,15 +1,24 @@
 {%- comment -%}
   Figma: Components Atoms / Textarea
   id, name, value, placeholder, rows (4), required, disabled, describedby, error, class, attributes
-  States: Hover = :hover, Focus = :focus-visible, Disabled = [disabled], Error = [aria-invalid]
+  style    boxed (default) | underline: no fill or side padding, 1px bottom rule (Figma: Style=Underline)
+  Padding 12/16 as in Figma, measured from cap height and baseline: the vertical padding subtracts the trim (tailwind/text-trim.css).
+  Underline: rest Border, hover Border medium, focus Ink. States: Hover = :hover, Focus = :focus-visible, Disabled = [disabled], Error = [aria-invalid]
 {%- endcomment -%}
 {%- liquid
   assign rows = rows | default: 4
-  assign base = 'textarea block w-full min-h-30 rounded-input border bg-background px-4 py-3 text-body-base text-text placeholder:text-text-muted outline-none transition-colors resize-y hover:border-text focus-visible:border-focus aria-invalid:border-error disabled:bg-surface-alt disabled:border-disabled disabled:text-text-disabled disabled:cursor-not-allowed'
+  if style == 'underline'
+    assign frame = 'border-b bg-transparent'
+    assign rest = 'border-border hover:border-border-medium'
+  else
+    assign frame = 'rounded-input border bg-background px-4'
+    assign rest = 'border-border-strong hover:border-text'
+  endif
+  assign base = 'textarea block w-full min-h-30 ' | append: frame | append: ' pt-[calc(0.75rem_-_(0.5lh_-_var(--trim-top)))] pb-[calc(0.75rem_-_(0.5lh_-_var(--trim-bottom)))] text-body-base text-text placeholder:text-text-muted outline-none transition-colors resize-y focus-visible:border-focus aria-invalid:border-error disabled:bg-surface-alt disabled:border-disabled disabled:text-text-disabled disabled:cursor-not-allowed'
   if error
     assign base = base | append: ' border-error'
   else
-    assign base = base | append: ' border-border-strong'
+    assign base = base | append: ' ' | append: rest
   endif
 -%}
 <textarea

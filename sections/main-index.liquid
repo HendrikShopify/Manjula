@@ -95,12 +95,12 @@
             <span class="text-label-sm text-text-muted">{{ label }}</span>
             {%- case i -%}
               {%- when 0 %}{% render 'product-card', product: demo_products[0], section_id: section.id, quick_add: 'none' %}
-              {%- when 1 %}{% render 'product-card', product: demo_products[1], section_id: section.id, quick_add: 'button', show_vendor: true %}
-              {%- when 2 %}{% render 'product-card', product: demo_products[2], section_id: section.id, quick_add: 'icon' %}
+              {%- when 1 %}{% render 'product-card', product: demo_products[1], section_id: section.id, show_vendor: true %}
+              {%- when 2 %}{% render 'product-card', product: demo_products[2], section_id: section.id %}
               {%- when 3 %}{% render 'product-card', product: demo_products[3], section_id: section.id, quick_add: 'variant-picker' %}
               {%- when 4 %}{% render 'product-card', product: demo_products[4], section_id: section.id, show_wishlist: false, show_badge: false %}
               {%- when 5 %}{% render 'product-card', product: demo_products[5], section_id: section.id, show_rating: false, show_swatches: false %}
-              {%- when 6 %}{% render 'product-card', product: demo_products[6], section_id: section.id, quick_add: 'button', show_vendor: true, show_rating: true, show_swatches: true %}
+              {%- when 6 %}{% render 'product-card', product: demo_products[6], section_id: section.id, show_vendor: true, show_rating: true, show_swatches: true %}
               {%- when 7 %}{% render 'product-card', product: demo_products[7], section_id: section.id, loading: 'eager' %}
             {%- endcase -%}
           </div>
@@ -108,7 +108,7 @@
       </div>
       <span class="text-label-sm text-text-muted">Horizontal: quick add button + description, and variant picker</span>
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        {% render 'product-card', product: demo_products[8], section_id: section.id, layout: 'horizontal', quick_add: 'button', show_description: true %}
+        {% render 'product-card', product: demo_products[8], section_id: section.id, layout: 'horizontal', show_description: true %}
         {% render 'product-card', product: demo_products[9], section_id: section.id, layout: 'horizontal', quick_add: 'variant-picker', show_description: true %}
       </div>
     </div>
@@ -300,7 +300,7 @@
             {% render 'summary-row', label: 'Total', value: '€88,20', type: 'total' %}
           </dl>
           <div class="rounded-sm border border-border">
-            {% render 'drawer-header', title: 'Your cart', subtitle: '3 items' %}
+            {% render 'drawer-header', title: 'Your cart', count: 3 %}
             {% render 'cart-empty-state' %}
           </div>
         </div>
@@ -335,7 +335,7 @@
         {% render 'accordion-item', title: 'Shipping', content: 'Free shipping on orders over 100 euro.', open: true %}
         {% render 'accordion-item', title: 'Returns', content: '30 days, no questions asked.' %}
       {%- endcapture -%}
-      {% render 'side-drawer', id: 'demo-drawer-right', title: 'Filters', subtitle: '24 results', body: drawer_body %}
+      {% render 'side-drawer', id: 'demo-drawer-right', title: 'Filters', count: 24, body: drawer_body %}
       {%- capture drawer_body_left -%}
         <nav aria-label="Demo">
           <ul class="flex flex-col gap-3 text-body-lg">
@@ -371,7 +371,7 @@
         {%- capture demo_products -%}
           {%- for product in collections.all.products limit: 2 -%}
             {%- assign demo_option_id = 'demo-prod-' | append: forloop.index -%}
-            {% render 'search-product-result', product: product, id: demo_option_id, show_rating: true, show_quick_add: true, section_id: section.id %}
+            {% render 'search-product-result', product: product, id: demo_option_id, show_rating: true, section_id: section.id %}
           {%- endfor -%}
         {%- endcapture -%}
         {% render 'search-result-group', title: 'Products', items: demo_products, id: 'demo-group-products' %}

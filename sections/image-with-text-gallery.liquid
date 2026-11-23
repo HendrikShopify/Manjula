@@ -1,0 +1,103 @@
+{%- comment -%}
+  Figma: Sections / Image with text, Layout=Gallery (2083:19340, mobile 2083:19363). Own section: Manjula keeps one
+  section per layout (Hendrik, 15 Nov), no layout select.
+  Small image over 2 columns, large image over 5, text over 4 inside a lg Bracket (64px heading at the top, eyebrow and
+  60% body at the bottom, the block as tall as the large image) and the button below. Mobile: large image, then the
+  bracket block with the 120px small image, the 48px heading and the body, then the button.
+  heading        display/2 (heading/1 on mobile)
+  eyebrow        optional, Eyebrow lg above the body (Figma: Show eyebrow)
+  text           body (richtext or plain), 14px at 60%
+  image          large image (1:1)
+  image_small    small image (1:1)
+  button_label, button_url   primary button sm, full width of the text column (Figma: Show button)
+  No parallax: the photos stay still (Hendrik, 23 Nov; the <paralax-img> effect was removed site wide).
+  Markup inline in this section (no snippet). The section settings are read into variables at the top.
+{%- endcomment -%}
+{%- liquid
+  assign heading = section.settings.heading
+  assign eyebrow = section.settings.eyebrow
+  assign text = section.settings.text
+  assign image = section.settings.image
+  assign image_small = section.settings.image_small
+  assign button_label = section.settings.button_label
+  assign button_url = section.settings.button_url
+-%}
+<div class="image-with-text-gallery mx-auto grid w-full max-w-page grid-cols-1 gap-6 px-page-margin py-section-md lg:grid-cols-12 lg:gap-x-gutter lg:gap-y-3">
+  <div class="relative aspect-square overflow-hidden rounded-media bg-surface-alt max-lg:hidden lg:col-span-2 lg:self-start">
+    {% render 'media', media: image_small, ratio: 'fill', sizes: '(min-width: 1728px) 278px, 16vw', class: 'absolute! inset-0 size-full' %}
+  </div>
+  <div class="relative aspect-square overflow-hidden rounded-media bg-surface-alt lg:col-span-5 lg:self-start">
+    {% render 'media', media: image, ratio: 'fill', sizes: '(min-width: 1728px) 712px, (min-width: 1024px) 41vw, 100vw', class: 'absolute! inset-0 size-full' %}
+  </div>
+  <div class="relative flex flex-col gap-16 p-3 lg:col-span-4 lg:col-start-8 lg:justify-between lg:gap-10">
+    {% render 'bracket', size: 'lg' %}
+    {% render 'media', media: image_small, ratio: '1:1', sizes: '120px', class: 'w-30 lg:hidden' %}
+    {%- if heading != blank -%}
+      <h2 class="text-heading-1 lg:text-display-2 text-balance">{{ heading }}</h2>
+    {%- endif -%}
+    {%- if eyebrow != blank or text != blank -%}
+      <div class="flex flex-col gap-5">
+        {% render 'eyebrow', label: eyebrow, size: 'lg' %}
+        {%- if text != blank -%}
+          <div class="text-body-sm opacity-60 [&_p+p]:mt-3">{{ text }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+  {%- if button_label != blank -%}
+    {% render 'button', label: button_label, href: button_url, style: 'primary', size: 'sm', class: 'w-full lg:col-span-4 lg:col-start-8' %}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Text with two images",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "info": "Optional short line"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Ayurvedic formulas, tuned for your skin."
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Every Manjula oil starts with a classical Ayurvedic formula: cold-pressed base oils and slow-infused herbs, used for centuries to calm the skin. We kept the recipe and adjusted the weight, choosing base oils that absorb fast and won't clog pores, so it works for skin that breaks out, not just skin that's dry. No fillers, no synthetic fragrance, no preservatives to make the numbers work. Fewer ingredients, and a reason for every one.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Large image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_small",
+      "label": "Small image"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Explore the formulas"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Text with two images"
+    }
+  ]
+}
+{% endschema %}

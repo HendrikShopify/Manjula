@@ -1,0 +1,60 @@
+{%- comment -%}
+  Figma: Sections / Image with text, Layout=Founder note (Manjula; PDP / Face oil 2526:26024, mobile 2526:26035).
+  Own section: one section per layout (Hendrik, 15 Nov), no layout select.
+  Desktop: photo and a Surface note card side by side, 8px apart, both 405x516, centred (818px, not on the grid).
+  Mobile: the photo full width, the note card overlapping its lower part, inset from the left.
+  label        small line at the top of the card ("Founders note")
+  text         richtext note
+  image        photo
+  signature    optional image; empty uses the drawn Manjula signature (assets/signature-founder.svg)
+  name         line under the signature
+  Markup inline in this section (no snippet). The section settings are read into variables at the top.
+{%- endcomment -%}
+{%- liquid
+  assign label = section.settings.label
+  assign text = section.settings.text
+  assign image = section.settings.image
+  assign signature = section.settings.signature
+  assign name = section.settings.name
+-%}
+<div class="image-with-text-founder-note mx-auto flex w-full max-w-page flex-col px-page-margin py-section-md lg:flex-row lg:items-start lg:justify-center lg:gap-2">
+  {% render 'media', media: image, ratio: 'fill', sizes: '(min-width: 1024px) 405px, 100vw', class: 'h-89.5 w-full lg:h-129 lg:w-101.25 lg:shrink-0' %}
+  <div class="relative -mt-25 ml-9.5 flex flex-col gap-10 bg-surface p-8 text-text lg:mt-0 lg:ml-0 lg:h-129 lg:w-101.25 lg:shrink-0 lg:justify-between lg:gap-6 lg:p-6">
+    {%- if label != blank -%}
+      <p class="text-label-base">{{ label }}</p>
+    {%- endif -%}
+    {%- if text != blank -%}
+      <div class="rte max-w-90 text-body-sm [&_p+p]:mt-5">{{ text }}</div>
+    {%- endif -%}
+    <div class="flex flex-col items-start gap-3">
+      {%- if signature != blank -%}
+        {{ signature | image_url: width: 300 | image_tag: alt: name, class: 'h-6.75 w-auto', loading: 'lazy' }}
+      {%- else -%}
+        <span class="block h-6.75 w-26 text-text [&>svg]:size-full" aria-hidden="true">{{ 'signature-founder.svg' | inline_asset_content }}</span>
+      {%- endif -%}
+      {%- if name != blank -%}
+        <p class="text-label-base">{{ name }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image with text: Founder",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+    { "type": "text", "id": "label", "label": "Label", "default": "Founders note" },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Note",
+      "default": "<p>I've had eczema since infancy, so I've always been careful about what goes on my skin. I wanted Kumkumadi, the classical Ayurvedic brightening oil, but the traditional recipe was too rich for skin like mine.</p><p>So we rebuilt it. My mother, an Ayurvedic practitioner, and a team of Canadian chemists kept what made it work and removed what my skin couldn't take.</p><p>I made it for myself. Now it belongs to whoever needs it.</p>"
+    },
+    { "type": "image_picker", "id": "signature", "label": "Signature", "info": "Empty uses the drawn signature" },
+    { "type": "text", "id": "name", "label": "Name", "default": "Founder MANJULA" }
+  ],
+  "presets": [{ "name": "Image with text: Founder" }]
+}
+{% endschema %}

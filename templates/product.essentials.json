@@ -1,0 +1,123 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "item-face": {
+          "type": "bundle_item",
+          "settings": {
+            "product": "face-oil",
+            "name": "Face oil",
+            "size": "30ml",
+            "benefits": "Brightens, Calms, Hydrates"
+          }
+        },
+        "item-hair": {
+          "type": "bundle_item",
+          "settings": {
+            "product": "hair-oil",
+            "name": "Hair oil",
+            "size": "100ml",
+            "benefits": "Brightens, Calms, Hydrates"
+          }
+        },
+        "item-body": {
+          "type": "bundle_item",
+          "settings": {
+            "product": "body-oil",
+            "name": "Body oil",
+            "size": "100ml",
+            "benefits": "Brightens, Calms, Hydrates"
+          }
+        }
+      },
+      "block_order": [
+        "item-face",
+        "item-hair",
+        "item-body"
+      ],
+      "settings": {
+        "expert_quote": "“High quality Ayurvedic oils, like those from Manjula, are a powerful way to support healthy skin and hair using time-tested botanical ingredients.”",
+        "expert_name": "Dr. Anika Sharma",
+        "expert_role": "Ayurvedic Practitioner"
+      }
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {
+        "heading": "Customer reviews",
+        "recommend_label": "Would recommend this set."
+      }
+    },
+    "use_guide": {
+      "type": "use-guide",
+      "blocks": {
+        "note-1": {
+          "type": "note",
+          "settings": {
+            "label": "When to use",
+            "text": "Morning: Apply after water-based serums and before SPF. Evening: Use as the final step in your skincare routine."
+          }
+        },
+        "note-2": {
+          "type": "note",
+          "settings": {
+            "label": "For best results",
+            "text": "Use consistently and start with a small amount. If your skin feels oily, reduce the number of drops."
+          }
+        }
+      },
+      "block_order": [
+        "note-1",
+        "note-2"
+      ],
+      "settings": {
+        "heading": "How to use the complete set"
+      }
+    },
+    "ingredients": {
+      "type": "ingredient-explorer",
+      "settings": {
+        "heading": "Explore all ingredients",
+        "functions": "Brightens, Nourishes, Smoothes, Protects, Barrier support",
+        "products": [
+          "face-oil",
+          "hair-oil",
+          "body-oil"
+        ]
+      }
+    },
+    "founder_note": {
+      "type": "image-with-text-founder-note",
+      "settings": {
+        "image": "shopify://shop_images/subscription-founder.jpg"
+      }
+    },
+    "faq": {
+      "type": "faq-image",
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+        "heading": "Questions\nand answers",
+        "image": "shopify://shop_images/contact-faq-smile.jpg"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "use_guide",
+    "ingredients",
+    "reviews",
+    "founder_note",
+    "faq"
+  ]
+}

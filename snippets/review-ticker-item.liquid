@@ -1,0 +1,21 @@
+{%- comment -%}
+  Figma: Components Molecules / Review ticker item
+  quote   short review quote, shown in quotation marks     (Figma: Quote)
+  name    reviewer first name                               (Figma: Name)
+  tone    inverse (default) | default                       (Figma: Tone; inverse = over photography, hero marquee)
+  class   placement only
+  Quote · name in 14px caps (label/caps-base), 8px apart, with a 4px dot.
+{%- endcomment -%}
+{%- liquid
+  assign tone = tone | default: 'inverse'
+  if tone == 'inverse'
+    assign tone_class = 'text-text-inverse'
+  else
+    assign tone_class = 'text-text'
+  endif
+-%}
+<span class="inline-flex shrink-0 items-center gap-2 whitespace-nowrap text-label-caps-base {{ tone_class }} {{ class }}" data-tone="{{ tone }}">
+  <span>&ldquo;{{ quote }}&rdquo;</span>
+  <span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
+  <span>{{ name }}</span>
+</span>

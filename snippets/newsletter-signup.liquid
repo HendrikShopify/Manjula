@@ -1,6 +1,8 @@
 {%- comment -%}
   Figma: Components Atoms / Newsletter signup
-  layout          stacked-left | stacked-center | side-by-side     (Figma: Layout)
+  layout          stacked-left | stacked-center | side-by-side | card     (Figma: Layout)
+                  card: Manjula footer card. 52px padding from lg (page margin below), display/2 title (heading/2 on
+                  mobile) next to a body/lg intro, the form at the bottom. The card's size and background come from the parent.
   input_style     inline | attached | underline                     (Newsletter input: Style)
   id              unique id (form and field ids derive from it)
   title, description, fine_print_html, placeholder, button_label   (Figma: Title, Description, Fine print); default to the newsletter.* locale strings
@@ -32,6 +34,9 @@
     when 'stacked-center'
       assign root = 'flex-col items-center text-center max-w-120'
       assign form_align = 'items-center'
+    when 'card'
+      assign root = 'flex-col justify-between'
+      assign form_align = 'items-start'
     when 'side-by-side'
       assign root = 'flex-col md:flex-row md:items-start md:gap-10 max-w-240'
       assign form_align = 'items-start'
@@ -43,13 +48,28 @@
   assign field_id = id | append: '-email'
 -%}
 <div class="newsletter-signup flex w-full gap-6 {{ root }} {{ class }}" data-layout="{{ layout }}">
+  {%- if layout == 'card' -%}
+    <div class="flex w-full flex-col gap-4 lg:flex-row lg:items-start lg:justify-between lg:gap-2">
+      <{{ tag }} class="text-heading-2 text-text text-balance lg:max-w-118 lg:text-display-2">{{ title_text }}</{{ tag }}>
+      {%- unless show_description == false -%}
+        <p class="text-body-sm text-text-muted lg:max-w-85 lg:text-body-lg lg:text-text">{{ description_text }}</p>
+      {%- endunless -%}
+    </div>
+  {%- else -%}
   <div class="flex w-full flex-col gap-2 md:flex-1">
     <{{ tag }} class="text-heading-4 text-text">{{ title_text }}</{{ tag }}>
     {%- unless show_description == false -%}
       <p class="text-body-base text-text-muted">{{ description_text }}</p>
     {%- endunless -%}
   </div>
-  {%- form 'customer', id: id, class: 'newsletter-signup__form flex w-full flex-col md:flex-1' -%}
+  {%- endif -%}
+  {%- liquid
+    assign form_class = 'newsletter-signup__form flex w-full flex-col md:flex-1'
+    if layout == 'card'
+      assign form_class = 'newsletter-signup__form flex w-full flex-col'
+    endif
+  -%}
+  {%- form 'customer', id: id, class: form_class -%}
     {%- liquid
       assign current_status = status
       assign current_message = message

@@ -1,17 +1,25 @@
 {%- comment -%}
-  Figma: Sections / Main page (Desktop, Mobile)
-  Title and optional subtitle in the prose column, then the page body as Rich text. No breadcrumbs in the design.
+  Figma: Sections / Main page (Desktop, Mobile). Manjula legal pages.
+  From lg: title and subtitle over columns 1 to 4, body over columns 6 to 10. Stacked below lg.
   Subtitle: page.metafields.custom.subtitle when set (Figma: Show subtitle), for example "Last updated 12 October 2026".
+  Body: the rich-text snippet at size sm (every heading heading/3, lists body/sm), as the Figma Main page.
+  No breadcrumbs in the design.
 {%- endcomment -%}
-{%- liquid
-  assign subtitle = page.metafields.custom.subtitle
--%}
-<div class="mx-auto w-full max-w-page px-page-margin pt-8 pb-12 lg:pt-12 lg:pb-20 flex flex-col items-center gap-8 lg:gap-12">
-  <header class="flex w-full max-w-prose-width flex-col gap-4">
-    <h1 class="text-heading-2 lg:text-heading-1 text-text">{{ page.title | escape }}</h1>
+{%- assign subtitle = page.metafields.custom.subtitle -%}
+<div class="mx-auto flex w-full max-w-page flex-col gap-8 px-page-margin py-section-md lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-gutter lg:gap-y-0 lg:pt-section-sm">
+  <header class="flex flex-col gap-4 lg:col-span-4">
+    <h1 class="text-heading-1 lg:text-display-2 text-text">{{ page.title | escape }}</h1>
     {%- if subtitle != blank -%}
       <p class="text-body-sm text-text-muted">{{ subtitle }}</p>
     {%- endif -%}
   </header>
-  {% render 'rich-text', content: page.content, class: 'w-full max-w-prose-width' %}
+  {% render 'rich-text', content: page.content, size: 'sm', class: 'w-full lg:col-start-6 lg:col-span-5' %}
 </div>
+
+{% schema %}
+{
+  "name": "Main page",
+  "tag": "section",
+  "settings": []
+}
+{% endschema %}

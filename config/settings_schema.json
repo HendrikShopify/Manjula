@@ -19,54 +19,48 @@
     ]
   },
   {
-    "name": "Social media",
+    "name": "Products",
     "settings": [
       {
-        "type": "header",
-        "content": "Social accounts"
+        "type": "richtext",
+        "id": "delivery_returns",
+        "label": "Delivery and returns",
+        "info": "Shown in the product details drawer.",
+        "default": "<p>Made in Canada, sustainably packaged and travel-sized. Free standard shipping on orders over the threshold. Not happy with it? Return unused items within 30 days for a refund.</p>"
       },
       {
-        "type": "text",
-        "id": "social_facebook_link",
-        "label": "Facebook",
-        "placeholder": "https://www.facebook.com/your-page"
-      },
-      {
-        "type": "text",
-        "id": "social_instagram_link",
-        "label": "Instagram",
-        "placeholder": "https://www.instagram.com/your-page"
-      },
-      {
-        "type": "text",
-        "id": "social_linkedin_link",
-        "label": "LinkedIn",
-        "placeholder": "https://www.linkedin.com/in/your-page"
-      },
-      {
-        "type": "text",
-        "id": "social_youtube_link",
-        "label": "YouTube",
-        "placeholder": "https://www.youtube.com/channel/your-page"
-      },
-      {
-        "type": "text",
-        "id": "social_pinterest_link",
-        "label": "Pinterest",
-        "placeholder": "https://www.pinterest.com/your-page"
-      },
-      {
-        "type": "text",
-        "id": "social_twitter_link",
-        "label": "Twitter",
-        "placeholder": "https://www.twitter.com/your-page"
-      },
-      {
-        "type": "text",
-        "id": "social_tiktok_link",
-        "label": "TikTok",
-        "placeholder": "https://www.tiktok.com/@your-page"
+        "type": "url",
+        "id": "delivery_returns_link",
+        "label": "Delivery and returns page",
+        "info": "Shown as a link under the delivery and returns text."
       }
+    ]
+  },
+  {
+    "name": "Delivery estimate",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "The \"Estimated delivery\" date under Add to cart. It counts from today, using the visitor's country. Countries not listed below use the default."
+      },
+      { "type": "range", "id": "delivery_days", "label": "Days to delivery (default)", "min": 1, "max": 30, "step": 1, "default": 7 },
+      { "type": "checkbox", "id": "delivery_business_days", "label": "Count business days only", "info": "Saturdays and Sundays are skipped.", "default": true },
+      { "type": "range", "id": "delivery_cutoff_hour", "label": "Order cut-off time", "min": 0, "max": 24, "step": 1, "unit": "h", "default": 14, "info": "Orders after this hour (store time zone) ship a day later. 24 turns it off." },
+      { "type": "header", "content": "Country 1" },
+      { "type": "text", "id": "delivery_country_1", "label": "Country code", "info": "Two letters, e.g. CA, US, GB. Separate more countries with a comma.", "default": "CA" },
+      { "type": "range", "id": "delivery_days_1", "label": "Days to delivery", "min": 1, "max": 30, "step": 1, "default": 3 },
+      { "type": "header", "content": "Country 2" },
+      { "type": "text", "id": "delivery_country_2", "label": "Country code", "default": "US" },
+      { "type": "range", "id": "delivery_days_2", "label": "Days to delivery", "min": 1, "max": 30, "step": 1, "default": 5 },
+      { "type": "header", "content": "Country 3" },
+      { "type": "text", "id": "delivery_country_3", "label": "Country code", "default": "GB" },
+      { "type": "range", "id": "delivery_days_3", "label": "Days to delivery", "min": 1, "max": 30, "step": 1, "default": 7 },
+      { "type": "header", "content": "Country 4" },
+      { "type": "text", "id": "delivery_country_4", "label": "Country code" },
+      { "type": "range", "id": "delivery_days_4", "label": "Days to delivery", "min": 1, "max": 30, "step": 1, "default": 7 },
+      { "type": "header", "content": "Country 5" },
+      { "type": "text", "id": "delivery_country_5", "label": "Country code" },
+      { "type": "range", "id": "delivery_days_5", "label": "Days to delivery", "min": 1, "max": 30, "step": 1, "default": 7 }
     ]
   }
 ]

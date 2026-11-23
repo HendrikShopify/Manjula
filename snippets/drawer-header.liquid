@@ -1,15 +1,18 @@
 {%- comment -%}
-  Figma: Components Atoms / Drawer header
-  title, subtitle (optional caps label), id (sets the heading id for aria-labelledby)
-  Close button is an icon-button ghost sm with data-drawer-close; the drawer element listens for it.
+  Figma: Components Atoms / Drawer header (107:952)
+  title   heading/1 (heading/2 below lg)
+  count   optional number set as a superscript next to the title (cart item count)
+  id      sets the heading id for aria-labelledby
+  class   placement only
+  CLOSE text button (label/caps) with data-drawer-close; the drawer element listens for it. 1px bottom border.
 {%- endcomment -%}
-{%- liquid
-  assign close_label = 'accessibility.close' | t
--%}
-<div class="drawer-header flex items-center justify-between gap-3 p-6 bg-background {{ class }}">
-  <div class="flex items-center gap-4">
-    <h2 class="text-heading-5 text-text"{% if id %} id="{{ id }}-title"{% endif %}>{{ title }}</h2>
-    {%- if subtitle %}<span class="text-label-caps text-text">{{ subtitle }}</span>{% endif -%}
-  </div>
-  {% render 'icon-button', icon: 'icon__close.svg', label: close_label, style: 'ghost', size: 'sm', attributes: 'data-drawer-close' %}
+{%- assign close_label = 'accessibility.close' | t -%}
+<div class="drawer-header flex items-start justify-between gap-3 border-b border-border bg-background p-6 {{ class }}">
+  <h2 class="flex items-start gap-2 text-text lg:gap-3"{% if id %} id="{{ id }}-title"{% endif %}>
+    <span class="text-heading-2 lg:text-heading-1">{{ title }}</span>
+    {%- if count != blank %}<sup class="top-0 text-heading-4 lg:text-heading-2">{{ count }}</sup>{% endif -%}
+  </h2>
+  <button type="button" class="inline-flex h-8 shrink-0 cursor-pointer items-center rounded-xs text-label-caps text-text transition-colors hover:text-text-muted focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus" data-drawer-close>
+    {{- close_label -}}
+  </button>
 </div>

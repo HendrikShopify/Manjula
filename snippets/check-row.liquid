@@ -1,0 +1,50 @@
+{%- comment -%}
+  Figma: Components Molecules / Check row (2117:21598)
+  Ingredient list row hanging off a bracket: a tick line, then the label.
+  label    text
+  type     included | excluded | minor | summary | benefit          (Figma: Type)
+             included  32px tick at 60%, check icon, label/xl
+             excluded  32px tick, cross icon, label/base (dim the whole list to 60% where it is used)
+             minor     32px tick, label/base only
+             summary   40px tick at 60%, label/xl (e.g. Plant oils last)
+             benefit   no tick, small check, label/base at 60%
+  class    placement only
+  Below lg the ticks shorten to 20px and the xl labels drop to label/base, as in the mobile frames.
+{%- endcomment -%}
+{%- liquid
+  assign type = type | default: 'included'
+  case type
+    when 'excluded'
+      assign tick = 'w-5 lg:w-8'
+      assign icon = 'icon__x.svg'
+      assign icon_size = 'size-2.25'
+      assign text = 'text-label-base'
+    when 'minor'
+      assign tick = 'w-5 lg:w-8'
+      assign icon = ''
+      assign text = 'text-label-sm lg:text-label-base'
+    when 'summary'
+      assign tick = 'w-5 opacity-60 lg:w-10'
+      assign icon = ''
+      assign text = 'text-label-base lg:text-label-xl'
+    when 'benefit'
+      assign tick = ''
+      assign icon = 'icon__check.svg'
+      assign icon_size = 'h-2.25 w-3.5'
+      assign text = 'text-body-xs lg:text-label-base'
+    else
+      assign tick = 'w-5 opacity-60 lg:w-8'
+      assign icon = 'icon__check.svg'
+      assign icon_size = 'h-3.25 w-4.5'
+      assign text = 'text-label-base lg:text-label-xl'
+  endcase
+-%}
+<li class="check-row flex items-center gap-2 text-text {{ class }}" data-type="{{ type }}">
+  {%- if tick != blank -%}
+    <span class="h-px shrink-0 bg-text {{ tick }}" aria-hidden="true"></span>
+  {%- endif -%}
+  {%- if icon != blank -%}
+    <span class="{{ icon_size }} shrink-0 [&>svg]:size-full" aria-hidden="true">{{ icon | inline_asset_content }}</span>
+  {%- endif -%}
+  <span class="{{ text }}{% if type == 'benefit' %} opacity-60{% endif %}">{{ label }}</span>
+</li>

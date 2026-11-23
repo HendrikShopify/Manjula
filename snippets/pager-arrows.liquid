@@ -1,0 +1,20 @@
+{%- comment -%}
+  Figma: Components Atoms / Pager arrows (2088:29793)
+  previous_label, next_label   accessible names
+  previous_attributes, next_attributes   JS hooks, e.g. 'data-carousel-prev'
+  previous_disabled            boolean, starts the Previous button disabled
+  class                        placement only
+  Previous / next pair: 24px squares with a 1px Ink outline that share a border. Disabled dims to 60%.
+  States: Hover = :hover (Surface alt fill), Focus = :focus-visible, Disabled = [disabled]
+{%- endcomment -%}
+{%- liquid
+  assign button_class = 'inline-flex size-6 cursor-pointer items-center justify-center border border-text text-text transition-colors hover:bg-surface-alt focus-visible:relative focus-visible:z-10 focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:cursor-default disabled:opacity-60 disabled:hover:bg-transparent [&>svg]:size-6'
+-%}
+<div class="pager-arrows flex {{ class }}">
+  <button type="button" class="{{ button_class }} -mr-px" aria-label="{{ previous_label | escape }}"{% if previous_disabled %} disabled{% endif %} {{ previous_attributes }}>
+    {{- 'icon__pager-prev.svg' | inline_asset_content -}}
+  </button>
+  <button type="button" class="{{ button_class }}" aria-label="{{ next_label | escape }}" {{ next_attributes }}>
+    {{- 'icon__pager-next.svg' | inline_asset_content -}}
+  </button>
+</div>

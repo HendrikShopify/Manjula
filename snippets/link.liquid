@@ -2,7 +2,8 @@
   Figma: Components Atoms / Link
   label          text                            (Figma: Label)
   href           url; omit for a <button>
-  size           sm | md                         (Figma: Size)
+  size           sm | md | lg | inline           (Figma: Size; lg = link/lg 13px caps, About hero; inline = link/inline 14px, Press card)
+  tone           default | inverse               inverse = text-on-media for links over photos
   icon_trailing  asset name, optional            (Figma: Trailing icon + swap)
   disabled       boolean                         (Figma: State=Disabled)
   class          placement only
@@ -12,10 +13,18 @@
 {%- liquid
   assign size = size | default: 'md'
   assign base = 'link inline-flex items-center gap-1 rounded-xs text-accent underline underline-offset-[0.15em] transition-colors hover:no-underline hover:text-accent-hover focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus aria-disabled:text-text-disabled aria-disabled:pointer-events-none cursor-pointer'
-  if size == 'sm'
-    assign dim = 'text-link-sm'
-  else
-    assign dim = 'text-link-base'
+  case size
+    when 'sm'
+      assign dim = 'text-link-sm'
+    when 'lg'
+      assign dim = 'text-link-lg'
+    when 'inline'
+      assign dim = 'text-link-inline'
+    else
+      assign dim = 'text-link-base'
+  endcase
+  if tone == 'inverse'
+    assign base = base | replace: 'text-accent ', 'text-text-on-media ' | replace: 'hover:text-accent-hover', 'hover:text-text-on-media/70'
   endif
   assign tag = 'button'
   if href != blank

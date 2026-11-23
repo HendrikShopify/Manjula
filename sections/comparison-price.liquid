@@ -1,0 +1,136 @@
+{%- comment -%}
+  Figma: Sections / Comparison price (2490:20463; Templates FINAL PDP / Hair oil "Comparison" 2526:26049, mobile 2526:26061)
+  Same frame as Comparison texture: on the breakout grid, the photo bleeds left to the end of column 4 (desktop only), content on columns 5 to 12, then a display heading, small photo and text.
+  Below, two Surface columns: "Buy them separately" lists the products this one replaces with their prices and a struck
+  total; "Or one bottle" shows this product, its price and a check list.
+  Rows are blocks (title, sub, price in whole currency units). The left total is the sum of the rows. The right price is
+  the product's own price. These are display figures at heading size, not the Price atom (see DECISIONS).
+{%- endcomment -%}
+{%- liquid
+  assign rows = section.blocks | where: 'type', 'row'
+  assign total = 0
+  for block in rows
+    assign row_cents = block.settings.price | times: 100
+    assign total = total | plus: row_cents
+  endfor
+  assign product_name = section.settings.product_title | default: product.title
+  assign checks = section.settings.checks | newline_to_br | split: '<br />'
+-%}
+<div class="comparison-price section-breakout bg-background py-section-md">
+  <div class="relative max-lg:hidden" data-bleed="left" style="--start: 1; --span: 4;">
+    {% render 'media', media: section.settings.media, ratio: 'fill', sizes: '560px', class: 'absolute! inset-0 size-full' %}
+  </div>
+
+  <div class="flex flex-col gap-10 lg:gap-20" style="--start: 5; --span: 8;">
+    <div class="flex flex-col gap-6 text-text lg:gap-10">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="text-heading-2 lg:text-display-2">{{ section.settings.heading | newline_to_br }}</h2>
+      {%- endif -%}
+      {%- if section.settings.image != blank -%}
+        {% render 'media', media: section.settings.image, ratio: 'fill', sizes: '80px', class: 'h-27.25 w-20' %}
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p class="text-body-sm lg:max-w-80">{{ section.settings.text }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="grid w-full grid-cols-2 gap-2 lg:max-w-205 lg:gap-1">
+      <div class="flex min-w-0 flex-col justify-between gap-10 bg-surface p-3 text-text lg:p-6">
+        <div class="flex flex-col gap-4 lg:gap-10">
+          <p class="text-label-caps-lg text-text-muted">{{ section.settings.left_label }}</p>
+          <ul class="flex flex-col" role="list">
+            {%- for block in rows -%}
+              {%- assign row_cents = block.settings.price | times: 100 -%}
+              <li class="flex items-start justify-between gap-2 border-b border-border-subtle py-4 last:border-b-0" {{ block.shopify_attributes }}>
+                <div class="flex min-w-0 flex-1 flex-col gap-2 lg:max-w-90 lg:gap-3">
+                  <p class="text-label-base lg:text-heading-4">{{ block.settings.title }}</p>
+                  {%- if block.settings.sub != blank -%}
+                    <p class="text-body-xs opacity-60 lg:text-body-sm">{{ block.settings.sub }}</p>
+                  {%- endif -%}
+                </div>
+                <p class="shrink-0 text-label-base lg:text-heading-4">{{ row_cents | money_without_trailing_zeros }}</p>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+        <div class="flex flex-col gap-5 border-t border-surface-alt pt-5">
+          <p class="flex items-center justify-between gap-2">
+            <span class="text-label-base lg:text-heading-4">{{ section.settings.left_total }}</span>
+            <s class="text-heading-4 opacity-60 lg:text-heading-2">{{ total | money_without_trailing_zeros }}</s>
+          </p>
+        </div>
+      </div>
+
+      <div class="flex min-w-0 flex-col justify-between gap-10 bg-surface p-3 text-text lg:p-6">
+        <div class="flex flex-col gap-4 lg:gap-10">
+          <p class="text-label-caps-lg text-text-muted">{{ section.settings.right_label }}</p>
+          <div class="flex flex-col gap-8">
+            <div class="flex items-start justify-between gap-2 py-4">
+              <div class="flex min-w-0 flex-1 flex-col gap-2 lg:max-w-90 lg:gap-3">
+                <p class="text-label-base lg:text-heading-4">{{ product_name }}</p>
+                {%- if section.settings.product_sub != blank -%}
+                  <p class="text-body-xs opacity-60 lg:text-body-sm">{{ section.settings.product_sub }}</p>
+                {%- endif -%}
+              </div>
+              {%- if product -%}
+                <p class="shrink-0 text-label-base lg:text-heading-4">{{ product.price | money_without_trailing_zeros }}</p>
+              {%- endif -%}
+            </div>
+            {%- if section.settings.checks != blank -%}
+              <ul class="flex flex-col gap-3" role="list">
+                {%- for check in checks -%}
+                  {%- assign check_text = check | strip -%}
+                  {%- if check_text != blank %}{% render 'check-row', label: check_text, type: 'benefit' %}{% endif -%}
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </div>
+        </div>
+        <div class="flex flex-col gap-5 border-t border-surface-alt pt-5">
+          <p class="flex items-center justify-between gap-2">
+            <span class="text-label-base lg:text-heading-4">{{ section.settings.right_total }}</span>
+            {%- if product -%}
+              <span class="text-heading-4 lg:text-heading-2">{{ product.price | money_without_trailing_zeros }}</span>
+            {%- endif -%}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Comparison price",
+  "tag": "section",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    { "type": "image_picker", "id": "media", "label": "Large photo", "info": "Desktop only, runs to the left edge" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Four steps.\nOne bottle." },
+    { "type": "image_picker", "id": "image", "label": "Small photo" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Most hair routines split scalp care, growth support, conditioning and styling across four products. This one was formulated to move through all of it." },
+    { "type": "header", "content": "Separate products" },
+    { "type": "text", "id": "left_label", "label": "Label", "default": "Buy them separately" },
+    { "type": "text", "id": "left_total", "label": "Total label", "default": "Four bottles" },
+    { "type": "header", "content": "This product" },
+    { "type": "text", "id": "right_label", "label": "Label", "default": "Or one bottle" },
+    { "type": "text", "id": "product_title", "label": "Name", "info": "Empty uses the product title" },
+    { "type": "text", "id": "product_sub", "label": "Sub line", "default": "100 ml, four to six months" },
+    { "type": "textarea", "id": "checks", "label": "Check list", "info": "One per line", "default": "Scalp\nPre-wash\nPost-wash\nStyling" },
+    { "type": "text", "id": "right_total", "label": "Total label", "default": "One bottle" }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Separate product",
+      "limit": 6,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Name", "default": "Scalp treatment" },
+        { "type": "text", "id": "sub", "label": "Sub line" },
+        { "type": "number", "id": "price", "label": "Price", "info": "Whole amount in store currency, e.g. 34", "default": 34 }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Comparison price" }]
+}
+{% endschema %}

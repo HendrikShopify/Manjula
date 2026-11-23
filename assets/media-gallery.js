@@ -1,14 +1,13 @@
 /*
   Swiper (swiper-bundle.min.js, loaded in theme.liquid) drives both tracks.
-  <media-gallery data-layout data-count data-selected>
+  <media-gallery data-count data-selected>  PDP gallery (snippets/media-gallery.liquid)
     [data-gallery-track]   Swiper container (.swiper > .swiper-wrapper > [data-gallery-slide].swiper-slide), one slide per media
-    [data-g-thumb]         thumbnails (desktop), [data-carousel-to] dots, [data-carousel-current] counter
-    [data-lightbox-open]   zoom button, opens <media-lightbox> at the current slide
-    [data-variant-media]   JSON { variantId: 1-based media position }, slides to it on variant change
-    Grid layout: Swiper only runs below lg; from lg the slides are a plain 2-column grid.
-  <media-lightbox>
+    [data-g-thumb]         thumbnails (desktop), [data-carousel-to] dots
+  <media-lightbox>  used by the Reviews section (snippets/media-lightbox.liquid)
     <dialog> with [data-lightbox-track] (Swiper, created on first open), [data-lightbox-prev|next|close], [data-lightbox-current]
     open(index) / close() / setItems([{ type: 'photo'|'video', src, poster }]) for dynamic lightboxes (reviews; template[data-lightbox-photo|video]). Video slides use native controls and do not zoom. Click the image to zoom (2.5x at the click point), drag to pan while zoomed, click again to zoom out; swiping is off while zoomed.
+    data-style="overlay" (reviews): dimmed overlay like the hero video lightbox, no zoom; [data-lightbox-media] wraps each
+    slide's media (a click outside it and outside [data-lightbox-controls] closes); the controls pill hides below 2 items.
   Events (bubble): gallery:change { index }, lightbox:open, lightbox:close
 */
 (() => {
@@ -16,13 +15,9 @@
   const ZOOM = 2.5;
   const speed = (instant) => (instant || mediaReducedMotion() ? 0 : 300);
 
-  function syncIndicators(root, index, exclude) {
-    const keep = (el) => !exclude || !el.closest(exclude);
+  function syncIndicators(root, index) {
     root.querySelectorAll('[data-carousel-to]').forEach((el) => {
-      if (keep(el)) el.setAttribute('aria-selected', String(Number(el.dataset.carouselTo) === index));
-    });
-    root.querySelectorAll('[data-carousel-current]').forEach((el) => {
-      if (keep(el)) el.textContent = index;
+      el.setAttribute('aria-selected', String(Number(el.dataset.carouselTo) === index));
     });
   }
 
@@ -35,93 +30,47 @@
           this.thumbs = [...this.$$('[data-g-thumb]')];
           this.count = Number(this.dataset.count) || 0;
           this.index = Number(this.dataset.selected) || 1;
-          this.variantMedia = this.readVariantMedia();
           if (!this.track) return;
 
-          this.setupSwiper();
+          if (window.Swiper) this.createSwiper();
 
           this.listen(this, 'click', (evt) => {
             const thumb = evt.target.closest('[data-g-thumb]');
-            if (thumb && !thumb.closest('media-lightbox')) return this.select(Number(thumb.dataset.thumbIndex));
+            if (thumb) return this.select(Number(thumb.dataset.thumbIndex));
             const dot = evt.target.closest('[data-carousel-to]');
-            if (dot && !dot.closest('media-lightbox')) return this.select(Number(dot.dataset.carouselTo));
-            const open = evt.target.closest('[data-lightbox-open]');
-            if (open) {
-              const slide = open.closest('[data-gallery-slide]');
-              const slides = [...this.$$('[data-gallery-slide]')];
-              this.lightbox?.open(slide ? slides.indexOf(slide) + 1 : this.index);
-            }
+            if (dot) return this.select(Number(dot.dataset.carouselTo));
           });
           this.listen(this.track, 'keydown', (evt) => {
             if (evt.key === 'ArrowRight') this.select(this.index + 1);
             if (evt.key === 'ArrowLeft') this.select(this.index - 1);
           });
-          this.listen(this, 'lightbox:close', (evt) => this.select(evt.detail.index));
-
-          const info = this.closest('product-info');
-          if (info) this.listen(info, 'change', (evt) => this.onVariantChange(evt));
 
           this.sync();
         }
 
         disconnectedCallback() {
           super.disconnectedCallback();
-          this.destroySwiper();
-        }
-
-        setupSwiper() {
-          if (!window.Swiper) return;
-          const gridFromLg = this.dataset.layout === 'grid';
-          const desktop = window.matchMedia('(min-width: 1024px)');
-          const apply = () => {
-            if (gridFromLg && desktop.matches) this.destroySwiper();
-            else if (!this.swiper) this.createSwiper();
-          };
-          apply();
-          this.listen(desktop, 'change', apply);
+          this.swiper?.destroy(true, true);
+          this.swiper = null;
         }
 
         createSwiper() {
+          // Mobile: a plain slide. From lg no slide: the media swaps at once (speed 0) and the new media eases out of
+          // a zoom and blur into focus (lg slide classes in media-gallery.liquid).
           this.swiper = new Swiper(this.track, {
             slidesPerView: 1,
-            speed: 1000,
+            speed: mediaReducedMotion() ? 0 : 300,
+            breakpoints: { 1024: { speed: 0 } },
             initialSlide: this.index - 1,
             watchOverflow: true,
           });
           this.swiper.on('slideChange', () => this.select(this.swiper.activeIndex + 1, { scroll: false }));
         }
 
-        destroySwiper() {
-          this.swiper?.destroy(true, true);
-          this.swiper = null;
-        }
-
-        get lightbox() {
-          return this.$('media-lightbox');
-        }
-
-        readVariantMedia() {
-          try {
-            return JSON.parse(this.$('[data-variant-media]')?.textContent || '{}');
-          } catch (e) {
-            return {};
-          }
-        }
-
-        onVariantChange(evt) {
-          const input = evt.target;
-          if (!input.matches?.('input[name="id"]')) return;
-          const position = this.variantMedia[input.value];
-          if (position) this.select(position);
-        }
-
         select(index, { scroll = true } = {}) {
           if (!this.count) return;
           index = Math.min(Math.max(index, 1), this.count);
-          if (scroll) {
-            if (this.swiper) this.swiper.slideTo(index - 1, speed());
-            else this.$$('[data-gallery-slide]')[index - 1]?.scrollIntoView({ behavior: mediaReducedMotion() ? 'auto' : 'smooth', block: 'nearest', inline: 'nearest' });
-          }
+          if (scroll) this.swiper?.slideTo(index - 1, this.swiper.params.speed); // the breakpoint speed: slide on mobile, instant swap from lg
           if (index === this.index && !scroll) return;
           this.index = index;
           this.sync();
@@ -130,7 +79,7 @@
 
         sync() {
           this.thumbs.forEach((thumb) => thumb.setAttribute('aria-current', String(Number(thumb.dataset.thumbIndex) === this.index)));
-          syncIndicators(this, this.index, 'media-lightbox');
+          syncIndicators(this, this.index);
         }
       }
     );
@@ -149,8 +98,11 @@
           this.drag = null;
           if (!this.dialog || !this.track) return;
 
+          this.overlay = this.dataset.style === 'overlay';
           this.listen(this.dialog, 'click', (evt) => {
             if (evt.target === this.dialog || evt.target.closest('[data-lightbox-close]')) return this.close();
+            // Overlay style: a click outside the media and the pill closes, as in the hero video lightbox
+            if (this.overlay && !evt.target.closest('[data-lightbox-media], [data-lightbox-controls]')) return this.close();
             if (evt.target.closest('[data-lightbox-prev]')) return this.go(this.index - 1);
             if (evt.target.closest('[data-lightbox-next]')) return this.go(this.index + 1);
           });
@@ -203,6 +155,8 @@
           this.count = items.length;
           const total = this.$('[data-lightbox-total]');
           if (total) total.textContent = this.count;
+          const controls = this.$('[data-lightbox-controls]');
+          if (controls) controls.hidden = this.count < 2;
           this.index = 1;
         }
 

@@ -2,36 +2,44 @@
   Shopify policy pages (/policies/...). Shopify renders this markup itself inside layout/theme.liquid,
   so this is the one place the theme styles classes it does not own:
   .shopify-policy__container > .shopify-policy__title > h1, .shopify-policy__body > .rte
-  Mirrors sections/main-page.liquid and snippets/rich-text.liquid with the same utilities. Keep the two in step.
+  Mirrors sections/main-page.liquid (layout sidebar, the Manjula legal pages) and snippets/rich-text.liquid
+  with the same utilities. Keep the three in step.
+  Shopify policy HTML comes as paragraphs straight in .rte or wrapped in divs, sometimes a div in a div (privacy). Every
+  level that holds text blocks gets 24px between them (flex gap); a bare <br> between blocks is dropped, the gap already spaces them. Without the gap, the trimmed
+  text boxes (tailwind/text-trim.css) of two neighbouring paragraphs overlap.
+  Links in running text keep the text's own style, underlined (the caps link style is for standalone links).
 */
 .shopify-policy__container {
-  @apply mx-auto w-full max-w-page px-page-margin pt-8 pb-12 lg:pt-12 lg:pb-20 flex flex-col items-center gap-8 lg:gap-12;
+  @apply mx-auto flex w-full max-w-page flex-col gap-8 px-page-margin py-section-md lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-gutter lg:gap-y-0 lg:pt-section-sm;
 }
 .shopify-policy__title {
-  @apply w-full max-w-prose-width text-left;
+  @apply w-full text-left lg:col-span-4;
 }
 .shopify-policy__title h1 {
-  @apply text-heading-2 lg:text-heading-1 text-text text-left;
+  @apply text-heading-1 lg:text-display-2 text-text text-left;
 }
 .shopify-policy__body {
-  @apply w-full max-w-prose-width;
+  @apply w-full lg:col-start-6 lg:col-span-5;
 }
 .shopify-policy__body .rte {
-  @apply text-body-base text-text;
+  @apply flex flex-col gap-6 text-body-base text-text;
 }
-.shopify-policy__body .rte > div {
+.shopify-policy__body .rte > br,
+.shopify-policy__body .rte div > br { @apply hidden; }
+.shopify-policy__body .rte div:has(> :is(p, ul, ol, h1, h2, h3, h4, h5, h6, div, table, blockquote)) {
   @apply flex flex-col gap-6;
 }
-.shopify-policy__body .rte h1 { @apply text-heading-1; }
-.shopify-policy__body .rte h2 { @apply text-heading-2 mt-4; }
-.shopify-policy__body .rte h3 { @apply text-heading-3 mt-4; }
-.shopify-policy__body .rte h4 { @apply text-heading-4; }
-.shopify-policy__body .rte a { @apply text-accent underline underline-offset-[0.15em]; }
-.shopify-policy__body .rte a:hover { @apply no-underline text-accent-hover; }
+/* As snippets/rich-text.liquid at size sm (the Figma Main page): every heading heading/3, lists body/sm; 64px above a
+   heading on mobile (not the first block), 24px on desktop. */
+.shopify-policy__body .rte :is(h1, h2, h3, h4, h5, h6) { @apply text-heading-3; }
+.shopify-policy__body .rte > :is(h1, h2, h3, h4, h5, h6):not(:first-child),
+.shopify-policy__body .rte div > :is(h1, h2, h3, h4, h5, h6):not(:first-child) { @apply max-lg:mt-10; }
+.shopify-policy__body .rte a { @apply text-text underline underline-offset-[0.15em]; }
+.shopify-policy__body .rte a:hover { @apply no-underline; }
 .shopify-policy__body .rte strong,
 .shopify-policy__body .rte b { @apply font-semibold; }
-.shopify-policy__body .rte ul { @apply flex flex-col gap-2 list-disc pl-7; }
-.shopify-policy__body .rte ol { @apply flex flex-col gap-2 list-decimal pl-7; }
+.shopify-policy__body .rte ul { @apply flex flex-col gap-2 list-disc pl-7 text-body-sm; }
+.shopify-policy__body .rte ol { @apply flex flex-col gap-2 list-decimal pl-7 text-body-sm; }
 .shopify-policy__body .rte li { @apply pl-1; }
 .shopify-policy__body .rte blockquote { @apply border-l-2 border-text pl-6 text-heading-5; }
 .shopify-policy__body .rte hr { @apply my-4 h-px border-0 bg-border; }

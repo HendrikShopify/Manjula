@@ -1,0 +1,81 @@
+{%- comment -%}
+  Figma: Sections / Image with text, Layout=Centered (2090:19562, mobile 2090:19588). Own section: Manjula keeps one
+  section per layout (Hendrik, 15 Nov), no layout select.
+  Founder story: 8-column 16:9 media (video: the Video snippet with its control bar, autoplays muted and
+  looped while in view), Sabon quote (max 744px) and a text link, all centred. Mobile: media full width, 24px gap
+  to the text, text 24px in from the edges.
+  heading        the Sabon quote (serif/base, serif/lg from lg)
+  video          Shopify video; wins over image. Play/pause, sound and seek show on hover, or after a tap on touch
+  image          used when there is no video
+  button_label, button_url   Link md (Figma: Show button)
+  Markup inline in this section (no snippet). The section settings are read into variables at the top.
+{%- endcomment -%}
+{%- liquid
+  assign heading = section.settings.heading
+  assign video = section.settings.video
+  assign image = section.settings.image
+  assign button_label = section.settings.button_label
+  assign button_url = section.settings.button_url
+-%}
+<div class="image-with-text-centered mx-auto w-full max-w-page py-section-md lg:grid lg:grid-cols-12 lg:gap-x-gutter lg:px-page-margin">
+  <div class="flex flex-col items-center gap-4 lg:col-span-8 lg:col-start-3 lg:gap-6">
+    <div class="flex w-full flex-col items-center gap-6 lg:gap-10">
+      {%- if video != blank -%}
+        {% render 'video', media: video, ratio: '16:9', autoplay: true, controls: 'bar', class: 'w-full' %}
+      {%- else -%}
+        {% render 'media', media: image, ratio: '16:9', sizes: '(min-width: 1728px) 1146px, (min-width: 1024px) 66vw, 100vw', class: 'w-full' %}
+      {%- endif -%}
+      <div class="flex w-full max-w-186 flex-col items-center gap-8 px-6 text-center lg:px-0">
+        {%- if heading != blank -%}
+          <p class="text-serif-base text-balance lg:text-serif-lg">{{ heading }}</p>
+        {%- endif -%}
+        {%- if button_label != blank -%}
+          {% render 'link', label: button_label, href: button_url, size: 'md' %}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image with text: Centered",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Quote",
+      "default": "What we inherit, we transform. Generations of knowledge, reimagined into modern formulations. Your three-oil system made in Toronto, developed for every part of your body."
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "info": "Plays muted on a loop"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Used when there is no video"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Link label",
+      "default": "About Manjula"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with text: Centered"
+    }
+  ]
+}
+{% endschema %}

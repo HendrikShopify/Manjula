@@ -5,49 +5,56 @@
   href      link; without it the item is current (number) or disabled (previous/next)
   current   boolean
   States: Hover = :hover, Current = [aria-current], Disabled = [aria-disabled]
+  Numbered items (number, previous, next, ellipsis) are 32px boxes with a 1px Border line, sharing the line with the
+  next item (-1px). Hover Border strong, current Accent fill with an Ink line, focus the Focus line. The arrows are
+  10px (icon__arrow-page-*). The text items (previous-text, next-text) have no line; hover fills Surface.
 {%- endcomment -%}
 {%- liquid
   assign type = type | default: 'number'
-  assign base = 'pagination-item inline-flex h-10 min-w-10 items-center justify-center gap-1 rounded-button text-label-base transition-colors'
+  assign base = 'pagination-item inline-flex items-center justify-center gap-1 rounded-button text-label-base transition-colors'
+  assign line = 'relative -ml-px h-8 min-w-8 border px-1 first:ml-0'
+  assign box = line | append: ' border-border hover:z-1 hover:border-border-strong focus-visible:z-1 focus-visible:outline-none focus-visible:border-focus'
   assign prev_label = 'general.pagination.previous' | t
   assign next_label = 'general.pagination.next' | t
 -%}
 {%- case type -%}
   {%- when 'ellipsis' -%}
-    <span class="{{ base }} px-2 text-text-muted" aria-hidden="true">…</span>
+    <span class="{{ base }} {{ line }} border-border text-text-muted" aria-hidden="true">…</span>
   {%- when 'previous' or 'next' or 'previous-text' or 'next-text' -%}
     {%- liquid
       if type contains 'previous'
-        assign icon = 'icon__chevron-left.svg'
+        assign icon = 'icon__arrow-page-prev.svg'
         assign text = prev_label
       else
-        assign icon = 'icon__chevron-right.svg'
+        assign icon = 'icon__arrow-page-next.svg'
         assign text = next_label
       endif
       if type contains 'text'
-        assign pad = 'px-3'
+        assign pad = 'h-8 px-3 hover:bg-surface focus-visible:outline-none focus-visible:border focus-visible:border-focus'
+        assign pad_disabled = 'h-8 px-3'
       else
-        assign pad = 'px-2'
+        assign pad = box
+        assign pad_disabled = line | append: ' border-border'
       endif
     -%}
     {%- if href -%}
-      <a class="{{ base }} {{ pad }} text-text hover:bg-surface focus-visible:outline-none focus-visible:border focus-visible:border-focus" href="{{ href }}" aria-label="{{ text | escape }}" data-type="{{ type }}">
+      <a class="{{ base }} {{ pad }} text-text" href="{{ href }}" aria-label="{{ text | escape }}" data-type="{{ type }}">
         {%- if type == 'next-text' %}<span>{{ text }}</span>{% endif -%}
-        <span class="size-5 [&>svg]:size-full" aria-hidden="true">{{ icon | inline_asset_content }}</span>
+        <span class="w-2.5 [&>svg]:h-auto [&>svg]:w-full" aria-hidden="true">{{ icon | inline_asset_content }}</span>
         {%- if type == 'previous-text' %}<span>{{ text }}</span>{% endif -%}
       </a>
     {%- else -%}
-      <span class="{{ base }} {{ pad }} text-text-disabled" aria-disabled="true" data-type="{{ type }}">
+      <span class="{{ base }} {{ pad_disabled }} text-text-disabled" aria-disabled="true" data-type="{{ type }}">
         {%- if type == 'next-text' %}<span>{{ text }}</span>{% endif -%}
-        <span class="size-5 [&>svg]:size-full" aria-hidden="true">{{ icon | inline_asset_content }}</span>
+        <span class="w-2.5 [&>svg]:h-auto [&>svg]:w-full" aria-hidden="true">{{ icon | inline_asset_content }}</span>
         {%- if type == 'previous-text' %}<span>{{ text }}</span>{% endif -%}
       </span>
     {%- endif -%}
   {%- else -%}
     {%- assign page_label = 'general.pagination.page' | t: number: label -%}
     {%- if current -%}
-      <span class="{{ base }} px-2 bg-accent text-accent-contrast" aria-current="page" aria-label="{{ page_label | escape }}" data-type="number">{{ label }}</span>
+      <span class="{{ base }} {{ line }} z-1 border-text bg-accent text-accent-contrast" aria-current="page" aria-label="{{ page_label | escape }}" data-type="number">{{ label }}</span>
     {%- else -%}
-      <a class="{{ base }} px-2 text-text hover:bg-surface focus-visible:outline-none focus-visible:border focus-visible:border-focus" href="{{ href }}" aria-label="{{ page_label | escape }}" data-type="number">{{ label }}</a>
+      <a class="{{ base }} {{ box }} text-text" href="{{ href }}" aria-label="{{ page_label | escape }}" data-type="number">{{ label }}</a>
     {%- endif -%}
 {%- endcase -%}

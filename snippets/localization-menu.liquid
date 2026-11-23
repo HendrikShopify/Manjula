@@ -7,6 +7,7 @@
   current    iso code of the current language or country
   id         listbox id (the trigger points at it with aria-controls)
   labelledby id of the trigger
+  trigger_style  code | symbol, passed to each country item for the trigger text after a pick
   open       boolean, renders without the hidden attribute
   placement  bottom | top    (Figma: Placement) opens below (default) or above the trigger
   align      start | end      (Figma: Align) which edge of the trigger the menu lines up with; default end
@@ -46,7 +47,7 @@
         assign is_current = true
       endif
       assign item_id = id | append: '-' | append: country.iso_code
-      render 'localization-item', field: 'country', code: country.iso_code, name: country.name, currency: country.currency, current: is_current, id: item_id
+      render 'localization-item', field: 'country', code: country.iso_code, name: country.name, currency: country.currency, current: is_current, id: item_id, trigger_style: trigger_style
     -%}
   {%- endfor -%}
   {%- else -%}

@@ -4,7 +4,7 @@
   section_id      for unique card ids
   density         large | small, desktop columns: large 4, small 6        (Figma: Grid density)
   density_mobile  large | small, mobile columns: large 1, small 2
-  quick_add       passed to product-card, default button
+  quick_add       passed to product-card, default none
   id              default product-grid
   class
   No CSS file: the layout is Tailwind classes on the list. The density switch (grid-density.js) flips data-density and data-density-mobile on the ancestor
@@ -14,7 +14,7 @@
 {%- liquid
   assign density = density | default: 'large'
   assign density_mobile = density_mobile | default: 'small'
-  assign quick_add = quick_add | default: 'button'
+  assign quick_add = quick_add | default: 'none'
   assign id = id | default: 'product-grid'
   if density == 'small'
     assign columns = 'grid-cols-2 lg:grid-cols-6'

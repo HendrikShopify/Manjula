@@ -3,17 +3,21 @@
   field      language | country                  (Figma: Field)
   placement  bottom | top, opens below (default) or above the trigger (footer)
   align      start | end, which edge of the trigger the menu lines up with (default end)
-  style      filled | ghost                       (Figma: Style)
+  style      filled | ghost                       (Figma: Style; ghost = Manjula header: 13px caps, 5x3 caret, no padding)
   languages  array of language objects; defaults to localization.available_languages
   countries  array of country objects; defaults to localization.available_countries
   current    iso code of the current language or country; defaults to localization.language.iso_code / localization.country.iso_code
   items      captured localization-item markup instead of languages or countries (demos, tests)
   trigger_label  country only: text on the trigger, e.g. "NL / EUR"; defaults to the current country's code and currency
+  trigger_style  country only: code | symbol. symbol shows "€/EUR" on the trigger, also right after a pick (header)
   open       boolean, renders the menu open       (Figma: State=Open)
   id, class
   Renders nothing when there is only one language (or one country).
   Language or country switcher: button trigger + Localization menu inside Shopify's localization form. Picking an entry submits the form (hidden locale_code or country_code).
-  States: Hover = :hover, Focus = :focus-visible, Open = [aria-expanded=true]
+  States: Hover = :hover (filled only; ghost has no hover colour, the header dims the other utility items instead,
+  Hendrik 20 Nov), Focus = :focus-visible, Open = [aria-expanded=true]
+  Only the background and border fade (no hover text colour), so the text follows its parent's colour fade, like the
+  home header turning dark (Hendrik, 23 Nov).
   Type=Flag exists in Figma only: the theme has no flag assets yet.
 {%- endcomment -%}
 {%- liquid
@@ -36,6 +40,8 @@
   if field == 'country'
     if trigger_label != blank
       assign shown = trigger_label
+    elsif trigger_style == 'symbol' and localization.country.currency.iso_code != blank
+      assign shown = localization.country.currency.symbol | append: '/' | append: localization.country.currency.iso_code
     elsif localization.country.currency.iso_code != blank
       assign shown = current | upcase | append: ' / ' | append: localization.country.currency.iso_code
     endif
@@ -49,19 +55,23 @@
     assign expanded = 'true'
   endif
   if style == 'ghost'
-    assign look = 'bg-transparent px-2 hover:bg-surface aria-expanded:bg-surface'
+    assign look = 'gap-2 bg-transparent text-label-caps-lg'
+    assign caret = 'icon__caret-down.svg'
+    assign caret_class = 'inline-flex [&>svg]:block'
   else
-    assign look = 'bg-surface-alt px-3 hover:bg-disabled aria-expanded:bg-disabled'
+    assign look = 'gap-1 bg-surface-alt px-3 text-label-base hover:bg-disabled aria-expanded:bg-disabled'
+    assign caret = 'icon__chevron-down.svg'
+    assign caret_class = 'size-4 [&>svg]:size-full'
   endif
   assign language_label = label_key | t
 -%}
 {%- if choices.size > 1 or items != blank -%}
-  <localization-form class="localization-selector inline-block {{ class }}">
+  <localization-form class="localization-selector inline-flex {{ class }}">
     {%- form 'localization', id: id -%}
-      <custom-select class="relative block">
+      <custom-select class="relative flex">
         <button
           type="button"
-          class="inline-flex h-9 items-center gap-1 whitespace-nowrap rounded-button border border-transparent text-label-base text-text cursor-pointer outline-none transition-colors focus-visible:border-focus {{ look }}"
+          class="inline-flex h-9 items-center whitespace-nowrap rounded-button border border-transparent text-text cursor-pointer outline-none transition-[background-color,border-color] focus-visible:border-focus {{ look }}"
           id="{{ trigger_id }}"
           aria-haspopup="listbox"
           aria-expanded="{{ expanded }}"
@@ -69,9 +79,9 @@
         >
           <span class="sr-only">{{ language_label }}</span>
           <span data-selected-label>{{ shown }}</span>
-          <span class="select__chevron size-4 shrink-0 transition-transform [&>svg]:size-full {% if open %}rotate-180{% endif %}" aria-hidden="true">{{ 'icon__chevron-down.svg' | inline_asset_content }}</span>
+          <span class="select__chevron shrink-0 transition-transform {{ caret_class }} {% if open %}rotate-180{% endif %}" aria-hidden="true">{{ caret | inline_asset_content }}</span>
         </button>
-        {% render 'localization-menu', field: field, languages: languages, countries: countries, items: items, current: current, id: listbox_id, labelledby: trigger_id, open: open, align: align, placement: placement %}
+        {% render 'localization-menu', field: field, languages: languages, countries: countries, items: items, current: current, id: listbox_id, labelledby: trigger_id, trigger_style: trigger_style, open: open, align: align, placement: placement %}
         <input type="hidden" name="{{ input_name }}" value="{{ current | escape }}">
       </custom-select>
     {%- endform -%}

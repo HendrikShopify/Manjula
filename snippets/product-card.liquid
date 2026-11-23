@@ -1,15 +1,25 @@
 {%- comment -%}
   Figma: Components Molecules / Product card
   product            Product object
-  layout             vertical | horizontal                                  (Figma: Layout)
-  quick_add          none | button | icon | variant-picker                  (Figma: Quick add)
+  layout             vertical | horizontal | tile                           (Figma: Layout; tile = Manjula Product card 200:1620)
+  quick_add          none | variant-picker                                  (Figma: Quick add)
   show_vendor, show_badge, show_wishlist, show_rating, show_swatches, show_description  booleans (Figma: Show …)
   sizes              sizes attribute for the image, the grid passes it
   loading            eager for above-the-fold cards
   section_id         for unique ids
   class
   Rating reads product.metafields.reviews.rating / rating_count (Shopify standard product reviews metafields).
-  Quick add: button and icon open the quick view; variant-picker is a form of submit buttons, one per variant, each adds straight to the cart.
+  Tile (Manjula): Fill-subtle card, square from lg. Packshot centred (product.metafields.custom.solo_image, the bottle
+    without packaging, else the featured image), then name • variant, subtitle at 60% and price.
+    Mobile: 12px padding, image square on top, info stacked, subtitle one line. Desktop: 24px padding, info in one row.
+    Variant label = product.metafields.custom.size (e.g. 100ml), else the first variant title (hidden for a default-only product). Subtitle = product.metafields.custom.product_card_subtitle (single line text), else the titles of
+    product.metafields.custom.benefits (list of "Title--Description"), comma separated.
+    Hover with a lifestyle image: all text turns white, also a sale price and its struck compare-at price (Hendrik, 21 Nov).
+    Desktop hover: a lifestyle photo fades in fast (150ms) behind the bottle, with a bottom shade and on-media text,
+    and zooms out slightly from 105% while the bottle zooms in to 102% from its bottom edge (both motion-safe, 500ms). The bottle stays visible on top. The photo is the product
+    metafield custom.hover_image (file, image), else the product's second image; with neither it only tints (accent-subtle). Tile ignores quick_add, badge, wishlist, rating and swatches.
+  Quick add: variant-picker is a form of submit buttons, one per variant, each adds straight to the cart. Cards never open
+  the quick view (Hendrik, 19 Nov); the quick view only shows product details from a bundle item.
 {%- endcomment -%}
 {%- liquid
   assign layout = layout | default: 'vertical'
@@ -60,14 +70,68 @@
     assign ratio = '4:5'
   endif
   assign sizes = sizes | default: '(min-width: 1024px) 25vw, 50vw'
-  assign choose_label = 'products.product.choose_options' | t
   assign add_label = 'products.product.add_to_cart' | t
-  if product.has_only_default_variant
-    assign quick_label = add_label
-  else
-    assign quick_label = choose_label
-  endif
 -%}
+{%- if layout == 'tile' -%}
+  {%- liquid
+    assign tile_variant = product.metafields.custom.size.value
+    if tile_variant == blank
+      unless product.has_only_default_variant
+        assign tile_variant = product.variants.first.title
+      endunless
+    endif
+    assign subtitle = product.metafields.custom.product_card_subtitle.value
+    if subtitle == blank
+      assign subtitle = ''
+      for item in product.metafields.custom.benefits.value
+        assign benefit_title = item | split: '--' | first | strip
+        if benefit_title == blank
+          continue
+        endif
+        if subtitle != ''
+          assign subtitle = subtitle | append: ', '
+        endif
+        assign subtitle = subtitle | append: benefit_title
+      endfor
+    endif
+    assign packshot = product.metafields.custom.solo_image.value | default: product.featured_media
+    assign lifestyle = product.metafields.custom.hover_image.value
+    if lifestyle == blank
+      assign lifestyle = product.media[1]
+      if lifestyle.media_type != 'image'
+        assign lifestyle = nil
+      endif
+    endif
+  -%}
+  <product-card class="product-card group/tile relative isolate flex flex-col gap-3 overflow-hidden bg-surface-alt p-3 transition-colors lg:aspect-square lg:justify-end lg:gap-6 lg:p-6 lg:hover:bg-accent-subtle has-focus-visible:outline-1 has-focus-visible:outline-offset-2 has-focus-visible:outline-focus {% if lifestyle %}lg:hover:[--color-text:var(--color-text-on-media)] lg:hover:[--color-text-muted:var(--color-text-on-media)] lg:hover:[--color-sale:var(--color-text-on-media)]{% endif %} {{ class }}" id="{{ card_id }}" data-layout="tile">
+    {%- if lifestyle -%}
+      <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden opacity-0 transition-opacity duration-150 max-lg:hidden lg:group-hover/tile:opacity-100" aria-hidden="true">
+        <div class="absolute inset-0 motion-safe:scale-105 motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out lg:group-hover/tile:scale-100">
+          {% render 'media', media: lifestyle, ratio: 'fill', sizes: sizes, class: 'absolute! inset-0 size-full' %}
+        </div>
+        <div class="absolute inset-0 bg-linear-to-t from-overlay/50 to-transparent to-50%"></div>
+      </div>
+    {%- endif -%}
+    <div class="flex aspect-square w-full items-center justify-center lg:aspect-auto lg:min-h-0 lg:flex-1 lg:py-4 origin-bottom motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out motion-safe:lg:group-hover/tile:scale-102">
+      {% render 'media', media: packshot, ratio: '1:1', fit: 'contain', sizes: sizes, loading: loading, class: 'size-full bg-transparent! lg:h-full lg:w-auto' %}
+    </div>
+    <div class="flex w-full flex-col items-start gap-3 text-text lg:flex-row lg:items-center lg:justify-between">
+      <div class="flex min-w-0 max-w-full flex-col gap-3 lg:gap-2">
+        <h3 class="flex items-center gap-1 text-label-base">
+          <a href="{{ product.url }}" class="after:absolute after:inset-0 after:z-0 focus-visible:outline-none">{{ product.title | escape }}</a>
+          {%- if tile_variant != blank -%}
+            <span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
+            <span>{{ tile_variant | escape }}</span>
+          {%- endif -%}
+        </h3>
+        {%- if subtitle != blank -%}
+          <p class="max-w-full truncate text-body-xs opacity-60">{{ subtitle | escape }}</p>
+        {%- endif -%}
+      </div>
+      {% render 'price', product: product, size: 'sm', class: 'shrink-0' %}
+    </div>
+  </product-card>
+{%- else -%}
 <product-card class="{{ root }} {{ class }}" id="{{ card_id }}" data-layout="{{ layout }}" data-quick-add="{{ quick_add }}">
   <div class="{{ media_wrap }}">
     <a href="{{ product.url }}" class="block" tabindex="-1" aria-hidden="true">
@@ -77,14 +141,6 @@
     {%- if show_wishlist %}{% render 'wishlist-toggle', product: product, style: 'floating', size: 'sm', class: 'absolute top-2 right-2 z-[1]' %}{% endif -%}
 
     {%- case quick_add -%}
-      {%- when 'button' -%}
-        <div class="absolute inset-x-3 bottom-3 z-[1] lg:opacity-0 lg:transition-opacity lg:group-hover:opacity-100 lg:group-focus-within:opacity-100">
-          <button type="button" class="button inline-flex h-11 w-full items-center justify-center gap-2 whitespace-nowrap rounded-button border border-accent bg-background px-5 text-label-lg text-accent transition-colors cursor-pointer hover:bg-accent-subtle focus-visible:outline-none focus-visible:border-focus" aria-haspopup="dialog" data-quick-view-trigger data-product-url="{{ product.url | split: '?' | first }}">{{ quick_label }}</button>
-        </div>
-      {%- when 'icon' -%}
-        <div class="absolute right-3 bottom-3 z-[1] lg:opacity-0 lg:transition-opacity lg:group-hover:opacity-100 lg:group-focus-within:opacity-100">
-          <button type="button" class="icon-button inline-flex size-9 items-center justify-center rounded-button border border-accent bg-background text-accent transition-colors cursor-pointer hover:bg-accent-subtle focus-visible:outline-none focus-visible:border-focus" aria-haspopup="dialog" data-quick-view-trigger aria-label="{{ quick_label | escape }}" data-product-url="{{ product.url | split: '?' | first }}"><span class="size-4 [&>svg]:size-full" aria-hidden="true">{{ 'icon__plus.svg' | inline_asset_content }}</span></button>
-        </div>
       {%- when 'variant-picker' -%}
         {%- if product.has_only_default_variant -%}
           <product-form class="absolute inset-x-3 bottom-3 z-[1] lg:opacity-0 lg:transition-opacity lg:group-hover:opacity-100 lg:group-focus-within:opacity-100">
@@ -195,3 +251,4 @@
     {%- endif -%}
   </div>
 </product-card>
+{%- endif -%}

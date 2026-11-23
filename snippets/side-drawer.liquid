@@ -4,13 +4,14 @@
 
   id         required, unique. Triggers use data-drawer-trigger="id"
   title      heading in the drawer-header
-  subtitle   caps label next to the title
+  count      superscript count next to the title (drawer-header)
   body       captured markup for the scrolling area
   footer     captured markup pinned below the body (optional)
   content    captured markup that replaces header, body and footer entirely
              (use when a section-rendering target has to wrap all three, see cart-drawer)
   position   right | left                       (Figma: Drawer Position)
   size       xs | sm | md | lg  (440 / 600 / 700 / 800px; cart uses sm, filters use xs)   (Figma: Drawer Width)
+  width_class max-width class that replaces size, for a panel width outside the scale (Quick view details: max-w-120, 480px)
   class      extra classes on the panel
   attributes extra attributes on <side-drawer>
 
@@ -31,6 +32,9 @@
     else
       assign width = 'max-w-175'
   endcase
+  if width_class != blank
+    assign width = width_class
+  endif
 
   if position == 'left'
     assign align = 'justify-start'
@@ -66,7 +70,7 @@
     {%- if content != blank -%}
       {{ content }}
     {%- else -%}
-      {% render 'drawer-header', title: title, subtitle: subtitle, id: id %}
+      {% render 'drawer-header', title: title, count: count, id: id %}
       <div class="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto p-6" data-drawer-body>
         {{ body }}
       </div>

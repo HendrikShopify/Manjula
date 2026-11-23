@@ -1,0 +1,122 @@
+{%- comment -%}
+  Figma: Sections / Horizontal scroll (2155:31825; Templates FINAL Subscription 2526:25881, mobile 2526:25891)
+  Desktop: a 900px tall, 3447px wide track (as Figma, a 1440x900 screen) that moves sideways while the page scrolls
+  (the section pins). It scales with the screen height: the viewport sets --spacing to 1/225 of 100svh, so every
+  spacing-based size inside (numerals, photos, positions, the line, gaps) keeps the Figma proportions and the track
+  always fills the screen height. Text styles keep their token sizes, so the text hangs on the dashed centre line:
+  the title sits just above it and the body below it (as Figma), at any height.
+  Four steps along a faint dashed centre line, each with a big Surface numeral (assets/numeral-n.svg),
+  a heading/2 title with body/sm text, and a photo. Positions are art directed per step, as in Figma.
+  Mobile: the steps are 280px cards on Swiper (square photo, Surface text card overlapping it), as the UGC slider:
+  first and last card on the page margin, a swipe moves one card, one glass Next button that fades out after the
+  first card (data-past-first). No numerals on mobile (as in the Figma mobile frame).
+  Layer order (as Figma, bottom to top): photo 1, dashed line, then per step numeral, text, photo. So each numeral
+  sits over the photo before it and under its own step's photo; photo 1 sits under the line (-z-1 in the isolated track).
+  Reduced motion or no JS: the desktop track scrolls natively instead of pinning.
+  Desktop motion while pinned (the host gets data-animate): each photo slides sideways inside its frame (the photo is
+  116% wide, 8% each side) and the numerals drift slower than the track, so the steps get depth as they pass; each
+  step's text fades up once it comes into view (data-revealed). Mobile and reduced motion: no motion, all visible.
+  JS: horizontal-scroll.js, hooks data-horizontal-scroll-pin, -viewport, -track, -next, -parallax, -numeral, -text.
+{%- endcomment -%}
+{%- assign steps = section.blocks | where: 'type', 'step' -%}
+<script src="{{ 'horizontal-scroll.js' | asset_url }}" defer="defer"></script>
+<horizontal-scroll class="horizontal-scroll group/hs relative block bg-background pt-section-md text-text max-lg:pb-section-md">
+  <div class="relative" data-horizontal-scroll-pin>
+    <div class="swiper relative overflow-x-clip px-page-margin [scrollbar-width:none] lg:sticky lg:overflow-x-auto lg:px-0 lg:top-0 lg:h-225 lg:[--spacing:calc(100svh/225)]" data-horizontal-scroll-viewport>
+      <ol class="swiper-wrapper flex lg:relative lg:isolate lg:block lg:h-225 lg:w-861.75" role="list" data-horizontal-scroll-track>
+        <li class="absolute inset-x-5.75 top-1/2 border-t border-dotted border-text opacity-15 mask-x-from-80% max-lg:hidden" aria-hidden="true"></li>
+        {%- for block in steps limit: 4 -%}
+          {%- liquid
+            case forloop.index
+              when 1
+                assign numeral_class = 'lg:left-60.75'
+                assign text_class = 'lg:left-122.75 lg:w-auto'
+                assign body_class = 'lg:w-70'
+                assign photo_class = 'lg:left-0 lg:top-0 lg:h-225 lg:w-122.75 lg:p-6'
+                assign photo_sizes = '(min-width: 1024px) 57svh, 280px'
+              when 2
+                assign numeral_class = 'lg:left-193.75'
+                assign text_class = 'lg:left-264.25 lg:w-87.5'
+                assign body_class = 'lg:w-60'
+                assign photo_class = 'lg:left-311 lg:top-0 lg:size-112.25 lg:p-6'
+                assign photo_sizes = '(min-width: 1024px) 52svh, 280px'
+              when 3
+                assign numeral_class = 'lg:left-395.75'
+                assign text_class = 'lg:left-434.25 lg:w-89.75'
+                assign body_class = 'lg:w-60'
+                assign photo_class = 'lg:left-533.75 lg:top-112.25 lg:size-56.25 lg:p-3'
+                assign photo_sizes = '(min-width: 1024px) 26svh, 280px'
+              else
+                assign numeral_class = 'lg:left-617'
+                assign text_class = 'lg:left-633.75 lg:w-auto'
+                assign body_class = 'lg:w-67'
+                assign photo_class = 'lg:left-735.75 lg:top-0 lg:h-225 lg:w-126 lg:p-6'
+                assign photo_sizes = '(min-width: 1024px) 59svh, 280px'
+            endcase
+            assign numeral_asset = 'numeral-' | append: forloop.index | append: '.svg'
+            if forloop.first
+              assign photo_layer = 'lg:-z-1'
+            else
+              assign photo_layer = ''
+            endif
+          -%}
+          {%- capture photo -%}
+            <div class="relative order-first aspect-square min-h-0 w-full -mb-16 lg:absolute lg:mb-0 lg:aspect-auto {{ photo_layer }} {{ photo_class }}">
+              <div class="relative size-full overflow-hidden" data-horizontal-scroll-parallax>
+                {% render 'media', media: block.settings.image, ratio: 'fill', sizes: photo_sizes, class: 'size-full lg:absolute! lg:inset-y-0 lg:-left-[8%] lg:w-[116%] lg:will-change-transform' %}
+              </div>
+            </div>
+          {%- endcapture -%}
+          <li class="swiper-slide flex w-70 shrink-0 flex-col items-end lg:contents" {{ block.shopify_attributes }} data-horizontal-scroll-slide>
+            {%- if forloop.first -%}{{ photo }}{%- endif -%}
+            <span class="pointer-events-none absolute top-0 h-225 text-surface will-change-transform max-lg:hidden [&>svg]:h-full [&>svg]:w-auto {{ numeral_class }}" aria-hidden="true" data-horizontal-scroll-numeral>
+              {{- numeral_asset | inline_asset_content -}}
+            </span>
+            <div class="relative flex w-62 flex-col gap-4 bg-surface p-6 lg:absolute lg:top-1/2 lg:gap-0 lg:bg-transparent lg:p-0 lg:pt-6 lg:transition-[opacity,translate] lg:duration-700 lg:ease-out group-data-animate/hs:not-data-revealed:translate-y-6 group-data-animate/hs:not-data-revealed:opacity-0 {{ text_class }}" data-horizontal-scroll-text>
+              <h3 class="text-heading-3 lg:absolute lg:bottom-full lg:left-0 lg:text-heading-2 lg:whitespace-nowrap">{{ block.settings.title }}</h3>
+              {%- if block.settings.text != blank -%}
+                <p class="text-body-sm {{ body_class }}">{{ block.settings.text }}</p>
+              {%- endif -%}
+            </div>
+            {%- unless forloop.first -%}{{ photo }}{%- endunless -%}
+          </li>
+        {%- endfor -%}
+      </ol>
+    </div>
+    {%- if steps.size > 1 -%}
+      <button
+        type="button"
+        class="absolute top-29 right-page-margin z-10 flex size-12 cursor-pointer transition-[opacity,visibility] duration-300 group-data-past-first/hs:invisible group-data-past-first/hs:opacity-0 motion-reduce:transition-none items-center justify-center border border-background/40 bg-text/30 text-background backdrop-blur-sm focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus lg:hidden"
+        aria-label="{{ 'sections.horizontal_scroll.next' | t | escape }}"
+        data-horizontal-scroll-next
+      >
+        <span class="size-6 [&>svg]:size-full" aria-hidden="true">{{ 'icon__arrow-right.svg' | inline_asset_content }}</span>
+      </button>
+    {%- endif -%}
+  </div>
+</horizontal-scroll>
+
+{% schema %}
+{
+  "name": "Horizontal scroll",
+  "tag": "section",
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Photo" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Save on every order" },
+        { "type": "textarea", "id": "text", "label": "Text" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Horizontal scroll",
+      "blocks": [{ "type": "step" }, { "type": "step" }, { "type": "step" }, { "type": "step" }]
+    }
+  ]
+}
+{% endschema %}

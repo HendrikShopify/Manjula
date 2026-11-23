@@ -1,0 +1,231 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+        "popular_frequency": "Deliver every 3 months",
+        "community_title": "",
+        "expert_quote": "“High quality Ayurvedic oils, like those from Manjula, are a powerful way to support healthy skin and hair using time-tested botanical ingredients.”",
+        "expert_name": "Dr. Anika Sharma",
+        "expert_role": "Ayurvedic Practitioner"
+      }
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {
+        "heading": "Customer reviews",
+        "recommend_label": "Would recommend this hair oil."
+      }
+    },
+    "trial_results": {
+      "type": "trial-results",
+      "blocks": {
+        "result-1": {
+          "type": "result",
+          "settings": {
+            "title": "New growth",
+            "text": "Fine baby hairs along the hairline and part"
+          }
+        },
+        "result-2": {
+          "type": "result",
+          "settings": {
+            "title": "Visible density",
+            "text": "Less scalp showing through when you tie it back"
+          }
+        },
+        "result-3": {
+          "type": "result",
+          "settings": {
+            "title": "Calmer scalp",
+            "text": "Less itch, less tightness, less flaking after washing"
+          }
+        }
+      },
+      "block_order": [
+        "result-1",
+        "result-2",
+        "result-3"
+      ],
+      "settings": {
+        "heading": "Effects after 4 week consistent use trial",
+        "text": "Participants used the hair oil twice a week for four weeks. Photos were taken at the start and at the end, in the same light.",
+        "case_label": "",
+        "case_text": "Aged 29, fine hair with thinning at the temples. A scalp massage with the oil twice a week, left on overnight, with no other changes to the routine.",
+        "show_labels": true,
+        "disclaimer": "*Individual results shown, from participants using Manjula Hair Oil twice weekly for four weeks. Results vary from person to person and depend on factors including diet, stress, sleep and underlying health. Not intended to treat or prevent any condition."
+      }
+    },
+    "use_guide": {
+      "type": "use-guide",
+      "blocks": {
+        "note-1": {
+          "type": "note",
+          "settings": {
+            "label": "When to use",
+            "text": "Morning: Apply after water-based serums and before SPF. Evening: Use as the final step in your skincare routine."
+          }
+        },
+        "note-2": {
+          "type": "note",
+          "settings": {
+            "label": "For best results",
+            "text": "Use consistently and start with a small amount. If your skin feels oily, reduce the number of drops."
+          }
+        }
+      },
+      "block_order": [
+        "note-1",
+        "note-2"
+      ],
+      "settings": {
+        "heading": "How to use guide"
+      }
+    },
+    "ingredients": {
+      "type": "ingredient-explorer",
+      "settings": {
+        "heading": "Explore all ingredients",
+        "functions": "Brightens, Nourishes, Smoothes, Protects, Barrier support",
+        "products": [
+          "face-oil",
+          "hair-oil",
+          "body-oil"
+        ]
+      }
+    },
+    "founder_note": {
+      "type": "image-with-text-founder-note",
+      "settings": {
+        "image": "shopify://shop_images/subscription-founder.jpg"
+      }
+    },
+    "faq": {
+      "type": "faq-image",
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+        "heading": "Questions\nand answers",
+        "image": "shopify://shop_images/contact-faq-smile.jpg"
+      }
+    },
+    "results_timeline": {
+      "type": "results-timeline",
+      "blocks": {
+        "step-1": {
+          "type": "step",
+          "settings": {
+            "label": "Immediately",
+            "text": "Tone looks more uniform. Dry patches appear less often, and skin holds moisture longer between applications."
+          }
+        },
+        "step-2": {
+          "type": "step",
+          "settings": {
+            "label": "After 1-2 weeks",
+            "text": "Texture starts to even out. Tightness after cleansing eases, and makeup sits more smoothly across the face."
+          }
+        },
+        "step-3": {
+          "type": "step",
+          "settings": {
+            "label": "After 3 weeks",
+            "text": "The improvements hold. Skin looks consistently balanced and recovers faster from weather, travel, and late nights."
+          }
+        },
+        "step-4": {
+          "type": "step",
+          "settings": {
+            "label": "After 4 weeks",
+            "text": "The improvements hold. Skin looks consistently balanced and recovers faster from weather, travel, and late nights."
+          }
+        }
+      },
+      "block_order": [
+        "step-1",
+        "step-2",
+        "step-3",
+        "step-4"
+      ],
+      "settings": {
+        "heading": "Results timeline"
+      }
+    },
+    "comparison": {
+      "type": "comparison-price",
+      "blocks": {
+        "row-1": {
+          "type": "row",
+          "settings": {
+            "title": "Scalp treatment",
+            "sub": "Soothes and conditions the scalp",
+            "price": 34
+          }
+        },
+        "row-2": {
+          "type": "row",
+          "settings": {
+            "title": "Pre-wash treatment",
+            "sub": "Conditions lengths before cleansing",
+            "price": 32
+          }
+        },
+        "row-3": {
+          "type": "row",
+          "settings": {
+            "title": "Post-wash serum",
+            "sub": "Softens and protects",
+            "price": 38
+          }
+        },
+        "row-4": {
+          "type": "row",
+          "settings": {
+            "title": "Styling oil",
+            "sub": "Smooths frizz, adds shine",
+            "price": 36
+          }
+        }
+      },
+      "block_order": [
+        "row-1",
+        "row-2",
+        "row-3",
+        "row-4"
+      ],
+      "settings": {
+        "heading": "Four steps.\nOne bottle.",
+        "text": "Most hair routines split scalp care, growth support, conditioning and styling across four products. This one was formulated to move through all of it.",
+        "left_label": "Buy them separately",
+        "left_total": "Four bottles",
+        "right_label": "Or one bottle",
+        "product_title": "MANJULA Hair Oil",
+        "product_sub": "100 ml, four to six months",
+        "checks": "Scalp\nPre-wash\nPost-wash\nStyling",
+        "right_total": "One bottle"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "trial_results",
+    "results_timeline",
+    "use_guide",
+    "ingredients",
+    "comparison",
+    "reviews",
+    "founder_note",
+    "faq"
+  ]
+}

@@ -1,0 +1,159 @@
+{%- comment -%}
+  Figma: Sections / Ingredient explorer (2115:18626; Templates FINAL PDP / Face oil 2526:26026, mobile 2526:26037)
+  Desktop: heading, then Product type and Function filter lists (2 columns each) and the ingredient index (8 columns).
+  Hover, as the About page Timeline: while the list is hovered the other rows dim to 30% (CSS, also on keyboard focus)
+  and the 180px Ingredient preview (photo + Learn more tag) grows in and follows the cursor, but never covers a name: it
+  stays right of the widest ingredient name, inside the list, its middle on the hovered row. Inside it the photos are one column in list order; it
+  moves so the hovered row's photo fills the frame, blurred 3px while it moves. No hover on touch screens.
+  Mobile: Product type as chips, Function list and ingredient index side by side, the first 8 ingredients then
+  "Show more ingredients". Pressing an ingredient opens its Ingredient modal (snippets/ingredient-modal.liquid).
+  Data: the Product type filters are the products picked in the section (the oils). The index is every ingredient of
+  those products (product.metafields.custom.ingredients, ingredient metaobjects), each once, in label order; an
+  ingredient is tagged with every picked product that contains it. On the page of a picked product, that product is
+  selected first; elsewhere All. The Function filters are a setting; an ingredient matches through its Function field
+  (comma separated, same words). Without ingredients the section renders nothing.
+  JS: ingredient-explorer.js, hooks data-ingredient-*.
+{%- endcomment -%}
+{%- liquid
+  assign oils = section.settings.products
+  assign functions = section.settings.functions | split: ','
+  assign all_label = 'sections.ingredient_explorer.all' | t
+  assign learn_more = 'sections.ingredient_explorer.learn_more' | t
+  assign active_type = ''
+  if product
+    for oil in oils
+      if oil.id == product.id
+        assign active_type = oil.handle
+      endif
+    endfor
+  endif
+  assign all_active = false
+  if active_type == blank
+    assign all_active = true
+  endif
+
+  assign seen = ','
+  assign drawers = ''
+  assign photos = ''
+  assign count = 0
+-%}
+{%- capture rows -%}
+  {%- for oil in oils -%}
+    {%- for ingredient in oil.metafields.custom.ingredients.value -%}
+      {%- assign key = ',' | append: ingredient.system.handle | append: ',' -%}
+      {%- if seen contains key -%}{%- continue -%}{%- endif -%}
+      {%- liquid
+        assign seen = seen | append: ingredient.system.handle | append: ','
+        assign count = count | plus: 1
+        assign item_types = ''
+        for other in oils
+          for other_ingredient in other.metafields.custom.ingredients.value
+            if other_ingredient.system.handle == ingredient.system.handle
+              assign item_types = item_types | append: ' ' | append: other.handle
+              break
+            endif
+          endfor
+        endfor
+        assign item_functions = ''
+        assign split_functions = ingredient.function.value | split: ','
+        for f in split_functions
+          assign fn_handle = f | strip | handleize
+          assign item_functions = item_functions | append: ' ' | append: fn_handle
+        endfor
+        assign drawer_id = 'Ingredient-' | append: ingredient.system.handle
+      -%}
+      <li class="-mb-px last:mb-0 transition-opacity duration-300 motion-reduce:transition-none lg:group-hover/list:not-hover:opacity-30 lg:group-has-[:focus-visible]/list:not-has-[:focus-visible]:opacity-30" data-ingredient-item data-types="{{ item_types | strip }}" data-functions="{{ item_functions | strip }}">
+        {%- capture row_attrs -%}data-drawer-trigger="{{ drawer_id }}" data-ingredient-row aria-haspopup="dialog"{%- endcapture -%}
+        {% render 'list-row', label: ingredient.name.value, size: 'sm', trailing_arrow: true, solid: true, attributes: row_attrs, class: 'lg:hover:opacity-100 lg:[&>span:last-child]:hidden' %}
+      </li>
+      {%- capture photo -%}
+        <div class="relative size-45 shrink-0 overflow-hidden" data-ingredient-image>
+          {% render 'media', media: ingredient.image.value, ratio: 'fill', sizes: '180px', class: 'absolute! inset-0 size-full scale-105' %}
+        </div>
+      {%- endcapture -%}
+      {%- assign photos = photos | append: photo -%}
+      {%- capture drawer -%}{% render 'ingredient-modal', ingredient: ingredient, id: drawer_id %}{%- endcapture -%}
+      {%- assign drawers = drawers | append: drawer -%}
+    {%- endfor -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- if count > 0 -%}
+<script src="{{ 'ingredient-explorer.js' | asset_url }}" defer="defer"></script>
+<ingredient-explorer id="ingredient-explorer" class="ingredient-explorer group/explorer relative mx-auto flex w-full max-w-page flex-col gap-10 bg-background px-page-margin py-section-md" data-type="{{ active_type | default: 'all' }}" data-function="all">
+  {%- if section.settings.heading != blank -%}
+    <h2 class="text-heading-2 text-text lg:text-heading-1">{{ section.settings.heading }}</h2>
+  {%- endif -%}
+
+  <div class="flex flex-col gap-6 lg:grid lg:grid-cols-12 lg:gap-x-gutter">
+    {%- comment -%} Product type: chips on mobile, a list from lg {%- endcomment -%}
+    <div class="flex flex-col lg:col-span-2" role="group" aria-labelledby="IngredientTypes-{{ section.id }}">
+      <p id="IngredientTypes-{{ section.id }}" class="pb-3 text-label-sm text-text">{{ 'sections.ingredient_explorer.product_type' | t }}</p>
+      <div class="flex flex-wrap gap-1 lg:hidden">
+        {% render 'chip', type: 'filter', input_type: 'radio', name: 'ingredient-type-mobile', label: all_label, value: 'all', checked: all_active, attributes: 'data-ingredient-chip' %}
+        {%- for oil in oils -%}
+          {%- assign type_checked = false -%}
+          {%- if oil.handle == active_type %}{% assign type_checked = true %}{% endif -%}
+          {% render 'chip', type: 'filter', input_type: 'radio', name: 'ingredient-type-mobile', label: oil.title, value: oil.handle, checked: type_checked, attributes: 'data-ingredient-chip' %}
+        {%- endfor -%}
+      </div>
+      <div class="flex flex-col max-lg:hidden">
+        {%- capture filter_attrs -%}data-ingredient-filter="type" data-value="all"{%- endcapture -%}
+        {% render 'list-row', label: all_label, active: all_active, attributes: filter_attrs %}
+        {%- for oil in oils -%}
+          {%- assign type_active = false -%}
+          {%- if oil.handle == active_type %}{% assign type_active = true %}{% endif -%}
+          {%- capture filter_attrs -%}data-ingredient-filter="type" data-value="{{ oil.handle }}"{%- endcapture -%}
+          {% render 'list-row', label: oil.title, active: type_active, attributes: filter_attrs %}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {%- comment -%} Fixed grid, so the columns never move when a filter hides functions: mobile half and half (2 + 2 of the 4-column grid), desktop 2 + 8 of 10 {%- endcomment -%}
+    <div class="grid grid-cols-2 gap-x-gutter lg:col-span-10 lg:grid-cols-10">
+      <div class="flex flex-col lg:col-span-2" role="group" aria-labelledby="IngredientFunctions-{{ section.id }}">
+        <p id="IngredientFunctions-{{ section.id }}" class="pb-3 text-label-sm text-text">{{ 'sections.ingredient_explorer.function' | t }}</p>
+        {%- capture filter_attrs -%}data-ingredient-filter="function" data-value="all"{%- endcapture -%}
+        {% render 'list-row', label: all_label, active: true, attributes: filter_attrs %}
+        {%- for fn in functions -%}
+          {%- assign fn_label = fn | strip -%}
+          {%- capture filter_attrs -%}data-ingredient-filter="function" data-value="{{ fn | strip | handleize }}"{%- endcapture -%}
+          {% render 'list-row', label: fn_label, attributes: filter_attrs %}
+        {%- endfor -%}
+      </div>
+
+      <div class="relative flex flex-col lg:col-span-8">
+        <p class="pb-3 text-label-sm text-text">{{ 'sections.ingredient_explorer.ingredient' | t }}</p>
+        <ul class="group/list flex flex-col" role="list" data-ingredient-list>
+          {{- rows -}}
+        </ul>
+        <button type="button" class="mt-4 self-start text-label-caps text-text underline underline-offset-4 lg:hidden" hidden data-ingredient-more>
+          {{- 'sections.ingredient_explorer.show_more' | t -}}
+        </button>
+        <p class="py-2.5 text-label-caps text-text-muted" hidden data-ingredient-empty>{{ 'sections.ingredient_explorer.empty' | t }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="pointer-events-none absolute top-0 left-0 z-10 size-45 max-lg:hidden [@media(hover:none)]:hidden" aria-hidden="true" data-ingredient-frame>
+    <div class="relative size-full scale-0 overflow-hidden opacity-0 transition-[scale,opacity] duration-600 ease-out-quint group-has-[[data-ingredient-list]:hover]/explorer:scale-100 group-has-[[data-ingredient-list]:hover]/explorer:opacity-100 group-has-[[data-ingredient-list]_:focus-visible]/explorer:scale-100 group-has-[[data-ingredient-list]_:focus-visible]/explorer:opacity-100 motion-reduce:transition-none">
+      <div class="flex flex-col" data-ingredient-strip>{{ photos }}</div>
+      {% render 'badge', label: learn_more, type: 'new', class: 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2' %}
+    </div>
+  </div>
+
+  {{- drawers -}}
+</ingredient-explorer>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Ingredient explorer",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Explore all ingredients" },
+    { "type": "product_list", "id": "products", "label": "Product types", "limit": 6, "info": "Each product is one filter. The list shows the ingredients of these products (product metafield Ingredients)." },
+    { "type": "text", "id": "functions", "label": "Functions", "default": "Brightens, Nourishes, Smoothes, Protects, Barrier support", "info": "Comma separated filter list. An ingredient shows under a function when its Function field has the same word." }
+  ],
+  "presets": [{ "name": "Ingredient explorer" }]
+}
+{% endschema %}

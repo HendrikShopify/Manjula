@@ -2,24 +2,34 @@
   Figma: Components Atoms / Menu links (Menu link)
   links   array of linklist links (title, url, current)
   size    sm | md                                       (Figma: Size)
+  spacing default | loose (20px apart, Manjula footer columns)
   class
-  Vertical list of plain links, 8px apart for sm and 12px for md. Used in the footer columns, the footer accordions and the mega menu panel.
+  Vertical list of plain links, 8px apart for sm and 12px for md. Used in the footer columns and the footer accordions.
+  While one link is hovered or focused, the other links dim to 30% (same as the header nav and dropdown panel).
+  The space between links is padding on the links (the list pulls it back with a negative margin), so the hover never
+  falls in a gap and the other links don't flicker back.
 {%- endcomment -%}
 {%- liquid
   assign size = size | default: 'sm'
   if size == 'md'
     assign link_class = 'text-body-base'
-    assign gap = 'gap-3'
+    assign pad = 'py-1.5'
+    assign pull = '-my-1.5'
   else
     assign link_class = 'text-body-sm'
-    assign gap = 'gap-2'
+    assign pad = 'py-1'
+    assign pull = '-my-1'
+  endif
+  if spacing == 'loose'
+    assign pad = 'py-2.5'
+    assign pull = '-my-2.5'
   endif
 -%}
 {%- if links.size > 0 -%}
-  <ul class="menu-links flex flex-col {{ gap }} {{ class }}" role="list">
+  <ul class="menu-links group/list flex flex-col {{ pull }} {{ class }}" role="list">
     {%- for link in links -%}
-      <li>
-        <a href="{{ link.url }}" class="{{ link_class }} rounded-xs text-text transition-colors hover:text-text-muted focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+      <li class="flex">
+        <a href="{{ link.url }}" class="{{ link_class }} {{ pad }} rounded-xs text-text transition-opacity duration-150 group-has-[a:hover,a:focus-visible]/list:opacity-30 hover:opacity-100! focus-visible:opacity-100! focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
       </li>
     {%- endfor -%}
   </ul>

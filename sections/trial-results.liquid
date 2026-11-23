@@ -1,0 +1,102 @@
+{%- comment -%}
+  Figma: Sections / Trial results (2113:18478; Templates FINAL PDP / Face oil 2526:26022, mobile 2526:26033)
+  Desktop, 12 columns: intro and case study (4), a square Before after slider with the disclaimer (5),
+  bracketed Result highlight list (3).
+  The intro row is auto and the second row 1fr, so the tall slider and results never stretch the intro row:
+  the case study sits exactly 80px below the text on desktop (24px between all parts on mobile).
+  Mobile: intro, square slider and disclaimer, case study, results. Per-product copy lives in the template; the text
+  and the case study have placeholder defaults and each hides when it is empty.
+{%- endcomment -%}
+{%- liquid
+  assign case_label = section.settings.case_label
+  if case_label == blank
+    assign case_label = 'sections.trial_results.case_study' | t
+  endif
+  assign result_count = 0
+  for block in section.blocks
+    if block.type == 'result' and block.settings.title != blank
+      assign result_count = result_count | plus: 1
+    endif
+  endfor
+-%}
+<div class="trial-results mx-auto flex w-full max-w-page flex-col gap-6 bg-background px-page-margin py-section-md lg:grid lg:grid-cols-12 lg:grid-rows-[auto_1fr] lg:gap-x-gutter lg:gap-y-0">
+  <div class="flex flex-col gap-6 text-text lg:col-span-4 lg:col-start-1 lg:row-start-1 lg:gap-10 lg:pr-6">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="text-heading-2 lg:text-heading-1">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <p class="max-w-prose-width text-balance text-body-sm">{{ section.settings.text }}</p>
+    {%- endif -%}
+  </div>
+
+  <div class="flex flex-col gap-2 lg:col-span-5 lg:col-start-5 lg:row-span-2 lg:row-start-1">
+    {% render 'before-after-slider',
+      before: section.settings.before_image,
+      after: section.settings.after_image,
+      show_labels: section.settings.show_labels,
+      sizes: '(min-width: 1024px) 40vw, 100vw',
+      class: 'aspect-square w-full'
+    %}
+    {%- if section.settings.disclaimer != blank -%}
+      <p class="text-body-xs text-text opacity-60">{{ section.settings.disclaimer }}</p>
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.case_text != blank -%}
+    <div class="flex items-start text-body-sm text-text lg:col-span-4 lg:col-start-1 lg:row-start-2 lg:self-start lg:pt-20 lg:pr-6">
+      <p class="w-30 shrink-0 opacity-60">{{ case_label }}</p>
+      <p class="min-w-0 flex-1">{{ section.settings.case_text }}</p>
+    </div>
+  {%- endif -%}
+
+  {%- if result_count > 0 -%}
+    <div class="relative flex flex-col gap-6 pt-2 pb-4 lg:col-span-3 lg:col-start-10 lg:row-span-2 lg:row-start-1 lg:gap-16 lg:self-start lg:py-10">
+      {% render 'bracket', side: 'left', size: 'xs', strength: 'strong' %}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'result' and block.settings.title != blank -%}
+          {% render 'result-highlight', title: block.settings.title, description: block.settings.text, attributes: block.shopify_attributes %}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Trial results",
+  "tag": "section",
+  "settings": [
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Effects after 4 week consistent use trial" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Participants used the oil every day for four weeks. Photos were taken at the start and at the end, in the same light." },
+    { "type": "text", "id": "case_label", "label": "Case study label", "info": "Empty uses \"The case study\"" },
+    { "type": "textarea", "id": "case_text", "label": "Case study", "default": "Aged 34, combination skin with redness on the cheeks. Three drops every evening after cleansing, with no other changes to the routine." },
+    { "type": "header", "content": "Before and after" },
+    { "type": "image_picker", "id": "before_image", "label": "Before image" },
+    { "type": "image_picker", "id": "after_image", "label": "After image" },
+    { "type": "checkbox", "id": "show_labels", "label": "Show labels", "default": true },
+    { "type": "textarea", "id": "disclaimer", "label": "Disclaimer" }
+  ],
+  "blocks": [
+    {
+      "type": "result",
+      "name": "Result",
+      "limit": 4,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "text", "id": "text", "label": "Text" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trial results",
+      "blocks": [
+        { "type": "result", "settings": { "title": "New growth", "text": "Fine baby hairs along the hairline and part" } },
+        { "type": "result", "settings": { "title": "Visible density", "text": "Less scalp showing through when you tie it back" } },
+        { "type": "result", "settings": { "title": "Calmer scalp", "text": "Less itch, less tightness, less flaking after washing" } }
+      ]
+    }
+  ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

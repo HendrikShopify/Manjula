@@ -1,0 +1,74 @@
+{%- comment -%}
+  Featured collection, Layout=Tiles. Own section: one section per layout, no layout select.
+  Settings: products (product list, picked and ordered by the merchant; one tile per product), show_heading, eyebrow,
+  title (intro text, heading-3, heading-2 from lg). No products picked: nothing renders.
+  Bracketed intro (md Bracket, Eyebrow lg + title over 8 columns), 12px above the tiles; Product card layout tile, edge
+  to edge with 4px gaps, 2 columns below lg and 4 from lg. Section padding section-lg. No view-all link and no arrows.
+{%- endcomment -%}
+{%- liquid
+  assign products = section.settings.products
+  assign show_heading = section.settings.show_heading
+  assign eyebrow = section.settings.eyebrow
+  assign title = section.settings.title
+  assign heading_id = 'FeaturedCollectionTitle-' | append: section.id
+-%}
+{%- if products.size > 0 -%}
+<section class="featured-collection-tiles py-section-lg text-balance"{% if show_heading and title != blank %} aria-labelledby="{{ heading_id }}"{% endif %}>
+  <div class="mx-auto flex w-full max-w-page flex-col gap-3 px-page-margin">
+    {%- if show_heading and title != blank or show_heading and eyebrow != blank -%}
+      <div class="lg:grid lg:grid-cols-12 lg:gap-x-gutter">
+        <div class="relative flex flex-col gap-5 p-3 lg:col-span-8">
+          {% render 'bracket', size: 'md' %}
+          {% render 'eyebrow', label: eyebrow, size: 'lg', mobile_size: 'md' %}
+          {%- if title != blank -%}
+            <h2 id="{{ heading_id }}" class="text-heading-3 text-balance text-text lg:text-heading-2">{{ title }}</h2>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+    <ul class="grid grid-cols-2 gap-1 lg:grid-cols-4" role="list">
+      {%- for product in products -%}
+        <li>{% render 'product-card', product: product, layout: 'tile', section_id: section.id, sizes: '(min-width: 1728px) 430px, (min-width: 1024px) 25vw, 50vw' %}</li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product tiles",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "product_list",
+      "id": "products",
+      "label": "Products",
+      "limit": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "show_heading",
+      "label": "Show heading",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The MANJULA Essentials"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Heading",
+      "default": "We create thoughtful hair and skincare powered by nature. Our formulas bring together time-honoured ingredients and modern science to nourish your skin and strengthen your hair."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product tiles"
+    }
+  ]
+}
+{% endschema %}

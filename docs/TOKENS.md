@@ -4,7 +4,7 @@ Design tokens flow one way: Figma variables and text styles → `tokens/figma-to
 
 ## Pipeline
 
-1. **Export from Figma.** A session with the Figma MCP reads all variable collections and text styles from the Blanc file and writes `tokens/figma-tokens.json`. Primitives are not exported: the Figma palette, spacing, radius and type scales equal Tailwind v4 defaults, so semantic tokens alias Tailwind's own variables (`color/text` → `var(--color-neutral-900)`).
+1. **Export from Figma.** A session with the Figma MCP reads all variable collections and text styles from the Manjula file (`8gfPAorI7wIn97xtkDogiX`) and writes `tokens/figma-tokens.json`. Primitives that equal Tailwind v4 defaults (red, amber, green, spacing in 4px steps, radius scale) are not exported; primitives outside them go under `palette` (`palette/manjula/900` becomes `--color-manjula-900`) and semantic colours alias those.
 2. **Generate.** `node scripts/build-tokens.js` writes `tailwind/tokens.css`.
 3. **Build.** `npm run dev` compiles `assets/tailwind.input.css`, which imports `tokens.css` first.
 
@@ -44,3 +44,12 @@ Text utilities are fixed-size. Responsiveness is `text-heading-3 lg:text-heading
 ## Legacy
 
 `assets/tailwind.input.css` keeps `--font-primary` and `--font-secondary` as aliases, and the old component CSS files still reference Tailwind's default `gray-*` and `red-*` (their values differ slightly from the previous custom palette). Both go away in milestone 4 when the component CSS is replaced by utilities in snippets.
+
+## Manjula additions (2026-11-04)
+
+- `palette`: the Manjula greys and the Trustpilot green, emitted as `--color-manjula-*` in `@theme static`.
+- `font.serif` (Sabon) gives `--font-serif`; text styles with `"family": "serif"` use it.
+- `trim`: cap and baseline offsets per font for `tailwind/text-trim.css`. Text styles whose font differs from the body font write their own `--trim-top` and `--trim-bottom`.
+- `fontFiles`: self-hosted font files with ascent and descent overrides; `snippets/fonts.liquid` is generated from it.
+- Layout adds `label-column` (240, 240, 72): `w-label-column`.
+- Text styles: every Figma style is a utility, `/` becomes `-` (`label/caps-lg` is `text-label-caps-lg`, `serif/drop-cap` is `text-serif-drop-cap`).

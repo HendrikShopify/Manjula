@@ -1,29 +1,79 @@
 {%- comment -%}
   Figma: Components Molecules / Product form / Details
-  product   product object
-  class
-  Accordion with Description (product description, open), Ingredients, How to use and Shipping and returns.
-  Ingredients and How to use read product.metafields.custom.ingredients / how_to_use and fall back to the locale text (products.product.details).
+  The details accordion of the PDP (main-product) and the Quick view details drawer. Caps items with the plus icon:
+    How to use            product.metafields.custom.use_steps (list of use_step metaobjects: title, text)
+    The scent             product.metafields.custom.scent (multi-line text)
+    Key ingredients       product.metafields.custom.ingredients (list of ingredient metaobjects: name, function)
+    Delivery and returns  theme setting delivery_returns (Theme settings > Products), with a link to the page in
+                          delivery_returns_link (like the Key ingredients link)
+  An item without data is left out; with no items at all nothing renders.
+  How to use: rows 20px apart of a roman numeral (40px), the step title (120px, muted) and the text.
+  Key ingredients: the ingredient names as one line, then a "See full ingredients list" link that scrolls to the
+  Ingredient explorer section (#ingredient-explorer) on the same page. The link shows only with ingredients_link
+  (the PDP passes it, the Quick view does not), and is hidden when the page has no #ingredient-explorer.
+  product       product object
+  ingredients_link  boolean, show the "See full ingredients list" link
+  top_divider   boolean, line above the first item (PDP)
+  class         placement only
 {%- endcomment -%}
-{%- capture details_items -%}
-  {%- if product.description != blank -%}
-    {%- assign details_title = 'products.product.details.description' | t -%}
-    {%- capture details_body -%}<div class="rte text-text-muted">{{ product.description }}</div>{%- endcapture -%}
-    {% render 'accordion-item', title: details_title, content: details_body, icon: 'plus', name: 'product-details', open: true %}
+{%- liquid
+  assign steps = product.metafields.custom.use_steps.value
+  assign scent = product.metafields.custom.scent.value
+  assign ingredients = product.metafields.custom.ingredients.value
+  assign delivery = settings.delivery_returns
+  assign numerals = 'i,ii,iii,iv,v,vi,vii,viii,ix,x,xi,xii' | split: ','
+-%}
+{%- capture detail_items -%}
+  {%- if steps != blank -%}
+    {%- capture steps_body -%}
+      <ol class="flex flex-col gap-5 text-body-sm text-text">
+        {%- for step in steps -%}
+          <li class="flex items-start">
+            <span class="w-10 shrink-0">{{ numerals[forloop.index0] | default: forloop.index }}.</span>
+            <span class="w-30 shrink-0 text-text-muted">{{ step.title | escape }}</span>
+            <span class="min-w-0 flex-1">{{ step.text | escape | newline_to_br }}</span>
+          </li>
+        {%- endfor -%}
+      </ol>
+    {%- endcapture -%}
+    {%- assign steps_title = 'products.product.details.how_to_use' | t -%}
+    {% render 'accordion-item', title: steps_title, content: steps_body, icon: 'plus', style: 'caps', name: 'product-details' %}
   {%- endif -%}
-  {%- assign ingredients_title = 'products.product.details.ingredients_title' | t -%}
-  {%- assign ingredients_text = product.metafields.custom.ingredients.value -%}
-  {%- if ingredients_text == blank -%}{%- assign ingredients_text = 'products.product.details.ingredients_body' | t -%}{%- endif -%}
-  {%- capture ingredients_body -%}<div class="rte text-text-muted">{{ ingredients_text }}</div>{%- endcapture -%}
-  {% render 'accordion-item', title: ingredients_title, content: ingredients_body, icon: 'plus', name: 'product-details' %}
-  {%- assign how_to_use_title = 'products.product.details.how_to_use_title' | t -%}
-  {%- assign how_to_use_text = product.metafields.custom.how_to_use.value -%}
-  {%- if how_to_use_text == blank -%}{%- assign how_to_use_text = 'products.product.details.how_to_use_body' | t -%}{%- endif -%}
-  {%- capture how_to_use_body -%}<div class="rte text-text-muted">{{ how_to_use_text }}</div>{%- endcapture -%}
-  {% render 'accordion-item', title: how_to_use_title, content: how_to_use_body, icon: 'plus', name: 'product-details' %}
-  {%- assign shipping_title = 'products.product.details.shipping_title' | t -%}
-  {%- assign shipping_text = 'products.product.details.shipping_body' | t -%}
-  {%- capture shipping_body -%}<div class="text-text-muted">{{ shipping_text }}</div>{%- endcapture -%}
-  {% render 'accordion-item', title: shipping_title, content: shipping_body, icon: 'plus', name: 'product-details' %}
+  {%- if scent != blank -%}
+    {%- capture scent_body -%}<p class="text-body-sm text-text">{{ scent | escape | newline_to_br }}</p>{%- endcapture -%}
+    {%- assign scent_title = 'products.product.details.scent' | t -%}
+    {% render 'accordion-item', title: scent_title, content: scent_body, icon: 'plus', style: 'caps', name: 'product-details' %}
+  {%- endif -%}
+  {%- if ingredients != blank -%}
+    {%- capture ingredients_body -%}
+      {%- liquid
+        assign short_list = ingredients | map: 'name' | join: ', '
+        assign t_full = 'products.product.details.full_ingredients' | t
+      -%}
+      <div class="flex flex-col items-start gap-6 text-body-sm text-text">
+        <p>{{ short_list | escape }}.</p>
+        {%- if ingredients_link -%}
+          <div class="[body:not(:has(#ingredient-explorer))_&]:hidden">{% render 'link', label: t_full, href: '#ingredient-explorer', size: 'inline' %}</div>
+        {%- endif -%}
+      </div>
+    {%- endcapture -%}
+    {%- assign ingredients_title = 'products.product.details.key_ingredients' | t -%}
+    {% render 'accordion-item', title: ingredients_title, content: ingredients_body, icon: 'plus', style: 'caps', name: 'product-details' %}
+  {%- endif -%}
+  {%- if delivery != blank -%}
+    {%- capture delivery_body -%}
+      <div class="flex flex-col items-start gap-6 text-body-sm text-text">
+        <div class="rte">{{ delivery }}</div>
+        {%- if settings.delivery_returns_link != blank -%}
+          {%- assign t_delivery_link = 'products.product.details.delivery_link' | t -%}
+          {% render 'link', label: t_delivery_link, href: settings.delivery_returns_link, size: 'inline' %}
+        {%- endif -%}
+      </div>
+    {%- endcapture -%}
+    {%- assign delivery_title = 'products.product.details.delivery_returns' | t -%}
+    {% render 'accordion-item', title: delivery_title, content: delivery_body, icon: 'plus', style: 'caps', name: 'product-details' %}
+  {%- endif -%}
 {%- endcapture -%}
-{% render 'accordion', items: details_items, top_divider: true, class: class %}
+{%- if detail_items != blank -%}
+  {% render 'accordion', items: detail_items, top_divider: top_divider, class: class %}
+{%- endif -%}

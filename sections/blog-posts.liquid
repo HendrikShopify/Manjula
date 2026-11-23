@@ -1,18 +1,31 @@
 {%- comment -%}
-  Figma: Sections / Blog posts
-  Shows the latest articles of a fixed blog. The handle and layout are set here; theme settings come later.
+  Blog posts: the latest 3 articles of the fixed `news` blog as Vertical article cards (one column below lg, three
+  from lg), with a View all link. heading-3 and 80px padding from lg, heading-4 and 48px below.
+  Markup inline in this section (no snippet). The variable is news_blog, not blog: blog is Shopify's own object.
+  The featured layout is not in the final design and is not built.
 {%- endcomment -%}
 {%- liquid
-  assign blog_posts_handle = 'news'
-  assign blog_posts_blog = blogs[blog_posts_handle]
-  assign blog_posts_title = 'sections.blog_posts.title' | t
+  assign news_blog = blogs['news']
+  assign title = 'sections.blog_posts.title' | t
+  assign view_all_label = 'sections.blog_posts.view_all' | t
+  assign heading_id = 'BlogPostsTitle-' | append: section.id
+  assign card_sizes = '(min-width: 1728px) 541px, (min-width: 1024px) 33vw, 100vw'
 -%}
-{% render 'blog-posts',
-  blog: blog_posts_blog,
-  title: blog_posts_title,
-  layout: 'grid',
-  section_id: section.id
-%}
+{%- if news_blog.articles.size > 0 -%}
+  <section class="blog-posts py-12 lg:py-20" aria-labelledby="{{ heading_id }}">
+    <div class="mx-auto flex w-full max-w-page flex-col gap-6 px-page-margin lg:gap-10">
+      <div class="flex items-end justify-between gap-6">
+        <h2 id="{{ heading_id }}" class="text-heading-4 text-text lg:text-heading-3">{{ title }}</h2>
+        {% render 'link', label: view_all_label, href: news_blog.url, size: 'md', icon_trailing: 'icon__arrow-right.svg', class: 'shrink-0' %}
+      </div>
+      <div class="grid gap-4 lg:grid-cols-3 lg:gap-3">
+        {%- for article in news_blog.articles limit: 3 -%}
+          {% render 'article-card', article: article, layout: 'vertical', sizes: card_sizes %}
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
 
 {% schema %}
 {

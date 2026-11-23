@@ -11,6 +11,8 @@ class MarqueeSlider extends BaseComponent {
 
         if (!this.wrappers.length) return;
 
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
         this.pixelsPerSecond =
             parseFloat(this.dataset.pixelsPerSecond || '50') || 50;
 

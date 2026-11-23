@@ -65,13 +65,10 @@ class MobileMenu extends BaseComponent {
         this.opener = this.$('[data-mobile-menu-open]');
         this.panel = this.$('[data-mobile-menu-panel]');
         this.drawer = this.$('[data-mobile-menu-drawer]');
-        this.backdrop = this.$('[data-mobile-menu-backdrop]');
         this.desktopMedia = window.matchMedia(this.dataset.desktopQuery || '(min-width: 1024px)');
         this.createTimeline();
 
         this.listen(this, 'click', this.onClick);
-        if (this.opener) this.listen(this.opener, 'click', this.onClick);
-        if (this.panel) this.listen(this.panel, 'click', this.onClick);
         this.listen(this.desktopMedia, 'change', this.onBreakpoint);
         this.listen(window, 'pageshow', this.onPageShow);
     }
@@ -88,7 +85,7 @@ class MobileMenu extends BaseComponent {
     }
 
     createTimeline() {
-        if (typeof gsap === 'undefined' || !this.drawer || !this.backdrop) return;
+        if (typeof gsap === 'undefined' || !this.drawer) return;
         this.timeline?.kill();
         this.timeline = gsap.timeline({
             paused: true,
@@ -99,9 +96,7 @@ class MobileMenu extends BaseComponent {
                 this.panel.style.pointerEvents = '';
             },
         });
-        this.timeline
-            .fromTo(this.drawer, { xPercent: -100 }, { xPercent: 0 }, 0)
-            .fromTo(this.backdrop, { autoAlpha: 0 }, { autoAlpha: 1 }, 0);
+        this.timeline.fromTo(this.drawer, { xPercent: -100 }, { xPercent: 0 }, 0);
     }
 
     onClick(event) {
@@ -111,58 +106,13 @@ class MobileMenu extends BaseComponent {
             return;
         }
 
-        const drillOpen = event.target.closest('[data-drill-open]');
-        if (drillOpen && this.contains(drillOpen)) {
-            this.drillTo(drillOpen.dataset.drillOpen, drillOpen);
-            return;
-        }
-
-        if (event.target.closest('[data-drill-back]')) {
-            this.drillBack();
-            return;
-        }
-
         if (event.target.closest('[data-mobile-menu-close]')) {
-            this.close();
-            return;
-        }
-
-        if (event.target.closest('[data-mobile-menu-backdrop]')) {
             this.close();
             return;
         }
 
         const hashLink = event.target.closest('a[href^="#"]');
         if (hashLink && this.contains(hashLink)) this.close();
-    }
-
-    /* Drill-down style: each top-level category is its own panel inside the same scroll area. */
-    drillTo(id, opener) {
-        const target = document.getElementById(id);
-        const root = this.$('[data-drill-root]');
-        if (!target || !root) return;
-        this.drillOpener = opener;
-        root.hidden = true;
-        this.$$('[data-drill-panel]').forEach((panel) => (panel.hidden = panel !== target));
-        target.closest('nav')?.scrollTo({ top: 0 });
-        target.querySelector('[data-drill-back]')?.focus({ preventScroll: true });
-    }
-
-    drillBack() {
-        const root = this.$('[data-drill-root]');
-        if (!root) return;
-        this.$$('[data-drill-panel]').forEach((panel) => (panel.hidden = true));
-        root.hidden = false;
-        this.drillOpener?.focus({ preventScroll: true });
-        this.drillOpener = null;
-    }
-
-    resetDrill() {
-        const root = this.$('[data-drill-root]');
-        if (!root || root.hidden === false) return;
-        this.$$('[data-drill-panel]').forEach((panel) => (panel.hidden = true));
-        root.hidden = false;
-        this.drillOpener = null;
     }
 
     onPanelKeydown(event) {
@@ -208,7 +158,6 @@ class MobileMenu extends BaseComponent {
         this.setAttribute('data-scroll-lock', 'false');
         if (this.opener) this.opener.setAttribute('aria-expanded', 'false');
         this.playOut(immediate || silent);
-        this.resetDrill();
 
         if (!silent && restoreFocus) this.restoreFocus();
         if (!silent) this.emit('mobile-menu:close', { source: this });
@@ -227,10 +176,7 @@ class MobileMenu extends BaseComponent {
         if (!this.panel) return;
         if (immediate || this.prefersReducedMotion || !this.timeline) {
             this.timeline?.pause(0);
-            if (typeof gsap !== 'undefined') {
-                if (this.drawer) gsap.set(this.drawer, { clearProps: 'transform' });
-                if (this.backdrop) gsap.set(this.backdrop, { clearProps: 'opacity,visibility' });
-            }
+            if (typeof gsap !== 'undefined' && this.drawer) gsap.set(this.drawer, { clearProps: 'transform' });
             this.panel.setAttribute('data-state', 'closed');
             this.panel.style.pointerEvents = '';
             return;

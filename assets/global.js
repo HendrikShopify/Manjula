@@ -383,6 +383,105 @@ customElements.define('loading-bar', LoadingBar);
 
 /* GSAP EASES */
 
-gsap.registerPlugin(CustomEase);
+gsap.registerPlugin(CustomEase, ScrollTrigger);
 
 CustomEase.create("smooth", "0.77,0,0.175,1");
+
+
+/**
+ * Footer reveal (Hendrik, 18 Nov; lg and up, the sticky classes are lg: only): the wordmark and menu columns are sticky to the bottom of the screen under the image
+ * band, so the band scrolls up off them while they stay put (CSS only, nothing moves by script).
+ * This only sets --reveal-bottom: 0px, or minus the overflow when the part is taller than the screen, so its top is
+ * pinned instead and nothing stays hidden. Without this script the bottom is invalid and the part simply scrolls.
+ */
+class FooterReveal extends BaseComponent {
+  init() {
+    this.update = this.update.bind(this);
+    this.observer = new ResizeObserver(this.update);
+    this.observer.observe(this);
+    this.listen(window, 'resize', this.update);
+    this.update();
+    this.parallax();
+  }
+
+  // Small parallax and fade: while the band scrolls off, the content moves up from 30% lower to its place and the
+  // overlay fades from 15% Ink to nothing, both ending when the page ends. The trigger is the band above (not sticky,
+  // so its measured position is reliable). lg and up only.
+  parallax() {
+    const inner = this.querySelector('[data-footer-reveal-inner]');
+    const overlay = this.querySelector('[data-footer-reveal-overlay]');
+    const band = this.previousElementSibling;
+    if (!inner || !band || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    this.media = gsap.matchMedia();
+    this.media.add('(min-width: 1024px)', () => {
+      const timeline = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: { trigger: band, start: 'bottom bottom', end: 'max', scrub: true },
+      });
+      timeline.fromTo(inner, { yPercent: 30 }, { yPercent: 0 }, 0);
+      if (overlay) timeline.fromTo(overlay, { opacity: 0.15 }, { opacity: 0 }, 0);
+    });
+  }
+
+  update() {
+    const overflow = this.offsetHeight - window.innerHeight;
+    this.style.setProperty('--reveal-bottom', overflow > 0 ? `${-overflow}px` : '0px');
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.observer?.disconnect();
+    this.media?.revert();
+  }
+}
+
+customElements.define('footer-reveal', FooterReveal);
+
+// Accordion close animation (snippets/accordion-item.liquid, hook data-accordion). Safari hides a <details> panel the
+// moment [open] is removed, so its close never animated. closeAccordion keeps [open], sets data-closing (the CSS animates
+// the grid row and fade back to 0) and removes [open] once that is done. It runs on a click on the summary of an open
+// item, and in a group (same name) on the open sibling when another item opens: its name comes off for the close, so
+// the browser does not shut it at once, and goes back on after. Opening stays native. Reduced motion: native toggle.
+const ACCORDION_CLOSE_MS = 300; // duration-300 on ::details-content
+
+function closeAccordion(details) {
+  const name = details.getAttribute('name');
+  if (name) details.removeAttribute('name');
+  details.setAttribute('data-closing', '');
+  const finish = () => {
+    clearTimeout(timer);
+    details.removeEventListener('transitionend', onEnd);
+    details.open = false;
+    details.removeAttribute('data-closing');
+    if (name) details.setAttribute('name', name);
+  };
+  const onEnd = (event) => {
+    if (event.target === details && event.propertyName === 'grid-template-rows') finish();
+  };
+  const timer = setTimeout(finish, ACCORDION_CLOSE_MS + 50);
+  details.addEventListener('transitionend', onEnd);
+}
+
+document.addEventListener('click', (event) => {
+  const summary = event.target.closest('[data-accordion] > summary');
+  if (!summary) return;
+  const details = summary.parentElement;
+  if (details.hasAttribute('data-closing')) {
+    event.preventDefault();
+    return;
+  }
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (details.open) {
+    event.preventDefault();
+    closeAccordion(details);
+    return;
+  }
+  // Opening an item in a group: close the open sibling with the animation (before the browser closes it at once).
+  const name = details.getAttribute('name');
+  if (!name) return;
+  document.querySelectorAll('details[data-accordion][open]').forEach((other) => {
+    if (other !== details && other.getAttribute('name') === name) closeAccordion(other);
+  });
+});

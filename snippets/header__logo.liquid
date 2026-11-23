@@ -1,14 +1,13 @@
 {%- comment -%}
   Figma: Components Atoms / Logo (Type=Wordmark)
-  The store logo from assets/logo.svg (placeholder: "Blanc" in Inter Semi Bold, outlined). Height follows layout/logo-height: 24 on mobile, 32 from lg; the width follows the drawing.
+  The Manjula wordmark from assets/logo.svg, inlined so it takes the header's text colour (Tone=Inverse over the home hero is white).
+  Width as in the Figma header: 120 on mobile, 160 from lg; the height follows the drawing.
 {%- endcomment -%}
-<a href="{{ shop.url }}" class="inline-flex items-center rounded-xs focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus" data-focus-fallback>
-  <img
-    loading="eager"
-    width="106"
-    height="32"
-    class="h-6 w-auto lg:h-8"
-    alt="{{ shop.name | escape }}"
-    src="{{ 'logo.svg' | asset_url }}"
-  >
+<a
+  href="{{ routes.root_url }}"
+  class="inline-flex items-center rounded-xs text-current focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus [&>svg]:block [&>svg]:h-auto [&>svg]:w-30 lg:[&>svg]:w-40"
+  aria-label="{{ shop.name | escape }}"
+  data-focus-fallback
+>
+  {{- 'logo.svg' | inline_asset_content -}}
 </a>

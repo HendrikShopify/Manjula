@@ -1,0 +1,59 @@
+{%- comment -%}
+  Figma: Components Molecules / Picker row (2068:10241)
+  Product row in the mini-offer picker: 60x70 packshot on mobile, 80x93 from lg (Hendrik, 22 Nov: smaller on mobile). The
+  row is as tall as its content; the thumb's background runs the full row height, flush, while the packshot keeps its size, underlined name · size, benefits at 60%, free-gift line, price and a 32px add button.
+  product      the oil offered; thumb = custom.solo_image (bottle without box), else the featured image
+  size_label   e.g. 100ml                                       (Figma: Size)
+  benefits     short line; default the product card copy: custom.product_card_subtitle, else the titles of
+               product.metafields.custom.benefits (list of "Title--Description"), comma separated, as in product-card   (Figma: Benefits)
+  gift         free-gift line, e.g. "+ Free 30ml body oil"      (Figma: Gift, Show gift)
+  attributes   JS hooks on the add button (data-ritual-add ...)
+  The row is clickable as a whole (the name link covers it) and opens the Quick view drawer (data-quick-view-trigger,
+  quick-view.js); the add button sits above the link.
+  class        placement only
+{%- endcomment -%}
+{%- liquid
+  assign benefits = benefits | default: product.metafields.custom.product_card_subtitle.value
+  if benefits == blank
+    assign benefits = ''
+    for item in product.metafields.custom.benefits.value
+      assign benefit_title = item | split: '--' | first | strip
+      if benefit_title == blank
+        continue
+      endif
+      if benefits != ''
+        assign benefits = benefits | append: ', '
+      endif
+      assign benefits = benefits | append: benefit_title
+    endfor
+  endif
+  assign variant = product.selected_or_first_available_variant
+  assign add_label = 'products.product.ritual.add' | t: name: product.title
+  assign unavailable = false
+  unless variant.available
+    assign unavailable = true
+  endunless
+-%}
+<div class="picker-row relative flex items-center gap-3 bg-surface pr-3 {{ class }}">
+  <div class="flex w-15 shrink-0 items-center self-stretch bg-surface-alt lg:w-20">
+    {%- assign thumb = product.metafields.custom.solo_image.value | default: product.featured_image -%}
+    {%- if thumb -%}
+      {{ thumb | image_url: width: 240 | image_tag: widths: '80, 160, 240', sizes: '(min-width: 1024px) 80px, 60px', alt: '', class: 'aspect-[80/93] w-full object-contain', loading: 'lazy' }}
+    {%- endif -%}
+  </div>
+  <div class="flex min-w-0 flex-1 flex-col items-start gap-3 text-text">
+    <p class="flex items-center gap-1 text-label-base">
+      <a href="{{ product.url }}" class="underline underline-offset-2 after:absolute after:inset-0 hover:no-underline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus" aria-haspopup="dialog" data-quick-view-trigger data-product-url="{{ product.url | split: '?' | first }}">{{ product.title | escape }}</a>
+      {%- if size_label != blank -%}
+        <span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
+        <span>{{ size_label | escape }}</span>
+      {%- endif -%}
+    </p>
+    {%- if benefits != blank %}<p class="text-body-xs opacity-60">{{ benefits | escape }}</p>{% endif -%}
+    {%- if gift != blank %}<p class="text-body-xs">{{ gift | escape }}</p>{% endif -%}
+  </div>
+  <div class="relative z-[1] flex shrink-0 items-center gap-2">
+    <span class="text-label-base text-text">{{ variant.price | money }}</span>
+    {% render 'icon-button', icon: 'icon__plus.svg', label: add_label, style: 'primary', size: 'sm', disabled: unavailable, attributes: attributes %}
+  </div>
+</div>

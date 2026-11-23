@@ -1,0 +1,26 @@
+{%- comment -%}
+  Figma: Components Molecules / Result highlight (Viewport Desktop 2112:23394, Mobile 2318:255)
+  title         heading/4
+  description   body/sm at 60%
+  attributes    block.shopify_attributes
+  class         placement only
+  One trial result inside a left bracket: a 20px tick from the bracket, a heavy plus (icon__plus-heavy) over a fading line, then title and text.
+  Desktop leaves 20px between the tick and the content; mobile 4px.
+{%- endcomment -%}
+<div class="result-highlight flex items-start gap-1 lg:gap-2 {{ class }}" {{ attributes }}>
+  <div class="relative h-8 w-5 shrink-0 lg:w-10" aria-hidden="true">
+    <span class="absolute top-7.75 left-0 h-px w-5 bg-text opacity-60"></span>
+  </div>
+  <div class="flex min-w-0 flex-1 flex-col gap-4 lg:gap-6">
+    <div class="flex flex-col gap-2 lg:gap-4">
+      <div class="relative h-8" aria-hidden="true">
+        <span class="absolute top-0 left-0 size-4 text-text [&>svg]:size-full">{{ 'icon__plus-heavy.svg' | inline_asset_content }}</span>
+        <span class="absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-text/60 to-transparent"></span>
+      </div>
+      <h3 class="text-heading-4 text-text">{{ title }}</h3>
+    </div>
+    {%- if description != blank -%}
+      <p class="text-body-sm text-text opacity-60 lg:max-w-57.5">{{ description }}</p>
+    {%- endif -%}
+  </div>
+</div>

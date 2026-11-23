@@ -1,0 +1,169 @@
+{%- comment -%}
+  Figma: Sections / Bundle offer (2098:26426), with Fixed bundle Layout=Offer (186:7811) and Fixed bundle item Layout=Tile (186:7610)
+  product          the bundle product that is sold (e.g. Essentials set); its price and compare-at price show, the button adds it
+  items            up to 3 products (Products list); each tile shows the product's solo shot (custom.solo_image, else
+                   its main image), title, size (custom.size) and description
+                   (custom.product_card_subtitle)
+  eyebrow          label next to the 14px dot                (Figma: Eyebrow lg)
+  heading          offer title (heading/2); [savings] becomes the bundle's compare-at price minus its price
+  heading_no_savings   used instead when there is no saving (no compare-at price, e.g. in a market without one)
+  button_label     primary sm button, full width
+  note_text, note_link_label, note_link_url   line under the button ("Not sure yet? Try ...")
+  image_left, image_right   photos either side of the offer; mobile shows only image_left, full width and square
+  Desktop: image, 674px offer block (the images stretch to its full height) framed by xs brackets (20px deep, 20% Ink), image; items sit in a row with circled plus
+  marks in the 8px gaps. Mobile: image, then the offer with items stacked 4px apart and the plus marks between them.
+  Each item is clickable as a whole (the title link covers the tile) and opens the Quick view drawer (data-quick-view-trigger,
+  quick-view.js); without JS it goes to the product. Hover: the packshot grows to 105% from its bottom edge (motion-safe).
+  The button is a product form for the bundle product (product-form.js adds it and opens the cart drawer).
+  Markup inline in this section (no snippet). The section settings are read into variables at the top.
+  The Products list fills the tiles; the bundle product setting sets the price and is what the button adds.
+  Mobile: the note link starts on its own line.
+{%- endcomment -%}
+{%- liquid
+  assign product = section.settings.product
+  assign items = section.settings.items
+  assign view_details_label = 'products.product.bundle.view_details' | t
+  assign eyebrow = section.settings.eyebrow
+  assign heading = section.settings.heading
+  assign button_label = section.settings.button_label
+  assign note_text = section.settings.note_text
+  assign note_link_label = section.settings.note_link_label
+  assign note_link_url = section.settings.note_link_url
+  assign image_left = section.settings.image_left
+  assign image_right = section.settings.image_right
+-%}
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign on_sale = false
+  if variant.compare_at_price > variant.price
+    assign on_sale = true
+  endif
+  if heading contains '[savings]'
+    if on_sale
+      assign savings = variant.compare_at_price | minus: variant.price | money_without_trailing_zeros
+      assign heading = heading | replace: '[savings]', savings
+    else
+      # No compare-at price in this market: never show "0 off".
+      assign heading = section.settings.heading_no_savings
+    endif
+  endif
+-%}
+<section class="bundle-offer flex w-full flex-col gap-gutter bg-background pt-section-md pb-section-lg lg:flex-row lg:pt-0 lg:items-stretch" data-bundle-offer>
+  <div class="relative aspect-square w-full lg:aspect-auto lg:w-auto lg:flex-1">
+    {% render 'media', media: image_left, ratio: 'fill', sizes: '(min-width: 1024px) 30vw, 100vw', class: 'absolute! inset-0 size-full' %}
+  </div>
+
+  <div class="px-page-margin lg:shrink-0 lg:px-0">
+    <div class="relative flex flex-col items-center gap-8 bg-background px-4 py-6 lg:w-[674px] lg:gap-10 lg:px-12 lg:py-3">
+      <div class="flex flex-col items-center gap-6 text-center">
+        {% render 'eyebrow', label: eyebrow, size: 'lg' %}
+        {%- if heading != blank -%}
+          <h2 class="text-heading-2 text-balance text-text">{{ heading }}</h2>
+        {%- endif -%}
+      </div>
+
+      {%- if items.size > 0 -%}
+        <ul class="flex w-full flex-col gap-1 lg:flex-row lg:gap-2" role="list">
+          {%- for item in items -%}
+            {%- liquid
+              assign item_image = item.metafields.custom.solo_image.value | default: item.featured_media
+              assign item_size = item.metafields.custom.size.value
+              assign item_description = item.metafields.custom.product_card_subtitle.value
+            -%}
+            <li class="group/tile relative flex cursor-pointer items-center gap-4 bg-surface-alt p-3 lg:flex-1 lg:flex-col lg:justify-center lg:gap-3">
+              {%- unless forloop.first -%}
+                <span class="absolute top-0 left-1/2 z-10 inline-flex size-4 -translate-x-1/2 -translate-y-[calc(50%+2px)] rounded-full bg-background text-text lg:top-1/2 lg:left-0 lg:-translate-x-[calc(50%+4px)] lg:-translate-y-1/2 [&>svg]:size-full" aria-hidden="true">
+                  {{- 'icon__plus-circle.svg' | inline_asset_content -}}
+                </span>
+              {%- endunless -%}
+              <div class="size-18 shrink-0 origin-bottom motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out motion-safe:group-hover/tile:scale-105 lg:size-25">
+                {% render 'media', media: item_image, ratio: '1:1', sizes: '100px', class: 'size-full bg-transparent' %}
+              </div>
+              <div class="flex min-w-0 flex-1 flex-col gap-2 lg:w-full lg:items-center lg:text-center">
+                <p class="flex items-center gap-1 text-label-base text-text">
+                  {%- capture view_attributes %}aria-haspopup="dialog" data-quick-view-trigger data-product-url="{{ item.url | split: '?' | first }}"{% endcapture -%}
+                  <a href="{{ item.url }}" class="after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:outline-1 focus-visible:after:outline-offset-2 focus-visible:after:outline-focus" {{ view_attributes }}>
+                    {{- item.title | escape -}}<span class="sr-only">, {{ view_details_label }}</span>
+                  </a>
+                  {%- if item_size != blank -%}
+                    <span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
+                    <span>{{ item_size | escape }}</span>
+                  {%- endif -%}
+                </p>
+                {%- if item_description != blank -%}
+                  <p class="text-body-xs text-text opacity-60">{{ item_description | escape }}</p>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- if product != blank -%}
+        <p class="flex items-center gap-2 text-label-xl text-text">
+          {%- if on_sale -%}
+            <span class="sr-only">{{ 'products.product.price.sale_price' | t }}</span>
+            <span>{{ variant.price | money_without_trailing_zeros }}</span>
+            <span class="sr-only">{{ 'products.product.price.regular_price' | t }}</span>
+            <s class="opacity-60">{{ variant.compare_at_price | money }}</s>
+          {%- else -%}
+            <span>{{ variant.price | money_without_trailing_zeros }}</span>
+          {%- endif -%}
+        </p>
+      {%- endif -%}
+
+      <div class="flex w-full flex-col items-center gap-3">
+        {%- if product != blank and button_label != blank -%}
+          {%- liquid
+            assign add_disabled = false
+            unless variant.available
+              assign add_disabled = true
+            endunless
+          -%}
+          <product-form class="w-full">
+            {%- form 'product', product, class: 'flex', novalidate: 'novalidate' -%}
+              <input type="hidden" name="id" value="{{ variant.id }}">
+              {% render 'button', label: button_label, style: 'primary', size: 'sm', type: 'submit', name: 'add', class: 'w-full', disabled: add_disabled %}
+            {%- endform -%}
+          </product-form>
+        {%- endif -%}
+        {%- if note_text != blank or note_link_label != blank -%}
+          <p class="flex flex-col items-center gap-2 text-center text-label-base text-text lg:block">
+            <span>{{ note_text }}</span>
+            {%- if note_link_label != blank %} <a href="{{ note_link_url | default: '#' }}" class="rounded-xs underline transition-colors hover:text-text-muted focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus">{{ note_link_label }}</a>{%- endif -%}
+          </p>
+        {%- endif -%}
+      </div>
+
+      {% render 'bracket', side: 'left', size: 'xs' %}
+      {% render 'bracket', side: 'right', size: 'xs' %}
+    </div>
+  </div>
+
+  <div class="relative hidden lg:block lg:flex-1">
+    {% render 'media', media: image_right, ratio: 'fill', sizes: '30vw', class: 'absolute! inset-0 size-full' %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Bundle offer",
+  "tag": "div",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Bundle product", "info": "Its price and compare-at price show. The button adds this product." },
+    { "type": "product_list", "id": "items", "label": "Products", "limit": 3, "info": "The products in the bundle. Size and description come from each product." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The complete MANJULA ritual" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "All three oils, [savings] off", "info": "[savings] shows the bundle's saving (compare-at price minus price)." },
+    { "type": "text", "id": "heading_no_savings", "label": "Heading without saving", "default": "All three oils", "info": "Shown when the bundle has no compare-at price, for example in another currency." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Add all three to cart" },
+    { "type": "text", "id": "note_text", "label": "Note", "default": "Not sure yet?" },
+    { "type": "text", "id": "note_link_label", "label": "Note link label", "default": "Try all three essentials oils in discovery size" },
+    { "type": "url", "id": "note_link_url", "label": "Note link" },
+    { "type": "image_picker", "id": "image_left", "label": "Image left", "info": "Also the image on mobile." },
+    { "type": "image_picker", "id": "image_right", "label": "Image right", "info": "Desktop only." }
+  ],
+  "presets": [
+    { "name": "Bundle offer" }
+  ]
+}
+{% endschema %}

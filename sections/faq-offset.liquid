@@ -1,0 +1,46 @@
+{%- comment -%}
+  Figma: Sections / FAQ, Layout=Offset (215:7526; Templates FINAL Subscription 2526:25885, mobile 2526:25895).
+  Own section: one section per layout, no layout select. Same parts as FAQ: Image, without the photo.
+  Desktop: title (max 541px, heading/1) and the accordion (max 496px) in columns 3 to 7, 40px apart.
+  Mobile: title (heading/2) and accordion stacked, 32px apart. Answers are body/sm in Text muted.
+  Questions are FAQ metaobjects (faq: question, answer), picked in the Questions setting, in that order.
+  None picked: the section renders nothing. The same entries can be reused on other pages.
+{%- endcomment -%}
+{%- assign questions = section.settings.questions -%}
+{%- if questions.size > 0 -%}
+<div class="faq-offset mx-auto w-full max-w-page bg-background px-page-margin pt-section-md pb-section-lg lg:grid lg:grid-cols-12 lg:gap-x-gutter">
+  <div class="flex flex-col gap-8 lg:col-span-5 lg:col-start-3 lg:gap-10">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="max-w-135.25 text-heading-2 text-text lg:text-heading-1">{{ section.settings.heading | newline_to_br }}</h2>
+    {%- endif -%}
+    {%- comment -%} One group: opening a question closes the open one {%- endcomment -%}
+    {%- assign faq_group = 'faq-' | append: section.id -%}
+    {%- capture faq_items -%}
+      {%- for faq in questions -%}
+        {%- capture answer -%}<div class="rte text-body-sm text-text-muted [&_p+p]:mt-5">{{ faq.answer | metafield_tag }}</div>{%- endcapture -%}
+        {% render 'accordion-item', title: faq.question.value, content: answer, icon: 'plus', name: faq_group %}
+      {%- endfor -%}
+    {%- endcapture -%}
+    {% render 'accordion', items: faq_items, top_divider: true, class: 'max-w-124' %}
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FAQ: Offset",
+  "tag": "section",
+  "settings": [
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Questions\nand answers" },
+    {
+      "type": "metaobject_list",
+      "id": "questions",
+      "label": "Questions",
+      "metaobject_type": "faq",
+      "limit": 20,
+      "info": "Pick FAQ entries from Content > Metaobjects > FAQ. They show in this order."
+    }
+  ],
+  "presets": [{ "name": "FAQ: Offset" }]
+}
+{% endschema %}

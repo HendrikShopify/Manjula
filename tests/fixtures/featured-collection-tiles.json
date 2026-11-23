@@ -1,0 +1,195 @@
+{
+  "snippet": "featured-collection-tiles",
+  "figma": "Sections / Featured collection, Layout=Tiles (2078:18153)",
+  "matrix": {},
+  "params": {
+    "section_id": "demo",
+    "eyebrow": "The MANJULA Essentials",
+    "title": "We create thoughtful hair and skincare powered by nature. Our formulas bring together time-honoured ingredients and modern science to nourish your skin and strengthen your hair.",
+    "collection": {
+      "url": "#",
+      "products_count": 4,
+      "products": [
+        {
+          "id": 1,
+          "title": "Hair oil",
+          "url": "#",
+          "handle": "hair-oil",
+          "available": true,
+          "price": 9500,
+          "compare_at_price": null,
+          "has_only_default_variant": false,
+          "variants": [
+            {
+              "title": "100ml"
+            }
+          ],
+          "selected_or_first_available_variant": {
+            "id": 10,
+            "price": 9500,
+            "available": true
+          },
+          "featured_media": {
+            "media_type": "image",
+            "width": 800,
+            "height": 800,
+            "alt": "Hair oil",
+            "src": "https://placehold.co/800x800/ebebe9/1e1e1e?text=Hair+oil"
+          },
+          "media": [
+            {
+              "media_type": "image",
+              "width": 800,
+              "height": 800,
+              "alt": "Hair oil",
+              "src": "https://placehold.co/800x800/ebebe9/1e1e1e?text=Hair+oil"
+            }
+          ],
+          "metafields": {
+            "custom": {
+              "benefits": {
+                "value": "Softens, Strengthens, Smooths"
+              }
+            }
+          }
+        },
+        {
+          "id": 2,
+          "title": "Face oil",
+          "url": "#",
+          "handle": "face-oil",
+          "available": true,
+          "price": 9500,
+          "compare_at_price": null,
+          "has_only_default_variant": false,
+          "variants": [
+            {
+              "title": "30ml"
+            }
+          ],
+          "selected_or_first_available_variant": {
+            "id": 20,
+            "price": 9500,
+            "available": true
+          },
+          "featured_media": {
+            "media_type": "image",
+            "width": 800,
+            "height": 800,
+            "alt": "Face oil",
+            "src": "https://placehold.co/800x800/ebebe9/1e1e1e?text=Face+oil"
+          },
+          "media": [
+            {
+              "media_type": "image",
+              "width": 800,
+              "height": 800,
+              "alt": "Face oil",
+              "src": "https://placehold.co/800x800/ebebe9/1e1e1e?text=Face+oil"
+            },
+            {
+              "media_type": "image",
+              "width": 1200,
+              "height": 1200,
+              "alt": "Face oil",
+              "src": "https://placehold.co/1200x1200/6b5b4e/6b5b4e"
+            }
+          ],
+          "metafields": {
+            "custom": {
+              "benefits": {
+                "value": "Brightens, Calms, Hydrates"
+              }
+            }
+          }
+        },
+        {
+          "id": 3,
+          "title": "Body oil",
+          "url": "#",
+          "handle": "body-oil",
+          "available": true,
+          "price": 9500,
+          "compare_at_price": null,
+          "has_only_default_variant": false,
+          "variants": [
+            {
+              "title": "100ml"
+            }
+          ],
+          "selected_or_first_available_variant": {
+            "id": 30,
+            "price": 9500,
+            "available": true
+          },
+          "featured_media": {
+            "media_type": "image",
+            "width": 800,
+            "height": 800,
+            "alt": "Body oil",
+            "src": "https://placehold.co/800x800/ebebe9/1e1e1e?text=Body+oil"
+          },
+          "media": [
+            {
+              "media_type": "image",
+              "width": 800,
+              "height": 800,
+              "alt": "Body oil",
+              "src": "https://placehold.co/800x800/ebebe9/1e1e1e?text=Body+oil"
+            }
+          ],
+          "metafields": {
+            "custom": {
+              "benefits": {
+                "value": "Softens, Smooths, Hydrates"
+              }
+            }
+          }
+        },
+        {
+          "id": 4,
+          "title": "Discovery set",
+          "url": "#",
+          "handle": "discovery-set",
+          "available": true,
+          "price": 7000,
+          "compare_at_price": null,
+          "has_only_default_variant": true,
+          "variants": [
+            {
+              "title": "Default Title"
+            }
+          ],
+          "selected_or_first_available_variant": {
+            "id": 40,
+            "price": 7000,
+            "available": true
+          },
+          "featured_media": {
+            "media_type": "image",
+            "width": 800,
+            "height": 800,
+            "alt": "Discovery set",
+            "src": "https://placehold.co/800x800/ebebe9/1e1e1e?text=Discovery+set"
+          },
+          "media": [
+            {
+              "media_type": "image",
+              "width": 800,
+              "height": 800,
+              "alt": "Discovery set",
+              "src": "https://placehold.co/800x800/ebebe9/1e1e1e?text=Discovery+set"
+            }
+          ],
+          "metafields": {
+            "custom": {
+              "benefits": {
+                "value": "Face, hair & body oil minis"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

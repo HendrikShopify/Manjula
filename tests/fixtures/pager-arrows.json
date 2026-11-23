@@ -1,0 +1,15 @@
+{
+  "snippet": "pager-arrows",
+  "figma": "Components Atoms / Pager arrows (2088:29793)",
+  "matrix": {
+    "previous_disabled": [
+      false,
+      true
+    ]
+  },
+  "params": {
+    "previous_label": "Previous",
+    "next_label": "Next"
+  },
+  "extras": []
+}

@@ -1,6 +1,7 @@
 {%- comment -%}
   Figma: Components Atoms / Input
   id, name, type (text), value, placeholder, autocomplete, required, disabled, readonly, describedby
+  style           boxed | underline                 (Figma: Style)
   size            sm | md | lg                      (Figma: Size)
   icon_leading    asset name                        (Figma: Leading icon)
   icon_trailing   asset name                        (Figma: Trailing icon)
@@ -8,27 +9,38 @@
   error           boolean, sets aria-invalid        (Figma: State=Error)
   class           placement only (the wrapper)
   attributes      extra attributes on the <input>
-  States: Hover = :hover, Focus = :focus-within, Filled = the value, Disabled = [disabled], Error = [aria-invalid]
+  Underline: rest Border, hover Border medium, focus Ink. States: Hover = :hover, Focus = :focus-within, Filled = the value, Disabled = [disabled], Error = [aria-invalid]
 {%- endcomment -%}
 {%- liquid
+  assign style = style | default: 'boxed'
   assign size = size | default: 'md'
   assign type = type | default: 'text'
   case size
     when 'sm'
-      assign dim = 'h-9 px-3'
+      assign dim = 'h-9'
+      assign pad = 'px-3'
     when 'lg'
-      assign dim = 'h-13 px-4'
+      assign dim = 'h-13'
+      assign pad = 'px-4'
     else
-      assign dim = 'h-11 px-4'
+      assign dim = 'h-11'
+      assign pad = 'px-4'
   endcase
-  assign wrap = 'input flex w-full items-center gap-2 rounded-input border bg-background text-body-base transition-colors hover:border-text focus-within:border-focus has-[[aria-invalid=true]]:border-error has-[:disabled]:bg-surface-alt has-[:disabled]:border-disabled has-[:disabled]:text-text-disabled has-[:disabled]:cursor-not-allowed'
+  if style == 'underline'
+    assign frame = 'border-b'
+    assign rest = 'border-border not-focus-within:hover:border-border-medium'
+  else
+    assign frame = 'rounded-input border bg-background ' | append: pad
+    assign rest = 'border-border-strong not-focus-within:hover:border-text'
+  endif
+  assign wrap = 'input flex w-full items-center gap-2 ' | append: frame | append: ' text-body-base transition-colors focus-within:border-focus has-[[aria-invalid=true]]:border-error has-[:disabled]:bg-surface-alt has-[:disabled]:border-disabled has-[:disabled]:text-text-disabled has-[:disabled]:cursor-not-allowed'
   if error
     assign wrap = wrap | append: ' border-error'
   else
-    assign wrap = wrap | append: ' border-border-strong'
+    assign wrap = wrap | append: ' ' | append: rest
   endif
 -%}
-<div class="{{ wrap }} {{ dim }} {{ class }}" data-size="{{ size }}">
+<div class="{{ wrap }} {{ dim }} {{ class }}" data-style="{{ style }}" data-size="{{ size }}">
   {%- if icon_leading %}<span class="size-5 shrink-0 text-text-muted [&>svg]:size-full" aria-hidden="true">{{ icon_leading | inline_asset_content }}</span>{% endif -%}
   {%- if prefix %}<span class="shrink-0 text-text-muted">{{ prefix }}</span>{% endif -%}
   <input

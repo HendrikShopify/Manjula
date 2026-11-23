@@ -4,6 +4,7 @@
   code       language code or country code, e.g. en / NL   (Figma: Label)
   name       language name for assistive tech (Nederlands), or the country name shown in the item (Netherlands)
   currency   country only: currency object (iso_code, symbol), shown as "Netherlands (EUR €)"
+  trigger_style  country only: code | symbol, the trigger text after a pick ("ES / EUR" or "€/EUR")
   current    boolean, shows the 2px bar and full-strength text   (Figma: State=Current)
   id, class, attributes
   Rendered as role="option" for use inside localization-menu (listbox, driven by custom-select.js).
@@ -21,7 +22,11 @@
         assign money = money | append: ' ' | append: currency.symbol
       endif
       assign display = name | append: ' (' | append: money | append: ')'
-      assign trigger_label = code | upcase | append: ' / ' | append: currency.iso_code
+      if trigger_style == 'symbol'
+        assign trigger_label = currency.symbol | append: '/' | append: currency.iso_code
+      else
+        assign trigger_label = code | upcase | append: ' / ' | append: currency.iso_code
+      endif
     else
       assign trigger_label = code | upcase
     endif

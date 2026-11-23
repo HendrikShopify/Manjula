@@ -61,10 +61,8 @@
     },
     "mobile_menu": {
         "title": "Menu",
-        "close": "Close menu",
-        "back": "Back",
-        "all_of": "All {{ title }}",
-        "account": "Account"
+        "close": "Close",
+        "all_of": "All {{ title }}"
     },
     "accessibility": {
         "skip_to_text": "Skip to content",
@@ -114,10 +112,9 @@
     //     }
     // }
     "footer": {
+        "follow_us": "Follow us",
         "about": "Simple, honest skincare made in small batches in Amsterdam.",
-        "copyright": "© {{ year }} {{ shop }}",
-        "menu_label": "Footer",
-        "legal_label": "Legal"
+        "menu_label": "Footer"
     },
     "newsletter": {
         "title": "Join our newsletter",
@@ -169,14 +166,41 @@
         "product": {
             "purchase_options": {
                 "legend": "Purchase options",
-                "one_time": "One-time purchase",
-                "subscribe": "Subscribe & save",
-                "subscribe_save": "Subscribe & save {{ percent }}%",
+                "one_time": "Purchase once",
+                "subscribe": "Subscribe and save",
+                "savings": "{{ percent }}% off",
                 "description": "Delivered on your schedule. Skip, pause or cancel anytime.",
                 "deliver_every": "Deliver every",
+                "most_popular": "Most popular",
                 "free_shipping": "Free shipping on every delivery",
-                "cancel_anytime": "Cancel anytime",
-                "note": "Skip, pause or cancel anytime."
+                "cancel_anytime": "Cancel, pause or adjust anytime"
+            },
+            "rating_count": "{{ count }} reviews",
+            "bundle": {
+                "whats_inside": "What’s inside",
+                "view_details": "View details",
+                "free_shipping": "Free shipping"
+            },
+            "delivery_estimate": "Estimated delivery: {{ date }}",
+            "ritual": {
+                "tier": "Add a different oil and get a free mini of the third",
+                "unlocked": "Free {{ size }} {{ name }} mini unlocked",
+                "free_mini": "Free mini",
+                "add_oil": "Add a different oil",
+                "add_oil_note": "+ get a free mini",
+                "picker_title": "Pick your second oil",
+                "close": "Close",
+                "gift": "+ Free {{ size }} {{ name }}",
+                "add": "Add {{ name }}",
+                "remove": "Remove {{ name }}",
+                "add_two": "Add 2 oils to cart",
+                "subscribe": "Subscribe"
+            },
+            "community": {
+                "title": "The Manjula community",
+                "play": "Play video {{ index }}",
+                "previous": "Previous videos",
+                "next": "Next videos"
             },
             "add_to_cart": "Add to cart",
             "add_ons": {
@@ -196,13 +220,12 @@
                 "returns": "30-day returns"
             },
             "details": {
-                "description": "Description",
-                "ingredients_title": "Ingredients",
-                "ingredients_body": "List the full ingredients here, or add a product metafield custom.ingredients.",
-                "how_to_use_title": "How to use",
-                "how_to_use_body": "Explain how to use the product here, or add a product metafield custom.how_to_use.",
-                "shipping_title": "Shipping and returns",
-                "shipping_body": "Free standard shipping on orders over the threshold. Not happy with it? Return unused items within 30 days for a refund."
+                "how_to_use": "How to use",
+                "scent": "The scent",
+                "key_ingredients": "Key ingredients",
+                "delivery_returns": "Delivery and returns",
+                "full_ingredients": "See full ingredients list",
+                "delivery_link": "See delivery and returns"
             },
             "choose_options": "Choose options",
             "choose_product_options": "Choose options for {{ product_name }}",
@@ -273,7 +296,6 @@
             "media": {
                 "gallery_label": "Product media",
                 "show_media": "Show media {{ index }}",
-                "zoom": "Zoom image",
                 "close": "Close",
                 "previous": "Previous image",
                 "next": "Next image"
@@ -394,13 +416,13 @@
                 "name": "Name",
                 "name_placeholder": "Your name",
                 "email": "Email",
-                "email_placeholder": "you@example.com",
+                "email_placeholder": "Your email",
                 "phone": "Phone number",
                 "subject": "Subject",
                 "subject_placeholder": "Choose a subject",
                 "subjects": "Order question, Product question, Returns, Wholesale, Something else",
                 "message": "Message",
-                "message_placeholder": "How can we help?",
+                "message_placeholder": "Your message",
                 "comment": "Comment",
                 "send": "Send message",
                 "privacy_note_html": "By sending this form you agree to our <a href=\"{{ url }}\">privacy policy</a>.",
@@ -448,6 +470,50 @@
         // }
     },
     "sections": {
+        "trial_results": {
+            "case_study": "The case study",
+            "before": "Before",
+            "after": "After",
+            "slider": "Drag to compare before and after"
+        },
+        "ingredient_explorer": {
+            "all": "All",
+            "product_type": "Product type",
+            "function": "Function",
+            "ingredient": "Ingredient",
+            "learn_more": "Learn more",
+            "show_more": "Show more ingredients",
+            "empty": "No ingredients match",
+            "botanical": "Botanical",
+            "ayurvedic_name": "Ayurvedic name",
+            "description": "Description",
+            "research_sources": "Research sources:",
+            "opens_new_tab": "(opens in a new tab)"
+        },
+        "results_timeline": {
+            "next": "Next result"
+        },
+        "horizontal_scroll": {
+            "next": "Next benefit"
+        },
+        "faq_categories": {
+            "categories": "FAQ categories"
+        },
+        "press": {
+            "read_article": "Read article"
+        },
+        "video_statement": {
+            "play": "Play video",
+            "close": "Close video"
+        },
+        "timeline": {
+            "next": "Next year"
+        },
+        "use_guide": {
+            "previous": "Previous step",
+            "next": "Next step",
+            "go_to": "Step {{ number }}: {{ title }}"
+        },
         "featured_collection": {
             "view_all": "View all",
             "previous": "Previous products",
@@ -490,7 +556,8 @@
             "unmute": "Unmute",
             "progress": "Video progress",
             "previous": "Previous videos",
-            "next": "Next videos"
+            "next": "Next videos",
+            "view_product": "View product"
         },
         "comparison_table": {
             "yes": "Yes",
@@ -501,8 +568,11 @@
             "info_label": "More information"
         },
         "quick_view": {
-            "title": "Quick view",
-            "view_full_details": "View full details"
+            "title": "Product details",
+            "previous_image": "Previous image",
+            "next_image": "Next image",
+            "go_back": "Go back",
+            "view_full_product": "View full product"
         },
         // "announcements": {
         //   "previous_announcement": "Previous announcement",
@@ -514,7 +584,6 @@
         "header": {
             // "announcement": "Announcement",
             // "menu": "Menu",
-            "view_all": "View all",
             "submenu": "{{ title }} submenu",
             "cart_count": {
                 "one": "{{ count }} item",
@@ -527,15 +596,29 @@
             // "caption": "Cart items",
             "remove_title": "Remove {{ title }}",
             "remove": "Remove",
-            "sub_total": "Subtotal",
+            "sub_total": "Subtotal:",
             "total": "Total",
             "total_discounts": "Total discounts",
             "total_savings": "Total savings",
-            "shipping": "Shipping",
+            "shipping": "Shipping:",
             "calculated_at_checkout": "Calculated at checkout",
             // "new_estimated_total": "New estimated total",
             "note": "Order special instructions",
-            "checkout": "Check out",
+            "checkout": "Continue to checkout",
+            "subscription_savings": "Subscription savings:",
+            "delivered_once": "Delivered once",
+            "delivery_label": "Delivery for {{ product }}",
+            "subscribe_save": "Subscribe & save {{ amount }}",
+            "versus": "vs {{ price }}",
+            "subscription_note": "Cancel, pause or adjust anytime",
+            "subscription": "Subscription",
+            "percent_off": "{{ percent }}% off",
+            "gift_added": "Free {{ product }} mini added to your order",
+            "gift_note": "Your gift for trying 2 different oils",
+            "free_gift": "Free gift",
+            "mini_offer": "Add a different oil and get a free mini of the third",
+            "mini_offer_free": "+ Free {{ product }} mini",
+            "add_product": "Add {{ product }}",
             "empty": "Your cart is empty",
             "item_count": {
                 "one": "{{ count }} item",
@@ -696,7 +779,7 @@
             "shipping_address": "Shipping Address",
             "fulfillment_status": "Fulfillment Status",
             "discount": "Discount",
-            "shipping": "Shipping",
+            "shipping": "Shipping:",
             "tax": "Tax",
             "product": "Product",
             "sku": "SKU",
@@ -744,6 +827,9 @@
         }
     },
     "reviews": {
+        "summary": "Summary",
+        "filter": "Filter",
+        "sort": "Sort",
         "anonymous": "Anonymous",
         "stars": "{{ rating }} out of 5 stars",
         "based_on_one": "Based on {{ count }} review",
@@ -762,6 +848,7 @@
         "video": "Review video",
         "page": "Page {{ number }}",
         "write_review": "Write a review",
+        "read_more": "Read more",
         "remove_filter": "Remove {{ label }}",
         "empty_filters": "No reviews match these filters.",
         "empty": "No reviews yet.",

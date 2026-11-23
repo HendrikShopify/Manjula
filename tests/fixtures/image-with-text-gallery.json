@@ -1,0 +1,19 @@
+{
+  "snippet": "image-with-text-gallery",
+  "figma": "Sections / Image with text, Layout=Gallery (2083:19340)",
+  "params": {
+    "heading": "Ayurvedic formulas, tuned for your skin.",
+    "text": "<p>Every Manjula oil starts with a classical Ayurvedic formula: cold-pressed base oils and slow-infused herbs, used for centuries to calm the skin. We kept the recipe and adjusted the weight, choosing base oils that absorb fast and won't clog pores, so it works for skin that breaks out, not just skin that's dry. No fillers, no synthetic fragrance, no preservatives to make the numbers work. Fewer ingredients, and a reason for every one.</p>",
+    "button_label": "Explore the formulas",
+    "button_url": "#"
+  },
+  "extras": [
+    {
+      "eyebrow": "Formula philosophy",
+      "heading": "Ayurvedic formulas, tuned for your skin.",
+      "text": "<p>Short body to check the eyebrow.</p>",
+      "button_label": ""
+    }
+  ],
+  "matrix": {}
+}

@@ -1,35 +1,39 @@
 {%- comment -%}
   Reviews pagination (Pagination item atoms as buttons: previous, numbers, ellipsis, next). Hidden with one page.
+  Same look as snippets/pagination-item.liquid: 32px boxes sharing a 1px Border line, 10px arrows, current Accent.
+  The number sits in its own span (a flex item, so a block box), which the global text trim (tailwind/text-trim.css)
+  cuts to cap height and baseline: the digits centre optically in the 32px box, like the Button label.
   JS: reviews__ui.js renders the items from the templates into [data-reviews-pages].
 {%- endcomment -%}
 {%- liquid
   assign nav_label = 'reviews.pagination_label' | t
   assign prev_label = 'reviews.previous' | t
   assign next_label = 'reviews.next' | t
-  assign item = 'pagination-item inline-flex h-10 min-w-10 items-center justify-center gap-1 rounded-button px-2 text-label-base transition-colors cursor-pointer outline-none focus-visible:border focus-visible:border-focus'
-  assign page = item | append: ' text-text hover:bg-surface aria-[current=page]:bg-accent aria-[current=page]:text-accent-contrast'
-  assign arrow = item | append: ' text-text hover:bg-surface disabled:text-text-disabled disabled:hover:bg-transparent disabled:cursor-default'
+  assign item = 'pagination-item relative -ml-px inline-flex h-8 min-w-8 items-center justify-center gap-1 rounded-button border border-border px-1 text-label-base transition-colors outline-none first:ml-0'
+  assign interactive = ' cursor-pointer text-text hover:z-1 hover:border-border-strong focus-visible:z-1 focus-visible:border-focus'
+  assign page = item | append: interactive | append: ' aria-[current=page]:z-1 aria-[current=page]:border-text aria-[current=page]:bg-accent aria-[current=page]:text-accent-contrast'
+  assign arrow = item | append: interactive | append: ' disabled:cursor-default disabled:text-text-disabled disabled:hover:border-border'
 -%}
 <nav class="flex justify-center pt-10" data-reviews-pagination hidden aria-label="{{ nav_label | escape }}">
-  <div class="flex items-center gap-1" data-reviews-pages></div>
+  <div class="flex items-center" data-reviews-pages></div>
 </nav>
 
 <template data-reviews-page>
-  <button type="button" class="{{ page }}" data-reviews-page></button>
+  <button type="button" class="{{ page }}" data-reviews-page><span data-reviews-page-number></span></button>
 </template>
 
 <template data-reviews-page-current>
-  <button type="button" class="{{ page }}" data-reviews-page></button>
+  <button type="button" class="{{ page }}" data-reviews-page><span data-reviews-page-number></span></button>
 </template>
 
 <template data-reviews-page-prev>
-  <button type="button" class="{{ arrow }}" data-reviews-page aria-label="{{ prev_label | escape }}"><span class="size-5 [&>svg]:size-full" aria-hidden="true">{{ 'icon__chevron-left.svg' | inline_asset_content }}</span></button>
+  <button type="button" class="{{ arrow }}" data-reviews-page aria-label="{{ prev_label | escape }}"><span class="w-2.5 [&>svg]:h-auto [&>svg]:w-full" aria-hidden="true">{{ 'icon__arrow-page-prev.svg' | inline_asset_content }}</span></button>
 </template>
 
 <template data-reviews-page-next>
-  <button type="button" class="{{ arrow }}" data-reviews-page aria-label="{{ next_label | escape }}"><span class="size-5 [&>svg]:size-full" aria-hidden="true">{{ 'icon__chevron-right.svg' | inline_asset_content }}</span></button>
+  <button type="button" class="{{ arrow }}" data-reviews-page aria-label="{{ next_label | escape }}"><span class="w-2.5 [&>svg]:h-auto [&>svg]:w-full" aria-hidden="true">{{ 'icon__arrow-page-next.svg' | inline_asset_content }}</span></button>
 </template>
 
 <template data-reviews-page-ellipsis>
-  <span class="{{ item }} text-text-muted" aria-hidden="true">…</span>
+  <span class="{{ item }} text-text-muted" aria-hidden="true"><span>…</span></span>
 </template>

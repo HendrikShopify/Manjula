@@ -3,7 +3,48 @@
   One place in the bundle tray. State (Empty, Filled) is data-state, written by bundle-builder.js.
   Size follows the viewport: sm (56px) on mobile, md (120px) from lg.
   Hooks: data-bundle-slot, data-bundle-slot-image, data-bundle-slot-remove
+
+  size: 'lg' (Manjula mini offer, 237x148 tile at fill width, 2-up with 4px gap) takes its own parameters:
+    state         filled | empty                                    (Figma: State; Active = the empty slot with aria-expanded=true)
+    product       fills the packshot and name; packshot = custom.solo_image (bottle without box), else the featured image   (Figma: Packshot, Name)
+    size_label    e.g. 30ml                                         (Figma: Size)
+    label, note   empty slot text, e.g. "Add a different oil" / "+ get a free mini"
+    show_remove   filled only: x button top right (data-ritual-remove)  (Figma: Show remove)
+    remove_label  accessible name of the remove button
+    attributes    JS hooks; the empty slot is a <button> (aria-expanded drives the Active look)
+    class         placement only
+  Filled: Fill subtle, packshot (fills the slot above the name, no top padding) and name · size. Empty: dashed border, circled plus and the free-mini line. Active: solid border medium.
 {%- endcomment -%}
+{%- if size == 'lg' -%}
+  {%- if state == 'empty' -%}
+    <button type="button" class="bundle-slot group/slot flex h-37 cursor-pointer flex-col items-center justify-between border border-dashed border-text-disabled px-3 pt-10 pb-6 text-text focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus aria-expanded:border-solid aria-expanded:border-border-medium {{ class }}"{% if attributes %} {{ attributes }}{% endif %}>
+      <span class="size-6 transition-transform group-hover/slot:scale-90 [&>svg]:size-full" aria-hidden="true">{{ 'icon__plus-circle.svg' | inline_asset_content }}</span>
+      <span class="flex flex-col items-center gap-2 text-center">
+        <span class="text-body-sm">{{ label }}</span>
+        <span class="text-body-xs">{{ note }}</span>
+      </span>
+    </button>
+  {%- else -%}
+    <div class="bundle-slot relative flex h-37 flex-col items-center gap-2 bg-surface-alt px-3 pb-3 text-text {{ class }}"{% if attributes %} {{ attributes }}{% endif %}>
+      {%- assign slot_image = product.metafields.custom.solo_image.value | default: product.featured_image -%}
+      {%- if slot_image -%}
+        {{ slot_image | image_url: width: 320 | image_tag: widths: '160, 320', sizes: '130px', alt: '', class: 'min-h-0 w-full flex-1 object-contain', loading: 'lazy', data-ritual-slot-image: '' }}
+      {%- else -%}
+        <img class="min-h-0 w-full flex-1 object-contain" alt="" width="160" height="160" loading="lazy" data-ritual-slot-image>
+      {%- endif -%}
+      <span class="flex items-center gap-1 text-label-base">
+        <span data-ritual-slot-name>{{ product.title | escape }}</span>
+        <span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
+        <span data-ritual-slot-size>{{ size_label | escape }}</span>
+      </span>
+      {%- if show_remove -%}
+        <button type="button" class="absolute top-1 right-1 flex size-6 cursor-pointer items-center justify-center text-text transition-opacity hover:opacity-60 focus-visible:outline-1 focus-visible:outline-focus" aria-label="{{ remove_label | escape }}" data-ritual-remove>
+          <span class="size-3 [&>svg]:size-full [&_*]:[vector-effect:non-scaling-stroke]" aria-hidden="true">{{ 'icon__x.svg' | inline_asset_content }}</span>
+        </button>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+{%- else -%}
 <li class="bundle-slot group/slot relative size-14 shrink-0 lg:size-30" data-bundle-slot data-state="empty">
   <span class="flex size-full items-center justify-center rounded-input border border-dashed border-border-strong text-text-muted group-data-[state=filled]/slot:hidden" aria-hidden="true">
     <span class="size-4 lg:size-5 [&>svg]:size-full">{{ 'icon__plus.svg' | inline_asset_content }}</span>
@@ -13,3 +54,4 @@
     <span class="size-2.5 lg:size-3 [&>svg]:size-full" aria-hidden="true">{{ 'icon__x.svg' | inline_asset_content }}</span>
   </button>
 </li>
+{%- endif -%}

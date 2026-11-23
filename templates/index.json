@@ -1,22 +1,162 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "main": {
-      "type": "main-index"
+    "hero": {
+      "type": "hero-full-bleed",
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "quote": "A game changer for my KP",
+            "name": "Jen"
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "quote": "So obsessed with this oil",
+            "name": "KA"
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "quote": "Insane results",
+            "name": "Ria S."
+          }
+        },
+        "review_4": {
+          "type": "review",
+          "settings": {
+            "quote": "I tell everyone it fixed my curls",
+            "name": "Elham M."
+          }
+        },
+        "review_5": {
+          "type": "review",
+          "settings": {
+            "quote": "Beyond love",
+            "name": "Cynthia L."
+          }
+        },
+        "review_6": {
+          "type": "review",
+          "settings": {
+            "quote": "Love a multi-purpose oil!",
+            "name": "Denise"
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3",
+        "review_4",
+        "review_5",
+        "review_6"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/hero-bathroom-trio.jpg",
+        "heading": "High-performance oils rooted in Ayurveda, made to support healthier looking skin and hair.",
+        "button_label": "Explore the essentials",
+        "button_url": "shopify://products/essentials-set"
+      }
     },
-    "ugc": {
-      "type": "ugc-carousel"
+    "products": {
+      "type": "featured-collection-tiles",
+      "settings": {
+        "products": [
+          "hair-oil",
+          "face-oil",
+          "body-oil",
+          "discovery-set"
+        ],
+        "show_heading": true,
+        "eyebrow": "The MANJULA Essentials",
+        "title": "We create thoughtful hair and skincare powered by nature. Our formulas bring together time-honoured ingredients and modern science to nourish your skin and strengthen your hair."
+      }
     },
-    "blog_posts": {
-      "type": "blog-posts"
+    "formulas": {
+      "type": "image-with-text-gallery",
+      "settings": {
+        "eyebrow": "Formula philosophy",
+        "heading": "Ayurvedic formulas, tuned for your skin.",
+        "text": "<p>Every Manjula oil starts with a classical Ayurvedic formula: cold-pressed base oils and slow-infused herbs, used for centuries to calm the skin. We kept the recipe and adjusted the weight, choosing base oils that absorb fast and won't clog pores, so it works for skin that breaks out, not just skin that's dry. No fillers, no synthetic fragrance, no preservatives to make the numbers work. Fewer ingredients, and a reason for every one.</p>",
+        "image": "shopify://shop_images/formula-philosophy-body-oil.jpg",
+        "image_small": "shopify://shop_images/formula-philosophy-bottle-detail.jpg",
+        "button_label": "Explore the formulas",
+        "button_url": "shopify://pages/ingredients"
+      }
     },
-    "newsletter": {
-      "type": "newsletter"
+    "press": {
+      "type": "press",
+      "settings": {
+        "items": [
+          "sharp",
+          "coveteur",
+          "fashion",
+          "s-magazine",
+          "gents-post"
+        ]
+      }
+    },
+    "founder": {
+      "type": "image-with-text-centered",
+      "settings": {
+        "video": "shopify://files/videos/D48F1185-6396-48FA-A98D-14EC3EB65F05 2.mov",
+        "heading": "What we inherit, we transform. Generations of knowledge, reimagined into modern formulations. Your three-oil system made in Toronto, developed for every part of your body.",
+        "button_label": "About Manjula",
+        "button_url": "shopify://pages/about"
+      }
+    },
+    "experience": {
+      "type": "ugc-slider",
+      "settings": {
+        "title": "MANJULA, Made Yours",
+        "items": [
+          "hameem-face",
+          "hair-essentials",
+          "natasha-face",
+          "danny-body",
+          "ash-essentials"
+        ]
+      }
+    },
+    "bundle_offer": {
+      "type": "bundle-offer",
+      "settings": {
+        "product": "essentials-set",
+        "eyebrow": "The complete MANJULA ritual",
+        "heading": "All three oils, [savings] off",
+        "button_label": "Add all three to cart",
+        "note_text": "Not sure yet?",
+        "note_link_label": "Try all three essentials oils in discovery size",
+        "note_link_url": "shopify://products/discovery-set",
+        "items": [
+          "hair-oil",
+          "face-oil",
+          "body-oil"
+        ],
+        "image_left": "shopify://shop_images/R1-06128-0030-Edit.jpg",
+        "image_right": "shopify://shop_images/offer-body-oil-hands.jpg"
+      }
     }
   },
   "order": [
-    "main",
-    "ugc",
-    "blog_posts",
-    "newsletter"
+    "hero",
+    "products",
+    "formulas",
+    "press",
+    "founder",
+    "experience",
+    "bundle_offer"
   ]
 }

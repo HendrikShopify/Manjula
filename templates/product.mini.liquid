@@ -1,0 +1,30 @@
+{%- comment -%}
+  Mini products (Face, Hair and Body oil mini). They are on the Online Store only so the cart can add them as the
+  free gift; their own page must not be seen. The store's URL redirects (/products/<oil>-mini to /products/<oil>)
+  only fire while a page 404s, so this template sends visitors to the full oil instead: handle minus "-mini".
+  Not indexed; the canonical is the full oil. Without a matching oil it goes to the home page.
+{%- endcomment -%}
+{%- layout none -%}
+{%- liquid
+  assign full_handle = product.handle | remove_last: '-mini'
+  assign full = all_products[full_handle]
+  if full.id and full.id != product.id
+    assign target = full.url
+  else
+    assign target = routes.root_url
+  endif
+-%}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    <link rel="canonical" href="{{ request.origin }}{{ target }}">
+    <meta http-equiv="refresh" content="0; url={{ target }}">
+    <title>{{ full.title | default: shop.name | escape }}</title>
+    <script>location.replace({{ target | json }});</script>
+  </head>
+  <body>
+    <a href="{{ target }}">{{ full.title | default: shop.name | escape }}</a>
+  </body>
+</html>

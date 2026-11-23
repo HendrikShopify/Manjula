@@ -1,0 +1,194 @@
+{%- comment -%}
+  Figma: Components Molecules / Ritual builder (2069:6988), the Manjula buy part of Product form
+  Purchase options, the mini offer (add a different oil, get a free mini of the third) and Add to cart with a delivery line.
+  product            product object
+  section_id         unique ids (ProductSubmitButton-{section_id}, the error and picker ids)
+  product_form_id    id of the <form>; the selling plan input writes into it
+  Store data only: the product's custom.size is its size in the first slot (Figma: Bundle slot Size).
+  custom.free_mini_pairs (list of products) are the oils offered, each with its size from custom.size. The gift line
+  names the third oil (neither this product nor the row oil) and the size of its mini (custom.mini > custom.size).
+  No free_mini_pairs: no mini offer.
+  Packshots in the slots and picker rows use each oil's custom.solo_image (bottle without box), else its featured image.
+  popular            subscription plan name that gets the Most popular badge
+  "Estimated delivery" comes from Theme settings > Delivery estimate (days per visitor country, cut-off hour, business days).
+  delivery_note      optional text after the delivery line, behind a dot (Bundle: "Free shipping")
+  show_price         boolean, default true; false drops the price from the button (Bundle shows it above the items)
+  class              placement only
+  Variants (Figma Plan, Oils, Dropdown) are runtime states, kept by ritual-builder.js:
+    Plan=Subscribe       the subscription row is checked: the mini offer hides, the button reads Subscribe
+    Dropdown=Open        the empty slot has aria-expanded=true and the picker shows under it
+    Oils=2               a picked oil fills the second slot, the link mark and the FREE MINI badge show, the button reads Add 2 oils
+  The picked oil rides along as a checked [data-add-on] checkbox, so product-form.js posts both oils in one cart/add request
+  and keeps the button total. The free mini itself is not added here: the store gives it (discount, Function or app).
+  Hooks: data-ritual-toggle, -picker, -close, -add, -remove, -picked, -empty, -link, -tier, -badge, -offer, -oil
+{%- endcomment -%}
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign add_id = 'ProductSubmitButton-' | append: section_id
+  assign error_id = 'ProductFormError-' | append: section_id
+  assign picker_id = 'RitualPicker-' | append: section_id
+
+  assign add_disabled = false
+  assign add_label = 'products.product.add_to_cart' | t
+  if variant == null
+    assign add_disabled = true
+    assign add_label = 'products.product.unavailable' | t
+  elsif variant.available == false
+    assign add_disabled = true
+    assign add_label = 'products.product.sold_out' | t
+  endif
+
+  assign size_label = product.metafields.custom.size.value
+
+  # Offer oils: the free_mini_pairs metafield
+  assign offer_list = product.metafields.custom.free_mini_pairs.value
+  assign offer_count = 0
+  for entry in offer_list
+    if entry and entry.id != product.id
+      assign offer_count = offer_count | plus: 1
+    endif
+  endfor
+
+  assign add_price = variant.price | money
+  if show_price == false
+    assign add_price = nil
+  endif
+  assign plan_prices = '"one-time":' | append: variant.price
+  for a in variant.selling_plan_allocations
+    assign plan_prices = plan_prices | append: ',"' | append: a.selling_plan.id | append: '":' | append: a.price
+  endfor
+
+  # Estimated delivery (Theme settings > Delivery estimate): the visitor's country picks the days, else the default.
+  # After the cut-off hour the count starts a day later; with business days on, Saturdays and Sundays are skipped.
+  assign delivery_days = settings.delivery_days
+  assign visitor_country = localization.country.iso_code | upcase
+  for slot in (1..5)
+    assign country_key = 'delivery_country_' | append: slot
+    assign days_key = 'delivery_days_' | append: slot
+    assign slot_countries = settings[country_key] | upcase | remove: ' ' | split: ','
+    if slot_countries contains visitor_country
+      assign delivery_days = settings[days_key]
+      break
+    endif
+  endfor
+  assign delivery_time = 'now' | date: '%s' | plus: 0
+  assign current_hour = 'now' | date: '%H' | plus: 0
+  if current_hour >= settings.delivery_cutoff_hour
+    assign delivery_days = delivery_days | plus: 1
+  endif
+  assign counted = 0
+  for step in (1..60)
+    if counted >= delivery_days
+      break
+    endif
+    assign delivery_time = delivery_time | plus: 86400
+    assign weekday = delivery_time | date: '%u' | plus: 0
+    if settings.delivery_business_days and weekday > 5
+      continue
+    endif
+    assign counted = counted | plus: 1
+  endfor
+  assign delivery_date = delivery_time | date: '%A, %b %-d'
+  assign delivery_text = 'products.product.delivery_estimate' | t: date: delivery_date
+
+  assign t_tier = 'products.product.ritual.tier' | t
+  assign t_free_mini = 'products.product.ritual.free_mini' | t
+  assign t_add_oil = 'products.product.ritual.add_oil' | t
+  assign t_add_oil_note = 'products.product.ritual.add_oil_note' | t
+  assign t_picker = 'products.product.ritual.picker_title' | t
+  assign t_close = 'products.product.ritual.close' | t
+  assign t_add_two = 'products.product.ritual.add_two' | t
+  assign t_subscribe = 'products.product.ritual.subscribe' | t
+-%}
+<script src="{{ 'ritual-builder.js' | asset_url }}" defer="defer"></script>
+<ritual-builder
+  class="ritual-builder flex flex-col gap-6 {{ class }}"
+  data-label-one="{{ add_label | escape }}"
+  data-label-two="{{ t_add_two | escape }}"
+  data-label-subscribe="{{ t_subscribe | escape }}"
+  data-tier="{{ t_tier | escape }}"
+>
+  {% render 'purchase-options', product: product, product_form_id: product_form_id, popular: popular, id: 'purchase-options-ritual' %}
+
+  {%- if offer_count > 0 -%}
+    <div class="flex flex-col gap-3" data-ritual-offer>
+      <div class="flex items-center justify-between gap-3">
+        <p class="text-body-sm text-text" data-ritual-tier aria-live="polite">{{ t_tier }}</p>
+        <span class="invisible data-shown:visible" aria-hidden="true" data-ritual-badge>{% render 'badge', label: t_free_mini, type: 'new', size: 'sm' %}</span>
+      </div>
+
+      <div class="relative flex gap-1">
+        {% render 'bundle-slot', size: 'lg', state: 'filled', product: product, size_label: size_label, class: 'min-w-0 flex-1' %}
+        <span class="absolute top-1/2 left-1/2 z-[1] size-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-background text-text [&>svg]:size-full" hidden aria-hidden="true" data-ritual-link>{{ 'icon__plus-circle.svg' | inline_asset_content }}</span>
+        {%- capture toggle_attributes -%}aria-expanded="false" aria-controls="{{ picker_id }}" data-ritual-toggle data-ritual-empty{%- endcapture -%}
+        {% render 'bundle-slot', size: 'lg', state: 'empty', label: t_add_oil, note: t_add_oil_note, attributes: toggle_attributes, class: 'min-w-0 flex-1' %}
+        {% render 'bundle-slot', size: 'lg', state: 'filled', product: nil, show_remove: true, remove_label: t_close, attributes: 'hidden data-ritual-picked', class: 'min-w-0 flex-1' %}
+      </div>
+
+      <div id="{{ picker_id }}" class="relative flex flex-col gap-1 border border-border-medium p-3 lg:px-6 lg:pb-6" hidden data-ritual-picker>
+        {%- comment -%} Notch: a flat 20x5 triangle over the middle of the empty slot. The border-colour triangle sits 1px higher than the background one, so only its 1px edge shows and the fill covers the picker's top border under it. {%- endcomment -%}
+        <span class="absolute -top-1.25 right-1/4 h-1.25 w-5 translate-x-1/2 bg-border-medium [clip-path:polygon(0_100%,50%_0,100%_100%)]" aria-hidden="true"></span>
+        <span class="absolute -top-1 right-1/4 h-1.25 w-5 translate-x-1/2 bg-background [clip-path:polygon(0_100%,50%_0,100%_100%)]" aria-hidden="true"></span>
+        <div class="flex items-center justify-between pt-3 pb-4 text-text">
+          <p class="text-label-lg">{{ t_picker }}</p>
+          <button type="button" class="cursor-pointer text-label-caps-lg transition-opacity hover:opacity-60 focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus" data-ritual-close>{{ t_close }}</button>
+        </div>
+        {%- for entry in offer_list -%}
+          {%- liquid
+            assign oil = entry
+            assign oil_size = entry.metafields.custom.size.value
+            if oil == blank or oil.id == product.id
+              continue
+            endif
+            assign third = nil
+            for other in offer_list
+              if other and other.id != oil.id and other.id != product.id
+                assign third = other
+              endif
+            endfor
+            assign gift = ''
+            assign unlocked = ''
+            if third
+              assign gift_size = third.metafields.custom.mini.value.metafields.custom.size.value
+              assign gift = 'products.product.ritual.gift' | t: size: gift_size, name: third.title
+              assign unlocked = 'products.product.ritual.unlocked' | t: size: gift_size, name: third.title
+            endif
+            assign oil_variant = oil.selected_or_first_available_variant
+            assign oil_image = ''
+            assign oil_media = oil.metafields.custom.solo_image.value | default: oil.featured_image
+            if oil_media
+              assign oil_image = oil_media | image_url: width: 320
+            endif
+            assign remove_label = 'products.product.ritual.remove' | t: name: oil.title
+          -%}
+          {%- capture add_attributes -%}data-ritual-add="{{ oil_variant.id }}" data-name="{{ oil.title | escape }}" data-oil-size="{{ oil_size | escape }}" data-image="{{ oil_image }}" data-unlocked="{{ unlocked | escape }}" data-remove-label="{{ remove_label | escape }}"{%- endcapture -%}
+          {% render 'picker-row', product: oil, size_label: oil_size, gift: gift, attributes: add_attributes %}
+          <input type="checkbox" class="hidden" tabindex="-1" aria-hidden="true" data-add-on data-ritual-oil="{{ oil_variant.id }}" data-variant-id="{{ oil_variant.id }}" data-price="{{ oil_variant.price }}">
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="flex flex-col items-center gap-3">
+    <product-form class="product-form flex w-full flex-col gap-3">
+      {%- form 'product',
+        product,
+        id: product_form_id,
+        class: 'form flex flex-col gap-3',
+        novalidate: 'novalidate',
+        data-type: 'add-to-cart-form'
+      -%}
+        <input type="hidden" name="id" value="{{ variant.id }}"{% if add_disabled %} disabled{% endif %}>
+        {% render 'button', label: add_label, style: 'primary', size: 'sm', type: 'submit', name: 'add', id: add_id, disabled: add_disabled, price: add_price, price_amount: variant.price, class: 'w-full' %}
+      {%- endform -%}
+      {% render 'helper-text', text: '', type: 'error', id: error_id, attributes: 'hidden data-product-form-error' %}
+    </product-form>
+    <p class="flex items-center gap-2.5 text-label-sm text-text">
+      {{- delivery_text -}}
+      {%- if delivery_note != blank -%}
+        <span class="size-1 rounded-full bg-current" aria-hidden="true"></span>{{ delivery_note }}
+      {%- endif -%}
+    </p>
+  </div>
+  <script type="application/json" data-ritual-prices>{ {{ plan_prices }} }</script>
+</ritual-builder>

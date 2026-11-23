@@ -38,7 +38,7 @@ if (!customElements.get('product-form')) {
         return this.querySelector('[data-button-price]');
       }
 
-      /** Variant price in cents, kept in data-amount on the price (replaced after a variant change). */
+      /** Unit price in cents, kept in data-amount on the button price (ritual-builder.js sets it per plan). */
       setUnitPrice(cents) {
         const price = this.priceElement;
         if (price && Number.isFinite(cents)) price.dataset.amount = String(cents);
@@ -59,14 +59,6 @@ if (!customElements.get('product-form')) {
         return this.form.querySelector('[name=id]');
       }
 
-      get submitButtonText() {
-        return this.querySelector('[name=add] [data-button-label]') || this.submitButton?.querySelector('[data-button-label]');
-      }
-
-      get submitButtons() {
-        return this.form.querySelectorAll('[type="submit"]');
-      }
-
       onSubmit(evt) {
         // The clicked submit button (quick add pills carry name="id") drives the request.
         const submitter = evt.submitter || this.lastSubmitter;
@@ -85,12 +77,19 @@ if (!customElements.get('product-form')) {
         if (submitter?.name && !formData.has(submitter.name)) formData.append(submitter.name, submitter.value);
         const sections = ['cart-drawer', 'cart-icon-bubble', 'main-cart'];
         const addOns = this.checkedAddOns;
+        // The page product, every checked add-on and, when this add makes 2 different oils, the free mini.
+        const items = [this.mainItem(formData), ...addOns.map((input) => ({ id: Number(input.dataset.variantId), quantity: 1 }))];
+        const cartRequest = typeof CartGift === 'undefined'
+          ? { url: routes.cart_add_url, body: { items } }
+          : CartGift.addRequest(items);
+        let url = routes.cart_add_url;
 
-        if (addOns.length) {
-          // One request with the page product and every checked add-on.
+        if (cartRequest.url !== routes.cart_add_url || cartRequest.body.items.length > 1) {
+          // One request with all items (or one cart/update that also removes a gift that is no longer due).
+          url = cartRequest.url;
           config.headers['Content-Type'] = 'application/json';
           config.body = JSON.stringify({
-            items: [this.mainItem(formData), ...addOns.map((input) => ({ id: Number(input.dataset.variantId), quantity: 1 }))],
+            ...cartRequest.body,
             sections,
             sections_url: window.location.pathname,
           });
@@ -100,7 +99,7 @@ if (!customElements.get('product-form')) {
           config.body = formData;
         }
 
-        fetch(routes.cart_add_url, config)
+        fetch(url, config)
           .then(res => res.json())
           .then(data => {
             if (data.status) {
@@ -156,18 +155,6 @@ if (!customElements.get('product-form')) {
         if (!error) return;
         error.querySelector('[data-helper-text]').textContent = '';
         error.hidden = true;
-      }
-
-      toggleSubmitButton(disable = true, text) {
-        this.submitButtons.forEach((button) => button.toggleAttribute('disabled', disable));
-        const label = this.submitButtonText;
-        if (!label) return;
-        if (text) label.textContent = text;
-        else if (!disable && window.variantStrings?.addToCart) label.textContent = window.variantStrings.addToCart;
-      }
-
-      handleErrorMessage() {
-        this.clearError();
       }
     }
   );

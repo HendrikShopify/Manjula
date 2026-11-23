@@ -1,0 +1,66 @@
+{%- comment -%}
+  Figma: Components Molecules / Community strip (Viewport Desktop 2072:7021, Mobile 2295:1468)
+  product  the page product; its UGC videos come first, then the other entries
+  title    caps heading, default "The Manjula community"     (Figma: Title)
+  class    placement only
+  Videos are the store's UGC video entries (metaobject ugc_video: video, product), the same ones the UGC slider shows.
+  Desktop: caps title with Pager arrows, four tiles at fill width (176px high, 4px gaps), square 4px dots right-aligned.
+  Mobile: no arrows; 140x210 tiles scroll to the screen edge.
+  A tap plays the video inside its tile (no lightbox), one at a time. JS: community-strip.js (Swiper), hooks data-community-*.
+{%- endcomment -%}
+{%- liquid
+  assign entries = shop.metaobjects.ugc_video.values
+  assign video_count = 0
+  for entry in entries
+    if entry.video.value
+      assign video_count = video_count | plus: 1
+    endif
+  endfor
+  assign default_title = 'products.product.community.title' | t
+  assign title = title | default: default_title
+  assign previous_label = 'products.product.community.previous' | t
+  assign next_label = 'products.product.community.next' | t
+-%}
+{%- if video_count > 0 -%}
+  <script src="{{ 'community-strip.js' | asset_url }}" defer="defer"></script>
+  <community-strip class="community-strip flex flex-col gap-3 {{ class }}">
+    <div class="flex items-center justify-between">
+      <h2 class="text-label-caps-lg text-text">{{ title | escape }}</h2>
+      {%- if video_count > 4 -%}
+        {% render 'pager-arrows', previous_label: previous_label, next_label: next_label, previous_attributes: 'data-community-prev', next_attributes: 'data-community-next', previous_disabled: true, class: 'max-lg:hidden' %}
+      {%- endif -%}
+    </div>
+    <div class="swiper -mr-page-margin overflow-hidden lg:mr-0" data-community-track>
+      <div class="swiper-wrapper flex">
+        {%- assign index = 0 -%}
+        {%- comment -%} Pass 1: this product's videos, pass 2: the rest {%- endcomment -%}
+        {%- for pass in (1..2) -%}
+          {%- for entry in entries -%}
+            {%- liquid
+              assign video = entry.video.value
+              if video == blank
+                continue
+              endif
+              assign own = false
+              if product and entry.product.value.id == product.id
+                assign own = true
+              endif
+              if pass == 1 and own == false
+                continue
+              elsif pass == 2 and own
+                continue
+              endif
+              assign index = index | plus: 1
+            -%}
+            <div class="swiper-slide w-35 shrink-0 lg:w-[calc((100%-12px)/4)]">
+              {% render 'ugc-tile', video: video, index: index, attributes: 'data-community-play', class: 'h-52.5 w-full lg:h-44' %}
+            </div>
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </div>
+    {%- if video_count > 1 -%}
+      {% render 'carousel-indicators', count: video_count, active: 1, size: 'sm', class: 'justify-end' %}
+    {%- endif -%}
+  </community-strip>
+{%- endif -%}

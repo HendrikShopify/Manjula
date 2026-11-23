@@ -11,7 +11,7 @@
 
 <template data-reviews-photo>
   <li>
-    <button type="button" class="relative block size-25 overflow-hidden bg-surface-alt cursor-pointer outline-none focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus [&>img]:size-full [&>img]:object-cover" data-reviews-photo-open>
+    <button type="button" class="relative block size-20 overflow-hidden bg-surface-alt cursor-pointer outline-none focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus [&>img]:size-full [&>img]:object-cover" data-reviews-photo-open>
       <img data-reviews-photo-img src="" alt="" loading="lazy" width="100" height="100">
     </button>
   </li>
@@ -61,10 +61,10 @@
     {%- capture control -%}{% render 'rating-input', name: 'rating', id: rating_id, required: true %}{%- endcapture -%}
     {% render 'field', group: true, label: rating_label, required: true, control: control, error: true, error_id: rating_error_id, error_attributes: error_attrs, attributes: 'data-reviews-form-rating' %}
 
-    {%- capture control -%}{% render 'input', id: title_id, name: 'title', placeholder: title_placeholder, attributes: 'data-reviews-form-title' %}{%- endcapture -%}
+    {%- capture control -%}{% render 'input', id: title_id, name: 'title', placeholder: title_placeholder, style: 'underline', attributes: 'data-reviews-form-title' %}{%- endcapture -%}
     {% render 'field', label: title_label, for: title_id, control: control, attributes: 'data-reviews-form-field' %}
 
-    {%- capture control -%}{% render 'textarea', id: body_id, name: 'body', placeholder: body_placeholder, required: true, attributes: 'data-reviews-form-body' %}{%- endcapture -%}
+    {%- capture control -%}{% render 'textarea', id: body_id, name: 'body', placeholder: body_placeholder, required: true, rows: 4, style: 'underline', attributes: 'data-reviews-form-body' %}{%- endcapture -%}
     {% render 'field', label: body_label, required: true, for: body_id, control: control, error: true, error_id: body_error_id, error_attributes: error_attrs, attributes: 'data-reviews-form-field' %}
 
     <div class="flex flex-col items-start gap-2" data-reviews-form-field>
@@ -79,10 +79,10 @@
 
     <div class="flex flex-col gap-6 empty:hidden" data-reviews-form-questions></div>
 
-    {%- capture control -%}{% render 'input', id: email_id, name: 'email', type: 'email', autocomplete: 'email', required: true, placeholder: email_placeholder, describedby: email_hint_id, attributes: email_attrs %}{%- endcapture -%}
+    {%- capture control -%}{% render 'input', id: email_id, name: 'email', type: 'email', autocomplete: 'email', required: true, placeholder: email_placeholder, describedby: email_hint_id, style: 'underline', attributes: email_attrs %}{%- endcapture -%}
     {% render 'field', label: email_label, required: true, for: email_id, control: control, helper: email_hint, helper_id: email_hint_id, helper_attributes: 'data-reviews-form-hint', error: true, error_id: email_error_id, error_attributes: error_attrs, attributes: 'data-reviews-form-field' %}
 
-    {%- capture control -%}{% render 'input', id: name_id, name: 'name', autocomplete: 'name', required: true, placeholder: name_placeholder, attributes: 'data-reviews-form-name' %}{%- endcapture -%}
+    {%- capture control -%}{% render 'input', id: name_id, name: 'name', autocomplete: 'name', required: true, placeholder: name_placeholder, style: 'underline', attributes: 'data-reviews-form-name' %}{%- endcapture -%}
     {% render 'field', label: name_label, required: true, for: name_id, control: control, error: true, error_id: name_error_id, error_attributes: error_attrs, attributes: 'data-reviews-form-field' %}
 
     {%- capture control -%}
@@ -125,9 +125,10 @@
 
 <template data-reviews-video>
   <li>
-    <button type="button" class="relative flex size-25 items-center justify-center overflow-hidden bg-surface-alt cursor-pointer outline-none focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus [&>img]:absolute [&>img]:inset-0 [&>img]:size-full [&>img]:object-cover" data-reviews-video-open>
+    <button type="button" class="relative flex size-20 items-center justify-center overflow-hidden bg-surface-alt cursor-pointer outline-none focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus [&>img]:absolute [&>img]:inset-0 [&>img]:size-full [&>img]:object-cover" data-reviews-video-open>
       <img data-reviews-video-img src="" alt="" loading="lazy" width="100" height="100">
-      <span class="relative flex size-9 items-center justify-center rounded-full bg-background text-text" data-reviews-video-icon aria-hidden="true"><span class="size-4 [&>svg]:size-full">{{ 'icon__play.svg' | inline_asset_content }}</span></span>
+      <span class="absolute inset-x-0 bottom-0 h-11.25 bg-linear-to-b from-transparent to-text/50" aria-hidden="true"></span>
+      <span class="absolute bottom-2 left-2 w-2.5 text-surface-alt [&>svg]:h-auto [&>svg]:w-full" data-reviews-video-icon aria-hidden="true">{{ 'icon__play-solid.svg' | inline_asset_content }}</span>
     </button>
   </li>
 </template>

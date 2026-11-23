@@ -2,19 +2,19 @@
   Figma: Components Atoms / Rating histogram (five Histogram rows, 5 to 1 stars)
   total    review count
   counts   comma separated counts for 5,4,3,2,1 stars
-  Histogram row: star + rating (32px mark), bar (progress bar sm, accent), count. Clicking filters by that rating; Selected = aria-pressed="true" (label sm).
+  Histogram row (Manjula): star + rating (40px mark), 4px Ink bar on a Border track, count (40px). No gaps. Clicking filters by that rating; Selected = aria-pressed="true" (label sm).
   JS: reviews__ui.js re-renders the rows from <template data-reviews-histogram-row> and sets the fill width.
 {%- endcomment -%}
 {%- liquid
-  assign row_class = 'group/row flex h-4.5 w-full items-center gap-3 rounded-xs text-text-muted transition-colors cursor-pointer outline-none hover:text-text focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus aria-pressed:text-text'
-  assign mark_class = 'flex w-8 shrink-0 items-center gap-1'
+  assign row_class = 'group/row flex h-4.5 w-full items-center rounded-xs text-text transition-opacity cursor-pointer outline-none hover:opacity-70 focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus aria-pressed:text-text'
+  assign mark_class = 'flex w-10 shrink-0 items-center gap-1'
   assign star_class = 'size-3 shrink-0 text-rating [&>svg]:size-full'
-  assign num_class = 'text-body-xs group-aria-pressed/row:text-label-sm'
-  assign track_class = 'h-1 min-w-0 flex-1 overflow-hidden rounded-full bg-surface-alt'
-  assign fill_class = 'block h-full rounded-full bg-accent transition-[width] duration-300'
-  assign count_class = 'w-6 shrink-0 text-right text-body-xs group-aria-pressed/row:text-label-sm'
+  assign num_class = 'text-label-base'
+  assign track_class = 'h-1 min-w-0 flex-1 overflow-hidden bg-border'
+  assign fill_class = 'block h-full bg-text transition-[width] duration-300'
+  assign count_class = 'w-10 shrink-0 text-right text-label-base'
 -%}
-<div class="flex w-full flex-col gap-2" data-reviews-histogram>
+<div class="flex w-full flex-col gap-3" data-reviews-histogram>
   {%- assign histogram_counts = counts | split: ',' -%}
   {%- for count in histogram_counts -%}
     {%- liquid

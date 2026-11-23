@@ -1,0 +1,49 @@
+{%- comment -%}
+  Figma: Components Atoms / Bracket (2082:10242)
+  side      left (default) | right | top                        (Figma: Side; "[", "]", "⊓")
+  size      xs 20 | sm 24 | md 52 (default) | lg 80 | xl 200, the depth   (Figma: Size; xl = Comparison composition list)
+  strength  light 10% | default 20% | strong 60% | solid 100%    (Figma: Strength; solid = Comparison composition, Manjula)
+  class     placement only
+  Open bracket: 1px Ink line with 4px corners (radius-bracket, the only rounded element in Manjula). Decorative. It is absolute, so the parent needs `relative`; it stretches
+  along the open axis (full height for left/right, full width for top).
+{%- endcomment -%}
+{%- liquid
+  assign side = side | default: 'left'
+  assign size = size | default: 'md'
+  assign strength = strength | default: 'default'
+  case side
+    when 'right'
+      assign side_class = 'inset-y-0 right-0 rounded-r-bracket border-y border-r'
+      assign axis = 'w'
+    when 'top'
+      assign side_class = 'inset-x-0 top-0 rounded-t-bracket border-x border-t'
+      assign axis = 'h'
+    else
+      assign side_class = 'inset-y-0 left-0 rounded-l-bracket border-y border-l'
+      assign axis = 'w'
+  endcase
+  case size
+    when 'xs'
+      assign depth = axis | append: '-5'
+    when 'sm'
+      assign depth = axis | append: '-6'
+    when 'lg'
+      assign depth = axis | append: '-20'
+    when 'xl'
+      assign depth = axis | append: '-50'
+    else
+      assign depth = axis | append: '-13'
+  endcase
+  case strength
+    when 'light'
+      assign opacity = 'opacity-10'
+    when 'strong'
+      assign opacity = 'opacity-60'
+    when 'solid'
+      assign opacity = ''
+    else
+      assign opacity = 'opacity-20'
+  endcase
+-%}
+<span class="bracket pointer-events-none absolute {{ side_class }} {{ depth }} border-text {{ opacity }} {{ class }}" aria-hidden="true" data-side="{{ side }}"></span>
+{%- comment -%} Tailwind sources for the composed depth classes: w-5 w-6 w-13 w-20 w-50 h-5 h-6 h-13 h-20 h-50 {%- endcomment -%}

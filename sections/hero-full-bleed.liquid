@@ -1,0 +1,101 @@
+{%- comment -%}
+  Figma: Sections / Hero full-bleed (252:14500; Templates FINAL Home 2526:25943, mobile 2526:25953)
+  One screen tall (h-svh). Photo or video with a 10% Ink scrim, bottom copy row (headline over 7 columns,
+  Inverse button over 5), quote marquee of Review ticker items fed by Review blocks. Pair with the Tone=Inverse header.
+  Video (optional) plays muted, looped and inline instead of the image; the image is then the poster.
+  No parallax: the photos stay still (Hendrik, 23 Nov; the <paralax-img> effect was removed site wide).
+  The big wordmark over the hero on the home page lives in the header (sections/header.liquid, <hero-intro>), so it can sit
+  above the sticky header bar.
+  Mobile: copy stacked, button full width.
+{%- endcomment -%}
+{%- liquid
+  assign image = section.settings.image
+  assign video = section.settings.video
+  assign heading = section.settings.heading
+  assign button_label = section.settings.button_label
+  assign reviews = section.blocks | where: 'type', 'review'
+-%}
+<section class="relative isolate flex h-svh flex-col justify-end overflow-hidden bg-surface-alt text-text-inverse" data-hero>
+  <div class="absolute inset-0 -z-10 overflow-hidden">
+    {%- if video != blank -%}
+      {%- if image != blank -%}
+        {%- assign poster = image | image_url: width: 1920 -%}
+        {{ video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, preload: 'metadata', poster: poster, class: 'absolute inset-0 size-full object-cover' }}
+      {%- else -%}
+        {{ video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, preload: 'metadata', image_size: '1920x', class: 'absolute inset-0 size-full object-cover' }}
+      {%- endif -%}
+    {%- else -%}
+      {% render 'media', media: image, ratio: 'fill', loading: 'eager', sizes: '100vw', class: 'absolute! inset-0 size-full' %}
+    {%- endif -%}
+  </div>
+  <div class="pointer-events-none absolute inset-0 -z-10 bg-text/10" aria-hidden="true"></div>
+
+  <div class="mx-auto flex w-full max-w-page flex-col gap-6 px-page-margin py-6 lg:grid lg:grid-cols-12 lg:items-end lg:gap-x-gutter" data-hero-copy>
+    {%- if heading != blank -%}
+      <h1 class="text-heading-3 lg:col-span-7 lg:text-heading-2 text-balance">{{ heading }}</h1>
+    {%- endif -%}
+    {%- if button_label != blank -%}
+      {% render 'button', label: button_label, href: section.settings.button_url, style: 'inverse', size: 'sm', class: 'w-full lg:col-span-5 lg:col-start-8' %}
+    {%- endif -%}
+  </div>
+
+  {%- if reviews.size > 0 -%}
+    {%- liquid
+      assign per_copy = 8 | divided_by: reviews.size | plus: 1
+    -%}
+    <div class="w-full lg:px-page-margin" data-hero-marquee>
+      <marquee-slider class="flex w-full items-center py-6 overflow-hidden [mask-image:linear-gradient(90deg,transparent_0%,black_10%,black_90%,transparent_100%)]" data-pixels-per-second="40">
+        {%- for copy in (1..2) -%}
+          <div class="flex shrink-0 items-center gap-10 pr-10" data-marquee-wrapper{% if copy == 2 %} aria-hidden="true"{% endif %}>
+            {%- for i in (1..per_copy) -%}
+              {%- for review in reviews -%}
+                <span class="contents"{% if copy == 1 and i == 1 %} {{ review.shopify_attributes }}{% endif %}>{% render 'review-ticker-item', quote: review.settings.quote, name: review.settings.name, tone: 'inverse' %}</span>
+              {%- endfor -%}
+            {%- endfor -%}
+          </div>
+        {%- endfor -%}
+      </marquee-slider>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Hero full-bleed",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Also the poster while the video loads" },
+    { "type": "video", "id": "video", "label": "Video", "info": "Plays muted and looped instead of the image" },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "High-performance oils rooted in Ayurveda, made to support healthier looking skin and hair."
+    },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Explore the essentials" },
+    { "type": "url", "id": "button_url", "label": "Button link", "default": "/collections/all" }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "text", "id": "quote", "label": "Quote", "default": "Obsessed with this hair oil" },
+        { "type": "text", "id": "name", "label": "Name", "default": "Jake" }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Hero",
+      "blocks": [
+        { "type": "review", "settings": { "quote": "Lorem ipsum dolor sit amet", "name": "Kim" } },
+        { "type": "review", "settings": { "quote": "Obsessed with this hair oil", "name": "Jake" } },
+        { "type": "review", "settings": { "quote": "Lorem ipsum dolor sit amet", "name": "Jimmy" } },
+        { "type": "review", "settings": { "quote": "Lorem ipsum dolor sit amet", "name": "July" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

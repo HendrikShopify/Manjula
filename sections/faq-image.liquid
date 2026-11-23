@@ -1,0 +1,69 @@
+{%- comment -%}
+  Figma: Sections / FAQ, Layout=Image (215:7526; Templates FINAL PDP / Face oil 2526:26028, mobile 2526:26039).
+  Own section: one section per layout, no layout select.
+  Desktop: a 240px photo in columns 1 to 3; title (max 541px) and the accordion (max 496px) from column 4, 40px apart.
+  Mobile: photo, title, accordion stacked. Answers are body/sm in Text muted.
+  Questions: the product's FAQs first (product.metafields.custom.faqs, FAQ metaobjects: question, answer), then any
+  Question blocks (general questions that every product page shares; a block without question or answer is
+  left out). Nothing to ask means no accordion.
+  Photo: the Photo setting.
+{%- endcomment -%}
+{%- liquid
+  assign questions = section.blocks | where: 'type', 'question'
+  assign product_faqs = product.metafields.custom.faqs.value
+  assign faq_count = product_faqs.count | default: 0
+  for block in questions
+    if block.settings.question != blank and block.settings.answer != blank
+      assign faq_count = faq_count | plus: 1
+    endif
+  endfor
+-%}
+<div class="faq-image mx-auto flex w-full max-w-page flex-col gap-10 bg-background px-page-margin pt-section-md pb-section-lg lg:grid lg:grid-cols-12 lg:gap-x-gutter lg:gap-y-0">
+  {%- if section.settings.image != blank -%}
+    {% render 'media', media: section.settings.image, ratio: '1:1', sizes: '240px', class: 'w-60 lg:col-span-3 lg:col-start-1 lg:row-start-1 lg:self-start' %}
+  {%- endif -%}
+  <div class="flex flex-col gap-10 lg:col-span-5 lg:col-start-4 lg:row-start-1">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="max-w-135.25 text-heading-2 text-text lg:text-heading-1">{{ section.settings.heading | newline_to_br }}</h2>
+    {%- endif -%}
+    {%- comment -%} One group: opening a question closes the open one {%- endcomment -%}
+    {%- assign faq_group = 'faq-' | append: section.id -%}
+    {%- capture faq_items -%}
+      {%- for faq in product_faqs -%}
+        {%- capture answer -%}<div class="rte text-body-sm text-text-muted [&_p+p]:mt-5">{{ faq.answer | metafield_tag }}</div>{%- endcapture -%}
+        {% render 'accordion-item', title: faq.question.value, content: answer, icon: 'plus', name: faq_group %}
+      {%- endfor -%}
+      {%- for block in questions -%}
+        {%- if block.settings.question == blank or block.settings.answer == blank -%}{%- continue -%}{%- endif -%}
+        {%- capture answer -%}<div class="rte text-body-sm text-text-muted [&_p+p]:mt-5">{{ block.settings.answer }}</div>{%- endcapture -%}
+        {% render 'accordion-item', title: block.settings.question, content: answer, icon: 'plus', name: faq_group, attributes: block.shopify_attributes %}
+      {%- endfor -%}
+    {%- endcapture -%}
+    {%- if faq_count > 0 -%}
+      {% render 'accordion', items: faq_items, top_divider: true, class: 'max-w-124' %}
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "FAQ: Image",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Questions\nand answers" }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        { "type": "paragraph", "content": "Shown after the product's own FAQs (Products > FAQs field). Use blocks for questions every product page shares." },
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "richtext", "id": "answer", "label": "Answer" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "FAQ: Image" }]
+}
+{% endschema %}

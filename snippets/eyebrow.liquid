@@ -1,0 +1,68 @@
+{%- comment -%}
+  Figma: Components Atoms / Eyebrow (2087:24547)
+  label        text                                              (Figma: Label)
+  size         sm | lg (default) | xl                            (Figma: Size)
+                 sm  8px dot, 14px label (heading/6), 6px gap
+                 lg  14px dot, 20px label (heading/4), 6px gap
+                 xl  16px dot, 24px label (heading/3), 8px gap
+  mobile_size  optional size below lg (sm | md | lg | xl; md = 14px dot with a 16px heading/5 label, used by the Products
+               intro on mobile); size then applies from lg
+  tag          p (default) | span | h2 ...
+  class        placement only
+  A dot and a label. The dot is a shape in currentColor, never a text character.
+  The label sits in its own span, so the text trim applies and the dot centres on the capitals (bare text in a flex
+  row is not trimmed; the dot then sat 3px low).
+{%- endcomment -%}
+{%- liquid
+  assign size = size | default: 'lg'
+  assign tag = tag | default: 'p'
+  case size
+    when 'sm'
+      assign dot_lg = 'lg:size-2'
+      assign text_lg = 'lg:text-heading-6'
+      assign gap_lg = 'lg:gap-1.5'
+      assign dot = 'size-2'
+      assign text = 'text-heading-6'
+      assign gap = 'gap-1.5'
+    when 'xl'
+      assign dot_lg = 'lg:size-4'
+      assign text_lg = 'lg:text-heading-3'
+      assign gap_lg = 'lg:gap-2'
+      assign dot = 'size-4'
+      assign text = 'text-heading-3'
+      assign gap = 'gap-2'
+    else
+      assign dot_lg = 'lg:size-3.5'
+      assign text_lg = 'lg:text-heading-4'
+      assign gap_lg = 'lg:gap-1.5'
+      assign dot = 'size-3.5'
+      assign text = 'text-heading-4'
+      assign gap = 'gap-1.5'
+  endcase
+  if mobile_size != blank and mobile_size != size
+    case mobile_size
+      when 'sm'
+        assign dot = 'size-2 ' | append: dot_lg
+        assign text = 'text-heading-6 ' | append: text_lg
+        assign gap = 'gap-1.5 ' | append: gap_lg
+      when 'xl'
+        assign dot = 'size-4 ' | append: dot_lg
+        assign text = 'text-heading-3 ' | append: text_lg
+        assign gap = 'gap-2 ' | append: gap_lg
+      when 'md'
+        assign dot = 'size-3.5 ' | append: dot_lg
+        assign text = 'text-heading-5 ' | append: text_lg
+        assign gap = 'gap-1.5 ' | append: gap_lg
+      else
+        assign dot = 'size-3.5 ' | append: dot_lg
+        assign text = 'text-heading-4 ' | append: text_lg
+        assign gap = 'gap-1.5 ' | append: gap_lg
+    endcase
+  endif
+-%}
+{%- if label != blank -%}
+  <{{ tag }} class="eyebrow flex items-center {{ gap }} {{ text }} {{ class }}" data-size="{{ size }}">
+    <span class="{{ dot }} shrink-0 rounded-full bg-current" aria-hidden="true"></span>
+    <span>{{- label -}}</span>
+  </{{ tag }}>
+{%- endif -%}

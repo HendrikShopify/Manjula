@@ -1,0 +1,48 @@
+{%- comment -%}
+  Figma: Components Molecules / UGC product card (2093:10254)
+  product     Shopify product; fills title, url, image and size when the params below are empty
+  title       product name                                   (Figma: Title)
+  size_label  e.g. 30ml; default the product's custom.size (the only size source; sets have none), then the first
+              variant title (left out for Default Title)     (Figma: Size)
+  benefits    short line, shown at 60%; default the product's custom.product_card_subtitle   (Figma: Benefits)
+  url         link of View product
+  image       packshot, 82x100; default the product's solo shot (custom.solo_image), then its main image
+  link_label  text of the link, e.g. View product
+  class       placement only
+  Shoppable product under the active UGC video: name · size (label/base), benefits (body/xs at 60%), a caps link and the packshot, on Surface, 100px high.
+{%- endcomment -%}
+{%- liquid
+  assign title = title | default: product.title
+  assign url = url | default: product.url
+  assign image = image | default: product.metafields.custom.solo_image.value | default: product.featured_media
+  assign benefits = benefits | default: product.metafields.custom.product_card_subtitle.value
+  assign size_label = size_label | default: product.metafields.custom.size.value
+  if size_label == blank and product != blank
+    assign first_variant = product.selected_or_first_available_variant
+    unless first_variant.title == 'Default Title'
+      assign size_label = first_variant.title
+    endunless
+  endif
+-%}
+<div class="ugc-product-card flex h-25 w-full justify-between bg-surface text-text {{ class }}">
+  <div class="flex min-w-0 flex-col justify-between p-6">
+    <div class="flex flex-col gap-2">
+      <p class="flex items-center gap-1 text-label-base">
+        <span class="truncate">{{ title | escape }}</span>
+        {%- if size_label != blank -%}
+          <span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
+          <span class="shrink-0">{{ size_label | escape }}</span>
+        {%- endif -%}
+      </p>
+      {%- if benefits != blank -%}
+        <p class="truncate text-body-xs leading-[1.2] opacity-60">{{ benefits | escape }}</p>
+      {%- endif -%}
+    </div>
+    {%- if link_label != blank and url != blank -%}
+      {% render 'link', label: link_label, href: url, size: 'md', class: 'self-start' %}
+    {%- endif -%}
+  </div>
+  <div class="relative h-25 w-20.5 shrink-0 bg-surface-alt">
+    {% render 'media', media: image, ratio: 'fill', sizes: '82px', alt: '', class: 'absolute! inset-0 size-full' %}
+  </div>
+</div>

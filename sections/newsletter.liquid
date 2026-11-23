@@ -1,7 +1,11 @@
 {%- comment -%}
-  Figma: Sections / Newsletter. Centered layout; the with-image layout needs an image setting, which comes with theme settings.
+  Newsletter, centered layout: the Newsletter signup atom (stacked-center, inline input) on Surface, 80px padding from
+  lg, 48px below. Text comes from the newsletter.* locale strings.
+  Markup inline in this section (no snippet). The with-image layout is not in the final design and is not built.
 {%- endcomment -%}
-{% render 'newsletter', layout: 'centered', id: 'section-newsletter' %}
+<div class="newsletter flex justify-center bg-surface px-page-margin py-12 lg:py-20">
+  {% render 'newsletter-signup', id: 'section-newsletter', layout: 'stacked-center', input_style: 'inline' %}
+</div>
 
 {% schema %}
 {

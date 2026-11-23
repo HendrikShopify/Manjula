@@ -1,0 +1,112 @@
+{%- comment -%}
+  Figma: Sections / FAQ, Layout=Categories (215:7526; Templates FINAL Contact 2526:25967, mobile 2526:25972).
+  Own section (one section per layout) on the breakout grid (.section-breakout, tailwind/tokens.css).
+  Desktop: the title (display/2, max 541px) in columns 4 to 8; 72px below it the category List rows (size lg) in
+  columns 1 to 3, the accordion of the active category in columns 4 to 8 and a 510px photo bleeding right from column 9.
+  Mobile: title (heading/1), categories, accordion and a full-bleed photo (390:410) stacked, 40px apart.
+  One Category block per row; each picks FAQ metaobject entries (faq: question, answer). Categories without questions
+  are not shown. Pressing a row shows its questions; one group per section, so opening a question closes the open one.
+  JS: faq-categories.js, hooks data-faq-tab, data-faq-panel.
+{%- endcomment -%}
+{%- liquid
+  assign categories = section.blocks | where: 'type', 'category'
+  assign has_any = false
+  for block in categories
+    if block.settings.questions.count > 0
+      assign has_any = true
+    endif
+  endfor
+  assign faq_group = 'faq-' | append: section.id
+-%}
+{%- if has_any -%}
+<script src="{{ 'faq-categories.js' | asset_url }}" defer="defer"></script>
+<faq-categories class="faq-categories section-shell block bg-background text-text" data-padding-top="md" data-padding-bottom="md">
+  <div class="section-breakout [--grid-gap-y:--spacing(10)] lg:[--grid-gap-y:--spacing(18)]">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="max-w-135.25 text-heading-1 lg:text-display-2" style="--start: 4; --span: 5;">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    {%- comment -%} The active category: the first one with questions {%- endcomment -%}
+    {%- liquid
+      assign active = -1
+      for block in categories
+        if block.settings.questions.count > 0
+          assign active = forloop.index0
+          break
+        endif
+      endfor
+    -%}
+    <div class="flex flex-col lg:row-start-2 lg:self-start" style="--start: 1; --span: 3;" role="group" aria-label="{{ 'sections.faq_categories.categories' | t | escape }}">
+      {%- for block in categories -%}
+        {%- if block.settings.questions.count > 0 -%}
+          {%- liquid
+            assign is_active = false
+            if forloop.index0 == active
+              assign is_active = true
+            endif
+          -%}
+          {%- capture tab_attrs -%}data-faq-tab="{{ forloop.index0 }}" aria-controls="Faq-{{ section.id }}-{{ forloop.index0 }}" {{ block.shopify_attributes }}{%- endcapture -%}
+          {% render 'list-row', label: block.settings.title, size: 'lg', active: is_active, attributes: tab_attrs %}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    <div class="lg:row-start-2 lg:self-start" style="--start: 4; --span: 5;">
+      {%- for block in categories -%}
+        {%- if block.settings.questions.count > 0 -%}
+          <div id="Faq-{{ section.id }}-{{ forloop.index0 }}" data-faq-panel="{{ forloop.index0 }}"{% unless forloop.index0 == active %} hidden{% endunless %}>
+            {%- capture faq_items -%}
+              {%- for faq in block.settings.questions -%}
+                {%- capture answer -%}<div class="rte text-body-sm text-text-muted [&_p+p]:mt-5">{{ faq.answer | metafield_tag }}</div>{%- endcapture -%}
+                {% render 'accordion-item', title: faq.question.value, content: answer, icon: 'plus', name: faq_group %}
+              {%- endfor -%}
+            {%- endcapture -%}
+            {% render 'accordion', items: faq_items, top_divider: true %}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.image != blank -%}
+      <div class="max-lg:col-[full-start/full-end]! lg:row-start-2 lg:self-start" data-bleed="right" style="--start: 9;">
+        {% render 'media', media: section.settings.image, ratio: 'fill', sizes: '(min-width: 1024px) 40vw, 100vw', class: 'aspect-[390/410] w-full lg:aspect-auto lg:h-127.5' %}
+      </div>
+    {%- endif -%}
+  </div>
+</faq-categories>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "FAQ: Categories",
+  "tag": "section",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Questions and answers" },
+    { "type": "image_picker", "id": "image", "label": "Photo" }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Category", "default": "Shipping and delivery" },
+        {
+          "type": "metaobject_list",
+          "id": "questions",
+          "label": "Questions",
+          "metaobject_type": "faq",
+          "limit": 20,
+          "info": "Pick FAQ entries from Content > Metaobjects > FAQ. They show in this order. A category without questions is hidden."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ: Categories",
+      "blocks": [{ "type": "category" }, { "type": "category" }, { "type": "category" }]
+    }
+  ]
+}
+{% endschema %}

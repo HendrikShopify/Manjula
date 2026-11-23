@@ -1,38 +1,93 @@
-{%- assign product_form_id = 'product-form-' | append: section.id -%}
-
-<div class="mx-auto w-full max-w-page px-page-margin py-4">{% render 'breadcrumbs' %}</div>
-
+ {%- comment -%}
+  Figma: Sections / Product main (210:2841), Manjula: Media gallery Thumbnails right + Product form (Templates FINAL, PDP / Face oil)
+  Desktop: gallery (1:1, thumbnails right, sticky) next to a 480px form column, 40px apart, 4px from the left edge.
+  Mobile: full-bleed carousel with dots right, then the form on the page margin.
+  Form, top to bottom: title block (title, compact rating, intro), benefits, tag marquee, ritual builder, community strip,
+  details accordion, expert quote. Product data comes from metafields only: custom.benefits, custom.usp_tags,
+  custom.size, custom.free_mini_pairs (the offer oils) and their custom.mini (the free mini and its size). The intro is
+  custom.subtitle, else the first sentence of the description; the quick view shows the same line (Hendrik, 23 Nov).
+  Popular frequency, community title and expert quote are section settings (one template per product).
+  Product form Type=Bundle is derived: when the section has Bundle item blocks, a "What's inside" list with the bundle
+  price renders above the buy part and the button drops its price (Figma: PDP / Discovery set, Essentials set).
+  A product without ritual oils and selling plans (Gua sha) gets a plain Add to cart with the price in the button.
+{%- endcomment -%}
+{%- liquid
+  assign product_form_id = 'product-form-' | append: section.id
+  assign intro = product.metafields.custom.subtitle.value | escape | newline_to_br
+  if intro == blank
+    assign intro = product.description | strip_html | split: '. ' | first | strip
+    if intro != blank
+      unless intro contains '.'
+        assign intro = intro | append: '.'
+      endunless
+    endif
+    assign intro = intro | escape
+  endif
+  assign bundle_items = section.blocks | where: 'type', 'bundle_item'
+  assign is_bundle = false
+  assign show_button_price = true
+  assign delivery_note = nil
+  if bundle_items.size > 0
+    assign is_bundle = true
+    assign show_button_price = false
+    assign delivery_note = 'products.product.bundle.free_shipping' | t
+  endif
+-%}
+{%- comment -%} <product-info> has no script: every product has one variant. product-form.js and purchase-options.js use it as the scope of the buy part. {%- endcomment -%}
 <product-info
   id="MainProduct-{{ section.id }}"
-  class=""
-  data-section="{{ section.id }}"
+  class="block bg-background pb-section-md"
   data-product-id="{{ product.id }}"
-  data-update-url="true"
-  data-url="{{ product.url }}"
 >
-  <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
-
-  <div class="mx-auto w-full max-w-page px-page-margin flex flex-col gap-6 lg:grid lg:grid-cols-12 lg:gap-x-gutter pb-12 lg:pb-20">
-    <div class="col-span-full -mx-4 lg:col-span-7 lg:mx-0">
-      {% render 'media-gallery', product: product, section_id: section.id %}
+  <div class="mx-auto flex w-full max-w-page flex-col lg:flex-row lg:items-start lg:gap-10 lg:pr-page-margin lg:pl-1">
+    <div class="min-w-0 lg:sticky lg:top-0 lg:flex-1 lg:pt-1">
+      {% render 'media-gallery', product: product, sizes: '(min-width: 1024px) calc(100vw - 600px), 100vw' %}
     </div>
 
-    <div class="col-span-full flex flex-col gap-6 lg:col-span-5">
-      {% render 'product-title-block', product: product %}
-      {% render 'product-price-block', product: product %}
-      {%- assign short_description = product.description | strip_html | truncatewords: 20 -%}
-      {%- if short_description != blank -%}
-        <p class="text-body-base text-text-muted">{{ short_description }}</p>
+    <div class="flex flex-col gap-10 px-page-margin pt-6 lg:w-120 lg:shrink-0 lg:px-0 lg:pt-10">
+      {% render 'product-title-block', product: product, description: intro %}
+      {% render 'product-benefits', product: product %}
+      {%- assign usp_tags = product.metafields.custom.usp_tags.value | join: ',' -%}
+      {% render 'product-tags', tags: usp_tags %}
+      {%- if is_bundle -%}
+        <div class="flex flex-col gap-5">
+          <div class="flex items-end justify-between gap-3 text-text">
+            <h2 class="text-label-xl">{{ 'products.product.bundle.whats_inside' | t }}</h2>
+            {% render 'price', product: product, use_variant: true, size: 'sm' %}
+          </div>
+          <ul class="flex flex-col gap-1" role="list">
+            {%- for block in bundle_items -%}
+              <li {{ block.shopify_attributes }}>
+                {% render 'bundle-item', product: block.settings.product, name: block.settings.name, size_label: block.settings.size, benefits: block.settings.benefits %}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
       {%- endif -%}
-      {% render 'product-form', product: product, section_id: section.id, product_form_id: product_form_id %}
-      {% render 'product-delivery' %}
-      {% render 'product-details', product: product %}
+      {% render 'ritual-builder',
+        product: product,
+        show_price: show_button_price,
+        delivery_note: delivery_note,
+        section_id: section.id,
+        product_form_id: product_form_id,
+        popular: section.settings.popular_frequency
+      %}
+      {% render 'community-strip', product: product, title: section.settings.community_title %}
 
-      {% for block in section.blocks %}
-        {% if block.type == '@app' %}
+      {% render 'product-details', product: product, top_divider: true, ingredients_link: true %}
+
+      {% render 'expert-quote',
+        image: section.settings.expert_image,
+        quote: section.settings.expert_quote,
+        name: section.settings.expert_name,
+        role: section.settings.expert_role
+      %}
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == '@app' -%}
           {% render block %}
-        {% endif %}
-      {% endfor %}
+        {%- endif -%}
+      {%- endfor -%}
     </div>
   </div>
 </product-info>
@@ -41,20 +96,32 @@
   {{ product | structured_data }}
 </script>
 
-{% comment %}
-  {% schema %}
-  {
-    "name": "Custom Section",
-    "blocks": [
-      {
-        "type": "@app"
-      }
-    ],
-    "presets": [
-      {
-        "name": "Custom Section"
-      }
-    ]
-  }
-  {% endschema %}
-{% endcomment %}
+{% schema %}
+{
+  "name": "Product main",
+  "settings": [
+    { "type": "header", "content": "Subscription" },
+    { "type": "text", "id": "popular_frequency", "label": "Most popular frequency", "info": "Subscription plan name, or part of it (e.g. every 3 months), that gets the Most popular badge" },
+    { "type": "header", "content": "Community" },
+    { "type": "text", "id": "community_title", "label": "Title" },
+    { "type": "header", "content": "Expert quote" },
+    { "type": "image_picker", "id": "expert_image", "label": "Portrait" },
+    { "type": "textarea", "id": "expert_quote", "label": "Quote" },
+    { "type": "text", "id": "expert_name", "label": "Name" },
+    { "type": "text", "id": "expert_role", "label": "Role" }
+  ],
+  "blocks": [
+    {
+      "type": "bundle_item",
+      "name": "Bundle item",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "name", "label": "Name", "info": "Empty uses the product title" },
+        { "type": "text", "id": "size", "label": "Size", "info": "e.g. 10ml" },
+        { "type": "text", "id": "benefits", "label": "Benefits", "info": "e.g. Brightens, Calms, Hydrates" }
+      ]
+    },
+    { "type": "@app" }
+  ]
+}
+{% endschema %}

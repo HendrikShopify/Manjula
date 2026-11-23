@@ -1,0 +1,37 @@
+{%- comment -%}
+  Figma: Components Atoms / UGC tile (2072:7020)
+  video        Shopify video (from a UGC video entry); its preview image is the cover
+  index        1-based position, for the label and data-index
+  attributes   JS hooks on the button, e.g. 'data-community-play'
+  class        placement and size (the parent sets the width and height)
+  Community video tile: cover image and a 10x12 play mark bottom left, 8px padding. A button: a tap plays the video
+  inside the tile (muted, looped), a second tap pauses it. The parent toggles aria-pressed and plays the video
+  ([data-ugc-video], preload none); the play mark hides while it plays.
+{%- endcomment -%}
+{%- liquid
+  assign source = video.sources | where: 'format', 'mp4' | first
+  if source == blank
+    assign source = video.sources | first
+  endif
+  assign poster = ''
+  if video.preview_image
+    assign poster = video.preview_image | image_url: width: 1200
+  endif
+  assign play_label = 'products.product.community.play' | t: index: index
+-%}
+<button
+  type="button"
+  class="ugc-tile group/tile relative flex cursor-pointer flex-col items-start justify-end overflow-hidden bg-surface-alt p-2 focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus {{ class }}"
+  aria-label="{{ play_label | escape }}"
+  aria-pressed="false"
+  data-index="{{ index }}"
+  {%- if attributes %} {{ attributes }}{% endif -%}
+>
+  {%- if video.preview_image -%}
+    {{ video.preview_image | image_url: width: 400 | image_tag: widths: '140, 280, 400', sizes: '(min-width: 1024px) 120px, 140px', alt: '', class: 'absolute inset-0 size-full object-cover transition-opacity group-hover/tile:opacity-90', loading: 'lazy' }}
+  {%- endif -%}
+  {%- if source -%}
+    <video class="absolute inset-0 size-full object-cover" src="{{ source.url }}" {% if poster != '' %}poster="{{ poster }}" {% endif %}preload="none" muted loop playsinline aria-hidden="true" data-ugc-video></video>
+  {%- endif -%}
+  <span class="relative h-3 group-aria-pressed/tile:invisible w-2.5 text-surface-alt [&>svg]:size-full" aria-hidden="true">{{ 'icon__play-solid.svg' | inline_asset_content }}</span>
+</button>

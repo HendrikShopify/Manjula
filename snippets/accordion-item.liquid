@@ -2,23 +2,38 @@
   Figma: Components Atoms / Accordion item
   title      header text                                           (Figma: Title)
   content    captured markup for the panel                         (Figma: Content slot)
-  icon       chevron | plus                                        (Figma: Icon)
+  icon       chevron | plus (Manjula circled plus / minus, 16px)   (Figma: Icon)
+             plus: the minus-circle icon with a vertical bar on top (same 1px line, 8.89 of 16 long = 55.56%); on open the
+             bar turns 90° (150ms) onto the horizontal line, so the plus becomes the minus.
+  style      default (label/base, Manjula FAQ) | caps (label/caps-lg, footer and PDP details)   (Figma: Style)
   open       boolean                                               (Figma: Expanded)
   divider    boolean, default true                                 (Figma: Show divider)
   count      number of selected values shown as a neutral count badge; 0 or blank hides it   (Figma: Show selected count)
   name       same name on sibling items makes them exclusive (native details name)
   attributes extra attributes on <details> for JS hooks, e.g. 'data-filter-group'
   id, class
-  Native <details>/<summary>: open state is [open], no JS. Opens with a height transition on ::details-content where supported.
+  Native <details>/<summary>: open state is [open], no JS. Opens with a height and fade (opacity) transition on ::details-content where supported, closes the same way back.
+  The height animates as a grid row (0fr to 1fr), not height 0 to auto: Safari (iPhone) cannot animate to auto (no interpolate-size),
+  but it does animate grid rows. The min-h-0 wrapper lets the row shrink to 0; the padding sits on the inner div.
+  Closing: Safari hides the panel as soon as [open] goes, so a close would not animate. global.js (data-accordion) catches
+  the summary click on an open item, sets data-closing (the row and fade go back to 0 while [open] stays), and removes
+  [open] when that transition ends. Opening stays native.
+  The plus and chevron follow [open] without data-closing, so they turn back as the close starts, not after it.
+  The panel clips for that animation (overflow: clip) with a 4px clip margin (var(--spacing); Chrome does not take calc() here): trimmed text (text-box-trim) puts the
+  tops of tall letters just above the box, and a plain overflow: hidden cut them off.
 {%- endcomment -%}
 {%- liquid
   assign icon = icon | default: 'chevron'
+  assign title_class = 'text-label-base'
+  if style == 'caps'
+    assign title_class = 'text-label-caps-lg'
+  endif
   if divider == nil
     assign divider = true
   endif
 -%}
-<details class="accordion-item group {% if divider %}border-b border-border{% endif %} [&::details-content]:h-0 [&::details-content]:overflow-hidden motion-safe:[&::details-content]:transition-[height,content-visibility] motion-safe:[&::details-content]:duration-300 motion-safe:[&::details-content]:ease-out motion-safe:[&::details-content]:[transition-behavior:allow-discrete] open:[&::details-content]:h-auto {{ class }}"{% if id %} id="{{ id }}"{% endif %}{% if name %} name="{{ name }}"{% endif %}{% if open %} open{% endif %} data-icon="{{ icon }}"{% if attributes %} {{ attributes }}{% endif %}>
-  <summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-sm py-5 text-label-lg text-text outline-none focus-visible:border focus-visible:border-focus [&::-webkit-details-marker]:hidden">
+<details class="accordion-item group {% if divider %}border-b border-border{% endif %} [&::details-content]:grid [&::details-content]:grid-rows-[0fr] [&::details-content]:overflow-clip [&::details-content]:[overflow-clip-margin:var(--spacing)] [&::details-content]:opacity-0 motion-safe:[&::details-content]:transition-[grid-template-rows,opacity,content-visibility] motion-safe:[&::details-content]:duration-300 motion-safe:[&::details-content]:ease-out motion-safe:[&::details-content]:[transition-behavior:allow-discrete] open:[&::details-content]:grid-rows-[1fr] open:[&::details-content]:opacity-100 data-closing:open:[&::details-content]:grid-rows-[0fr] data-closing:open:[&::details-content]:opacity-0 {{ class }}"{% if id %} id="{{ id }}"{% endif %}{% if name %} name="{{ name }}"{% endif %}{% if open %} open{% endif %} data-accordion data-icon="{{ icon }}"{% if attributes %} {{ attributes }}{% endif %}>
+  <summary class="flex cursor-pointer list-none items-center justify-between gap-4 rounded-sm py-6 {{ title_class }} text-text outline-none focus-visible:border focus-visible:border-focus [&::-webkit-details-marker]:hidden">
     <span class="flex items-center gap-2">
       <span>{{ title }}</span>
       {%- if count and count != 0 -%}
@@ -26,13 +41,15 @@
       {%- endif -%}
     </span>
     {%- if icon == 'plus' -%}
-      <span class="relative size-5 shrink-0 text-text" aria-hidden="true">
-        <span class="absolute inset-0 [&>svg]:size-full group-open:hidden">{{ 'icon__plus.svg' | inline_asset_content }}</span>
-        <span class="absolute inset-0 hidden [&>svg]:size-full group-open:block">{{ 'icon__min.svg' | inline_asset_content }}</span>
+      <span class="relative size-4 shrink-0 text-text [&>svg]:size-full" aria-hidden="true">
+        {{- 'icon__minus-circle.svg' | inline_asset_content -}}
+        <span class="absolute left-1/2 top-1/2 h-[55.56%] w-px -translate-1/2 bg-current motion-safe:transition-transform motion-safe:duration-150 motion-safe:ease-out [details[open]:not([data-closing])_&]:rotate-90"></span>
       </span>
     {%- else -%}
-      <span class="size-5 shrink-0 text-text transition-transform group-open:rotate-180 [&>svg]:size-full" aria-hidden="true">{{ 'icon__chevron-down.svg' | inline_asset_content }}</span>
+      <span class="size-5 shrink-0 text-text transition-transform [details[open]:not([data-closing])_&]:rotate-180 [&>svg]:size-full" aria-hidden="true">{{ 'icon__chevron-down.svg' | inline_asset_content }}</span>
     {%- endif -%}
   </summary>
-  <div class="pb-5 text-body-base text-text">{{ content }}</div>
+  <div class="min-h-0">
+    <div class="pb-6 text-body-base text-text">{{ content }}</div>
+  </div>
 </details>

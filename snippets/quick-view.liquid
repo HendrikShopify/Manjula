@@ -1,15 +1,15 @@
 {%- comment -%}
-  Figma: Components Molecules / Quick view (side-drawer, size lg)
+  Figma: Components Molecules / Quick view, Type=Details (side-drawer, 480px, full width on mobile; Figma 640px, made smaller by Hendrik, 23 Nov)
   Rendered once in layout/theme.liquid. Any [data-quick-view-trigger][data-product-url] button opens it:
-  quick-view.js fetches <product url>?section_id=quick-view-product, fills the drawer body and opens the drawer.
-  The content is sections/quick-view-product.liquid (gallery left, product form right).
-  JS: quick-view.js and side-drawer.js. Adding to the cart closes it (product-form:added).
+  quick-view.js fetches <product url>?section_id=quick-view-details, fills [data-quick-view-body] and opens the drawer.
+  The content is sections/quick-view-details.liquid (no drawer header; the close button sits on the image).
+  JS: quick-view.js and side-drawer.js.
 {%- endcomment -%}
 {%- assign title = 'sections.quick_view.title' | t -%}
-{%- capture body -%}
-  <div data-quick-view-body></div>
+{%- capture content -%}
+  <div class="flex min-h-0 flex-1 flex-col" data-quick-view-body></div>
 {%- endcapture -%}
 <quick-view>
   <script src="{{ 'quick-view.js' | asset_url }}" defer="defer"></script>
-  {% render 'side-drawer', id: 'quick-view', title: title, size: 'lg', body: body %}
+  {% render 'side-drawer', id: 'quick-view', title: title, width_class: 'max-w-120', content: content %}
 </quick-view>

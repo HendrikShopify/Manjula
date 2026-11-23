@@ -7,10 +7,12 @@
   values       array of values aligned with options; defaults to the labels
   selected     the selected value
   placeholder  trigger text when nothing is selected
-  width        fill | hug (Figma: Width). fill stretches to the parent, hug fits the value with the menu at 240px; to fill below a breakpoint pass e.g. class: 'max-md:w-full' (the menu follows the trigger)
+  width        fill | hug (Figma: Width). fill stretches to the parent, hug fits the value with the menu as wide as its longest option; to fill below a breakpoint pass e.g. class: 'max-md:w-full' (the menu follows the trigger)
   placement    bottom | top, opens below (default) or above the trigger
   align        start | end, which edge of the trigger the menu lines up with (default start)
   name         hidden input name (form value)
+  style        field (default) | chip: the trigger looks like a Filter chip (32px, 12px sides, Border line, label/base,
+               6px caret; hover Border strong). Used for the review filters and sort. size is ignored for chip.
   id, size sm·md·lg, error, disabled, required, describedby, open, class, attributes
   Accessible select-only combobox: button trigger + listbox + hidden input, driven by custom-select.js.
   States: Hover = :hover, Focus = :focus-visible, Open = [aria-expanded=true], Disabled = [disabled], Error = [aria-invalid]
@@ -21,7 +23,7 @@
   assign id = id | default: name | handleize
   if width == 'hug'
     assign root_width = 'w-max'
-    assign menu_width = 'w-60 min-w-full'
+    assign menu_width = 'w-max min-w-full'
   else
     assign root_width = ''
     assign menu_width = 'w-full'
@@ -35,9 +37,20 @@
     else
       assign dim = 'h-11 px-4'
   endcase
-  assign trigger = 'select__trigger flex w-full items-center justify-between gap-2 rounded-input border bg-background text-body-base text-text text-left outline-none transition-colors cursor-pointer hover:border-text focus-visible:border-focus aria-expanded:border-text aria-invalid:border-error disabled:bg-surface-alt disabled:border-disabled disabled:text-text-disabled disabled:cursor-not-allowed'
+  if style == 'chip'
+    assign dim = 'h-8 px-3'
+    assign trigger = 'select__trigger flex w-full items-center justify-between gap-1 rounded-chip border bg-background text-label-base text-text text-left outline-none transition-colors cursor-pointer hover:border-border-strong focus-visible:border-focus aria-expanded:border-border-strong disabled:border-disabled disabled:text-text-disabled disabled:cursor-not-allowed'
+    assign chevron = 'icon__caret-select.svg'
+    assign chevron_box = 'w-1.5 [&>svg]:h-auto [&>svg]:w-full'
+  else
+    assign trigger = 'select__trigger flex w-full items-center justify-between gap-2 rounded-input border bg-background text-body-base text-text text-left outline-none transition-colors cursor-pointer hover:border-text focus-visible:border-focus aria-expanded:border-text aria-invalid:border-error disabled:bg-surface-alt disabled:border-disabled disabled:text-text-disabled disabled:cursor-not-allowed'
+    assign chevron = 'icon__chevron-down.svg'
+    assign chevron_box = 'size-5 [&>svg]:size-full'
+  endif
   if error
     assign trigger = trigger | append: ' border-error'
+  elsif style == 'chip'
+    assign trigger = trigger | append: ' border-border'
   else
     assign trigger = trigger | append: ' border-border-strong'
   endif
@@ -71,7 +84,7 @@
   {%- assign current_label = selected_label | default: selected -%}
   {%- assign current_value = selected -%}
 {%- endif -%}
-<custom-select class="select relative block {{ root_width }} {{ class }}" data-size="{{ size }}" data-width="{{ width }}"{% if attributes %} {{ attributes }}{% endif %}>
+<custom-select class="select relative block {{ root_width }} {{ class }}" data-size="{{ size }}" data-width="{{ width }}" data-style="{{ style | default: 'field' }}"{% if attributes %} {{ attributes }}{% endif %}>
   <button
     type="button"
     class="{{ trigger }} {{ dim }}"
@@ -83,8 +96,8 @@
     {%- if describedby %} aria-describedby="{{ describedby }}"{% endif %}
     {%- if disabled %} disabled{% endif %}
   >
-    <span class="truncate{% if current_value == blank %} text-text-muted{% endif %}" data-selected-label>{{ current_label }}</span>
-    <span class="size-5 shrink-0 transition-transform [&>svg]:size-full {% if open %}rotate-180{% endif %} select__chevron" aria-hidden="true">{{ 'icon__chevron-down.svg' | inline_asset_content }}</span>
+    <span class="truncate{% if current_value == blank and style != 'chip' %} text-text-muted{% endif %}" data-selected-label>{{ current_label }}</span>
+    <span class="{{ chevron_box }} shrink-0 transition-transform {% if open %}rotate-180{% endif %} select__chevron" aria-hidden="true">{{ chevron | inline_asset_content }}</span>
   </button>
   {% render 'dropdown-menu', items: items, id: listbox_id, labelledby: id, open: open, align: align, placement: placement, width: menu_width %}
   <input type="hidden"{% if name %} name="{{ name }}"{% endif %} value="{{ current_value | escape }}"{% if form %} form="{{ form }}"{% endif %}{% if required %} required{% endif %}{% if input_attributes %} {{ input_attributes }}{% endif %}>

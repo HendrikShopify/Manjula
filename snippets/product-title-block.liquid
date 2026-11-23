@@ -1,27 +1,31 @@
 {%- comment -%}
   Figma: Components Molecules / Product form / Title block
   product        product object
-  show_vendor    boolean, default true                 (Figma: Show vendor)
+  description    intro line under the title (body/lg)        (Figma: Description)
+  show_vendor    boolean, default false (Manjula has no vendor line)   (Figma: Show vendor)
   show_rating    boolean, default true                 (Figma: Show rating)
   class
-  Vendor (label caps), title (h1, heading 3) and rating. Rating reads product.metafields.reviews.rating / rating_count and renders only when there are reviews.
+  Manjula: title (h1, heading/2, heading/1 from lg) with the compact rating on the right, description below (24px, 32px from lg).
+  Rating reads product.metafields.reviews.rating / rating_count and renders only when there are reviews.
 {%- endcomment -%}
 {%- liquid
-  if show_vendor == nil
-    assign show_vendor = true
-  endif
   if show_rating == nil
     assign show_rating = true
   endif
   assign rating_value = product.metafields.reviews.rating.value.rating
   assign rating_count = product.metafields.reviews.rating_count.value
 -%}
-<div class="product-title-block flex flex-col gap-2 {{ class }}">
+<div class="product-title-block flex flex-col gap-6 lg:gap-8 {{ class }}">
   {%- if show_vendor and product.vendor != blank -%}
     <span class="text-label-caps text-text-muted">{{ product.vendor }}</span>
   {%- endif -%}
-  <h1 class="text-heading-3 text-text">{{ product.title }}</h1>
-  {%- if show_rating and rating_count > 0 -%}
-    {% render 'rating', value: rating_value, count: rating_count, size: 'sm' %}
+  <div class="flex items-start justify-between gap-4">
+    <h1 class="text-heading-2 text-text lg:text-heading-1">{{ product.title }}</h1>
+    {%- if show_rating and rating_count > 0 -%}
+      <a href="#reviews" class="shrink-0 hover:opacity-60">{% render 'rating', value: rating_value, count: rating_count, size: 'compact' %}</a>
+    {%- endif -%}
+  </div>
+  {%- if description != blank -%}
+    <p class="text-body-lg text-text">{{ description }}</p>
   {%- endif -%}
 </div>

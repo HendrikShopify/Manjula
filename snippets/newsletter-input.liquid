@@ -3,14 +3,16 @@
   style         inline | attached | underline        (Figma: Style)
   id, name      input id; name defaults to contact[email]
   value, placeholder, label (sr-only), autocomplete
-  button_label  submit text; accessible name for the arrow in underline   (Figma: Button label)
+  button_label  submit text   (Figma: Button label)
   icon_leading  asset name, e.g. icon__mail.svg       (Figma: Leading icon)
   error         boolean, sets aria-invalid + error border   (Figma: State=Error)
   success       boolean, success border                      (Figma: State=Success)
   describedby   id of the message under the field
   class         placement only
-  Inline: button inside the field. Attached: field and button joined. Underline: bottom border and an arrow button.
+  Inline: button inside the field. Attached: field and button joined. Underline (Manjula): 14px field, 1px Ink bottom line, the button label as caps text (SUBSCRIBE).
   States: Focus = :focus-within, Error = [error], Success = [success]
+  The underline button label sits in its own span: as a flex item it is a block, so the text trim applies and its
+  capitals centre on the same line as the input text (bare text in a flex button is not trimmed and sat 2px high).
 {%- endcomment -%}
 {%- liquid
   assign style = style | default: 'inline'
@@ -51,7 +53,7 @@
     {%- if icon_leading %}<span class="size-5 shrink-0 text-text-muted [&>svg]:size-full" aria-hidden="true">{{ icon_leading | inline_asset_content }}</span>{% endif -%}
     <label class="sr-only" for="{{ id }}">{{ label_text }}</label>
     <input
-      class="min-w-0 flex-1 bg-transparent text-body-base text-text placeholder:text-text-muted outline-none"
+      class="min-w-0 flex-1 bg-transparent {% if style == 'underline' %}text-label-base{% else %}text-body-base{% endif %} text-text placeholder:text-text-muted outline-none"
       type="email"
       id="{{ id }}"
       name="{{ name }}"
@@ -69,7 +71,7 @@
     {%- when 'attached' -%}
       {% render 'button', label: button_text, size: 'lg', type: 'submit' %}
     {%- when 'underline' -%}
-      {% render 'icon-button', icon: 'icon__arrow-right.svg', label: button_text, style: 'ghost', size: 'md', submit: true %}
+      <button type="submit" class="inline-flex h-10 shrink-0 cursor-pointer items-center rounded-xs text-label-caps text-text transition-colors hover:text-text-muted focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus"><span>{{ button_text }}</span></button>
     {%- else -%}
       {% render 'button', label: button_text, size: 'md', type: 'submit' %}
   {%- endcase -%}

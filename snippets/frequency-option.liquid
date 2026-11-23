@@ -1,0 +1,15 @@
+{%- comment -%}
+  Figma: Components Atoms / Frequency option (2031:8798)
+  One subscription cadence row: 16px padding, 1px border (Ink when selected), no indicator. Rows stack with a shared border (-1px).
+  label        e.g. "Delivered every 3 months"                       (Figma: Label)
+  badge        optional tag text, e.g. "Most popular"                (Figma: Show badge)
+  name, value, id, checked
+  attributes   JS hooks on the radio, e.g. 'data-frequency-pill' (purchase-options.js reads it)
+  States: Selected = radio :checked (Ink border, painted on top), Hover = :hover, Focus = :focus-visible on the radio
+{%- endcomment -%}
+<label class="frequency-option relative -mb-px flex cursor-pointer items-center justify-between gap-3 border border-border p-4 text-label-base text-text transition-colors last:mb-0 hover:z-[1] hover:border-border-medium has-[:checked]:z-[2] has-[:checked]:border-text has-[:focus-visible]:z-[3] has-[:focus-visible]:outline-1 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-focus"{% if id %} for="{{ id }}"{% endif %}>
+  <input type="radio" class="sr-only"{% if id %} id="{{ id }}"{% endif %} name="{{ name }}" value="{{ value | escape }}"{% if checked %} checked{% endif %}{% if attributes %} {{ attributes }}{% endif %}>
+  <span>{{ label }}</span>
+  {%- comment -%} Zero-height wrapper: the badge is taller than the label, but every row keeps the same height {%- endcomment -%}
+  {%- if badge != blank %}<span class="flex h-0 items-center">{% render 'badge', label: badge, type: 'new', size: 'sm' %}</span>{% endif -%}
+</label>

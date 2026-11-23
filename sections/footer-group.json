@@ -12,7 +12,10 @@
     "type": "footer",
     "sections": {
         "footer": {
-            "type": "footer"
+            "type": "footer",
+            "settings": {
+                "image": "shopify://shop_images/footer-band-sofa.jpg"
+            }
         }
     },
     "order": [

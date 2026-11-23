@@ -1,7 +1,7 @@
 {%- comment -%}
   Figma: Components Atoms / Button
   label          text                              (Figma: Label)
-  style          primary | secondary               (Figma: Style)
+  style          primary | secondary | inverse     (Figma: Style; inverse = Bone fill for photography and dark sections)
   size           sm | md | lg                      (Figma: Size)
   icon_leading   asset name, e.g. icon__arrow-left.svg   (Figma: Leading icon + swap)
   icon_trailing  asset name                        (Figma: Trailing icon + swap)
@@ -20,23 +20,25 @@
 {%- liquid
   assign style = style | default: 'primary'
   assign size = size | default: 'md'
-  assign base = 'button group relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-button border font-body transition-colors duration-150 cursor-pointer select-none focus-visible:outline-none focus-visible:border-focus disabled:cursor-not-allowed aria-busy:cursor-progress'
+  assign base = 'button group relative inline-flex items-center justify-center gap-3 whitespace-nowrap rounded-button border font-body transition-colors duration-150 cursor-pointer select-none focus-visible:outline-none focus-visible:border-focus disabled:cursor-not-allowed aria-busy:cursor-progress'
   case style
     when 'secondary'
-      assign look = 'bg-background text-accent border-accent hover:bg-accent-subtle disabled:border-disabled disabled:text-text-disabled disabled:bg-background'
+      assign look = 'bg-transparent text-accent border-accent hover:bg-accent-subtle disabled:border-disabled disabled:text-text-disabled disabled:bg-transparent'
+    when 'inverse'
+      assign look = 'bg-background text-text border-background hover:bg-surface-alt hover:border-surface-alt disabled:bg-disabled disabled:border-disabled disabled:text-text-disabled'
     else
       assign look = 'bg-accent text-accent-contrast border-accent hover:bg-accent-hover hover:border-accent-hover disabled:bg-disabled disabled:border-disabled disabled:text-text-disabled'
   endcase
   case size
     when 'sm'
-      assign dim = 'h-9 px-3 text-label-base'
+      assign dim = 'h-8 px-6 text-label-caps'
       assign icon_size = 'size-4'
     when 'lg'
-      assign dim = 'h-13 px-6 text-label-lg'
-      assign icon_size = 'size-5'
+      assign dim = 'h-12 px-8 text-label-caps-lg'
+      assign icon_size = 'size-4'
     else
-      assign dim = 'h-11 px-5 text-label-lg'
-      assign icon_size = 'size-5'
+      assign dim = 'h-10 px-6 text-label-caps'
+      assign icon_size = 'size-4'
   endcase
   assign classes = base | append: ' ' | append: look | append: ' ' | append: dim
   if class != blank

@@ -12,7 +12,7 @@
 {%- liquid
   assign type = type | default: 'title'
   if type == 'query'
-    assign text_cls = 'text-body-base font-medium text-text [&_mark]:bg-transparent [&_mark]:font-normal [&_mark]:text-text'
+    assign text_cls = 'text-body-base text-text [&_mark]:bg-transparent [&_mark]:font-normal [&_mark]:text-text'
   else
     assign text_cls = 'text-label-base text-text'
   endif

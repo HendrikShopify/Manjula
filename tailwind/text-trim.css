@@ -1,0 +1,78 @@
+/*
+  Text trimming, so every text box matches Figma's text-box-trim (cap height to baseline).
+  No classes needed: it applies to all text in the theme.
+
+  1. Browsers with text-box (Chrome, Edge, Safari 18.2+): the native property on every element.
+     It reads the cap height and baseline from the font itself, so Nimbus Sans and Sabon are both right.
+
+  2. Browsers without it (Firefox for now): the ::before / ::after fallback on block text elements.
+     Values come from the font metrics:
+       Nimbus Sans  ascender 667, descender 333, cap height 667  ->  top 0.5em,   bottom 0.167em
+       Sabon        ascender 976, descender 228, cap height 698  ->  top 0.324em, bottom 0.374em
+     Text set in Sabon overrides --trim-top and --trim-bottom. The fallback skips flex and grid
+     containers, where the pseudo-elements would become items and pick up the gap.
+
+  3. Text inputs (value and placeholder): text-box does not reach inside form controls, so every browser
+     uses the margin method on the input itself. line-height 1 makes its box exactly one em of font
+     content; the negative margins cut it to cap height and baseline, so the wrapper (which carries
+     the border and height in input, search-field, newsletter-input, quantity-selector) centres and
+     sizes on the letters, as in Figma. Inputs must stay bare: border and padding live on the wrapper.
+     The native text-box is switched off on inputs and their placeholder: Chrome would trim the value a second
+     time, which pushed it down, cut off descenders (g, j, p, y) and put it lower than the placeholder.
+
+  The font files in assets/ are normalised so every browser and OS reads the same metrics: hhea, typo and win
+  ascent/descent are equal, line gaps are 0 and USE_TYPO_METRICS is set. Sabon's OS/2 cap height is corrected
+  from 726 to 698, the real height of its capitals, so the native cap trim lands on the letters.
+  The @font-face overrides in snippets/fonts.liquid repeat the same values as a second guard.
+*/
+@layer base {
+  :root {
+    --trim-top: 0.5em;
+    --trim-bottom: 0.167em;
+  }
+
+  @supports (text-box: trim-both cap alphabetic) {
+    * {
+      text-box: trim-both cap alphabetic;
+    }
+
+    /* Text that clips its overflow (truncate, line-clamp) would lose descenders and accents at the trimmed edge.
+       Switch the native trim off there (the box keeps its full line boxes, so the clip area covers the full letters)
+       and trim the layout with negative margins only. Native trim plus padding was not reliable: Chrome skips the
+       bottom trim on a line-clamp box whose text fits, so a 3-line text was 8px taller than a clamped one. */
+    :is(.truncate, [class*="line-clamp-"], .text-ellipsis) {
+      text-box: none;
+      margin-block: calc(var(--trim-top) - 0.5lh) calc(var(--trim-bottom) - 0.5lh);
+    }
+    /* Paragraphs inside clamped text (review bodies) keep full line boxes too, or the last visible line is cut. */
+    :is(.truncate, [class*="line-clamp-"], .text-ellipsis) * {
+      text-box: none;
+    }
+  }
+
+  @supports not (text-box: trim-both cap alphabetic) {
+    :is(h1, h2, h3, h4, h5, h6, p, blockquote, figcaption, dt, dd):not([class*="flex"], [class*="grid"]) {
+      display: flow-root;
+    }
+    :is(h1, h2, h3, h4, h5, h6, p, blockquote, figcaption, dt, dd):not([class*="flex"], [class*="grid"])::before {
+      content: "";
+      display: table;
+      margin-bottom: calc(-0.5lh + var(--trim-top));
+    }
+    :is(h1, h2, h3, h4, h5, h6, p, blockquote, figcaption, dt, dd):not([class*="flex"], [class*="grid"])::after {
+      content: "";
+      display: table;
+      margin-bottom: calc(-0.5lh + var(--trim-bottom));
+    }
+  }
+
+  input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="hidden"], [type="submit"], [type="button"], [type="reset"], [type="color"], [type="image"]) {
+    line-height: 1;
+    margin-top: calc(-0.5em + var(--trim-top));
+    margin-bottom: calc(-0.5em + var(--trim-bottom));
+    text-box: none;
+  }
+  input::placeholder {
+    text-box: none;
+  }
+}

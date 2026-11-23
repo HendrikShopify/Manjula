@@ -1,4 +1,4 @@
-<div class="mx-auto w-full max-w-page px-page-margin py-4">{% render 'breadcrumbs' %}</div>
+{% comment %} <div class="mx-auto w-full max-w-page px-page-margin py-4">{% render 'breadcrumbs' %}</div>
 {% paginate collection.products by 24 %}
   <collection-filters data-section-id="{{ section.id }}">
     <div class="mx-auto w-full max-w-page px-page-margin section-padding-md">
@@ -38,4 +38,4 @@
       </div>
     </div>
   </collection-filters>
-{% endpaginate %}
+{% endpaginate %} {% endcomment %}

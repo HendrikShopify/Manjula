@@ -1,0 +1,62 @@
+{%- comment -%}
+  Figma: Components Atoms / Dropdown panel (164:5384), Type=Image
+  link    the top-level linklist link; its children fill the list
+  class   placement only
+  Surface panel: a caps list (label/caps-lg, 24px padding, 16px apart). The 16px gap is padding on the links (py-2, list py-4), so the hover never falls in a gap and the other links don't flicker back and a 180px square image.
+  The image is the linked product's or page's hover photo (custom.hover_image; on products the same photo as the tile hover), else the linked
+  collection or product image (link.object.featured_image); the first link with one shows first,
+  and header-nav.js swaps it on hover or focus (data-panel-link ↔ data-panel-image, same index).
+  The swap works like the product page gallery (Hendrik, 23 Nov): the new image shows at once and eases from 110% and
+  a 1px blur into focus (1.25s, ease-out-quint). With reduced motion it only swaps.
+  While one link is hovered or focused, the other links dim to 30%. No link has an image: the image slot is left out.
+{%- endcomment -%}
+{%- liquid
+  assign first_image_index = 0
+  for child in link.links
+    assign child_image = child.object.metafields.custom.hover_image.value | default: child.object.featured_image
+    if child_image != blank
+      assign first_image_index = forloop.index
+      break
+    endif
+  endfor
+-%}
+<div class="dropdown-panel flex justify-between bg-surface {{ class }}">
+  <ul class="group/list flex w-60 flex-col px-6 py-4" role="list">
+    {%- for child in link.links -%}
+      <li>
+        <a
+          href="{{ child.url }}"
+          class="block rounded-xs py-2 text-label-caps-lg text-text transition-opacity duration-150 group-has-[a:hover,a:focus-visible]/list:opacity-30 hover:opacity-100! focus-visible:opacity-100! focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus aria-[current=page]:font-medium"
+          {% if child.current %}aria-current="page"{% endif %}
+          data-panel-link="{{ forloop.index }}"
+        >
+          {{- child.title | escape -}}
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+  {%- if first_image_index > 0 -%}
+    <div class="relative size-45 shrink-0 overflow-clip bg-surface-alt" aria-hidden="true">
+      {%- for child in link.links -%}
+        {%- assign child_image = child.object.metafields.custom.hover_image.value | default: child.object.featured_image -%}
+        {%- if child_image != blank -%}
+          {%- liquid
+            assign is_active = false
+            if forloop.index == first_image_index
+              assign is_active = true
+            endif
+            assign image_attributes = 'data-panel-image="' | append: forloop.index | append: '" data-active="' | append: is_active | append: '"'
+          -%}
+          {% render 'media',
+            media: child_image,
+            ratio: 'fill',
+            sizes: '180px',
+            alt: '',
+            class: 'absolute! inset-0 size-full opacity-0 data-[active=true]:opacity-100 [&>*]:transition-[scale,filter] [&>*]:duration-1250 [&>*]:ease-out-quint motion-safe:not-data-[active=true]:[&>*]:scale-110 motion-safe:not-data-[active=true]:[&>*]:blur-3xs',
+            attributes: image_attributes
+          %}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>

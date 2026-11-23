@@ -1,0 +1,109 @@
+{%- comment -%}
+  Figma: Sections / Comparison texture (2490:20787; Templates FINAL PDP / Face oil "Differentiator" 2526:26023, mobile 2526:26034)
+  On the breakout grid (.section-breakout): the photo bleeds left from the screen edge to the end of column 4, the content
+  sits on columns 5 to 12. Desktop content: display heading, small photo and text, and two
+  comparison columns (theirs with minus marks, ours with plus marks), each with a skin illustration and spec rows.
+  Mobile: the big photo is hidden; the two columns sit side by side, 8px apart, with smaller titles.
+  Rows are blocks: one label with a value per column, marked with a minus (theirs) or plus (ours), 1.7px strokes.
+  The skin illustrations are fixed artwork (snippets/skin-illustration.liquid), on a Surface alt panel; they crop
+  like a cover image on mobile.
+  The value sits in its own block next to the mark, so it is trimmed to cap height and the 16px mark centres on the
+  capitals (a bare text node in a flex row is not trimmed and sat higher than the mark).
+  The small photo falls back to the large photo when it is empty.
+{%- endcomment -%}
+{%- assign small_image = section.settings.image | default: section.settings.media -%}
+<div class="comparison-texture section-breakout bg-background py-section-md">
+  <div class="relative max-lg:hidden" data-bleed="left" style="--start: 1; --span: 4;">
+    {% render 'media', media: section.settings.media, ratio: 'fill', sizes: '560px', class: 'absolute! inset-0 size-full' %}
+  </div>
+
+  <div class="flex flex-col gap-12 lg:gap-20" style="--start: 5; --span: 8;">
+    <div class="flex flex-col gap-6 text-text lg:max-w-85.25 lg:gap-10">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="text-heading-2 lg:text-display-2">{{ section.settings.heading | newline_to_br }}</h2>
+      {%- endif -%}
+      {%- if small_image != blank -%}
+        {% render 'media', media: small_image, ratio: 'fill', sizes: '120px', class: 'h-42.25 w-30' %}
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p class="text-body-sm lg:max-w-80">{{ section.settings.text }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="grid w-full grid-cols-2 gap-2 lg:max-w-205 lg:gap-1">
+      {%- for side in (1..2) -%}
+        {%- liquid
+          if side == 1
+            assign col_title = section.settings.left_title
+            assign col_sub = section.settings.left_sub
+            assign illustration = 'most-oils'
+            assign mark = 'icon__minus-thick.svg'
+          else
+            assign col_title = section.settings.right_title
+            assign col_sub = section.settings.right_sub
+            assign illustration = 'manjula'
+            assign mark = 'icon__plus-thick.svg'
+          endif
+        -%}
+        <div class="flex min-w-0 flex-col gap-5">
+          <div class="flex flex-col gap-3 text-text">
+            <h3 class="text-heading-3 lg:text-heading-2">{{ col_title }}</h3>
+            {%- if col_sub != blank -%}<p class="text-body-sm">{{ col_sub }}</p>{%- endif -%}
+          </div>
+          <div class="h-37.5 w-full overflow-hidden bg-surface-alt text-text lg:h-77.5">{% render 'skin-illustration', type: illustration, class: 'size-full' %}</div>
+          <dl class="flex flex-col">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'row' -%}
+                {%- liquid
+                  if side == 1
+                    assign value = block.settings.left_value
+                  else
+                    assign value = block.settings.right_value
+                  endif
+                -%}
+                <div class="flex flex-col gap-3 border-b border-border-subtle py-3" {% if side == 1 %}{{ block.shopify_attributes }}{% endif %}>
+                  <dt class="text-label-base text-text opacity-60">{{ block.settings.label }}</dt>
+                  <dd class="flex items-center gap-2 text-label-base text-text lg:text-heading-4">
+                    <span class="size-4 shrink-0 [&>svg]:size-full" aria-hidden="true">{{ mark | inline_asset_content }}</span>
+                    <p class="min-w-0">{{ value }}</p>
+                  </dd>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </dl>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Comparison texture",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "media", "label": "Large photo", "info": "Desktop only, runs to the left edge" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Most oils sit.\nOurs sinks in." },
+    { "type": "image_picker", "id": "image", "label": "Small photo", "info": "Empty uses the large photo" },
+    { "type": "textarea", "id": "text", "label": "Text" },
+    { "type": "header", "content": "Left column (theirs)" },
+    { "type": "text", "id": "left_title", "label": "Title", "default": "Most face oils" },
+    { "type": "text", "id": "left_sub", "label": "Subtitle", "default": "Sits on top, leaves a film" },
+    { "type": "header", "content": "Right column (ours)" },
+    { "type": "text", "id": "right_title", "label": "Title", "default": "MANJULA" },
+    { "type": "text", "id": "right_sub", "label": "Subtitle", "default": "Sinks in, leaves nothing" }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Row",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "text", "id": "left_value", "label": "Left value" },
+        { "type": "text", "id": "right_value", "label": "Right value" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Comparison texture" }]
+}
+{% endschema %}

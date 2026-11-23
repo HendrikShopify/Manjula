@@ -1,0 +1,105 @@
+{%- comment -%}
+  Figma: Sections / Concerns (2161:32446; Templates FINAL Science 2526:25918, mobile 2526:25928)
+  Own section. A list of concerns (List row, size lg) and, for the active one, its explanation.
+  Desktop (12 columns, 48px between rows): the title (heading/1) in columns 5 to 9; below it the list in columns 1 to 4
+  beside the explanation in columns 5 to 10: a lead (body/lg, max 464px), 60px gap, then up to three points
+  (label at 60% in a 200px column beside the text, body/sm, 24px apart). The photo is not shown on desktop (as in Figma).
+  Mobile: title (heading/2), list, the concern's photo (358:201), then lead and points stacked (body/sm, label muted).
+  One concern block per row; the first one starts active (Hendrik, 23 Nov). The explanation is at most 680px wide
+  (lg:max-w-170, Figma 674px at 1440), so it does not stretch on wide screens; the points at most 560px (lg:max-w-140),
+  so a point's text stays a short column beside its 200px label. JS: concerns.js, hooks data-concern-tab, data-concern-panel.
+{%- endcomment -%}
+{%- liquid
+  assign concerns = section.blocks | where: 'type', 'concern'
+  # The first concern starts active
+  assign active = 0
+-%}
+<script src="{{ 'concerns.js' | asset_url }}" defer="defer"></script>
+<concerns-section class="concerns block bg-background pt-section-lg pb-section-md text-text lg:py-section-sm">
+  <div class="mx-auto flex w-full max-w-page flex-col gap-8 px-page-margin lg:grid lg:grid-cols-12 lg:gap-x-gutter lg:gap-y-12">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="text-heading-2 lg:col-span-5 lg:col-start-5 lg:text-heading-1">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if concerns.size > 0 -%}
+      <div class="flex flex-col lg:col-span-4 lg:col-start-1 lg:row-start-2">
+        {%- for block in concerns -%}
+          {%- liquid
+            assign is_active = false
+            if forloop.index0 == active
+              assign is_active = true
+            endif
+          -%}
+          {%- capture tab_attrs -%}data-concern-tab="{{ forloop.index0 }}" aria-controls="Concern-{{ section.id }}-{{ forloop.index0 }}" {{ block.shopify_attributes }}{%- endcapture -%}
+          {% render 'list-row', label: block.settings.title, size: 'lg', active: is_active, attributes: tab_attrs %}
+        {%- endfor -%}
+      </div>
+      <div class="lg:col-span-6 lg:col-start-5 lg:row-start-2 lg:max-w-170">
+        {%- for block in concerns -%}
+          <div id="Concern-{{ section.id }}-{{ forloop.index0 }}" class="flex flex-col gap-8" data-concern-panel="{{ forloop.index0 }}"{% unless forloop.index0 == active %} hidden{% endunless %}>
+            {%- if block.settings.image != blank -%}
+              {% render 'media', media: block.settings.image, ratio: 'fill', sizes: '100vw', class: 'aspect-[358/201] w-full lg:hidden' %}
+            {%- endif -%}
+            <div class="flex flex-col gap-10 lg:gap-15">
+              {%- if block.settings.lead != blank -%}
+                <p class="max-w-116 text-body-sm lg:text-body-lg">{{ block.settings.lead }}</p>
+              {%- endif -%}
+              <dl class="flex flex-col gap-8 text-body-sm lg:max-w-140 lg:gap-6">
+                {%- for i in (1..3) -%}
+                  {%- liquid
+                    assign label_key = 'point_' | append: i | append: '_label'
+                    assign text_key = 'point_' | append: i | append: '_text'
+                    assign point_label = block.settings[label_key]
+                    assign point_text = block.settings[text_key]
+                  -%}
+                  {%- if point_label != blank or point_text != blank -%}
+                    <div class="flex flex-col gap-4 lg:flex-row lg:gap-0">
+                      <dt class="text-text-muted lg:w-50 lg:shrink-0 lg:text-text lg:opacity-60">{{ point_label }}</dt>
+                      <dd class="min-w-0 lg:flex-1">{{ point_text }}</dd>
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </dl>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</concerns-section>
+
+{% schema %}
+{
+  "name": "Concerns",
+  "tag": "section",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Most skin and hair problems start in the same place." }
+  ],
+  "blocks": [
+    {
+      "type": "concern",
+      "name": "Concern",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Concern", "default": "Dry skin" },
+        { "type": "image_picker", "id": "image", "label": "Photo", "info": "Shown on mobile only." },
+        { "type": "textarea", "id": "lead", "label": "Intro" },
+        { "type": "header", "content": "Point 1" },
+        { "type": "text", "id": "point_1_label", "label": "Label" },
+        { "type": "textarea", "id": "point_1_text", "label": "Text" },
+        { "type": "header", "content": "Point 2" },
+        { "type": "text", "id": "point_2_label", "label": "Label" },
+        { "type": "textarea", "id": "point_2_text", "label": "Text" },
+        { "type": "header", "content": "Point 3" },
+        { "type": "text", "id": "point_3_label", "label": "Label" },
+        { "type": "textarea", "id": "point_3_text", "label": "Text" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Concerns",
+      "blocks": [{ "type": "concern" }, { "type": "concern" }, { "type": "concern" }]
+    }
+  ]
+}
+{% endschema %}

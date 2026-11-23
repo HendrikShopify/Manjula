@@ -1,9 +1,21 @@
 <!doctype html>
-<html class="js" lang="{{ request.locale.iso_code }}">
+<html class="js motion-safe:scroll-smooth" lang="{{ request.locale.iso_code }}">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    {%- unless request.design_mode -%}
+      {%- if template.name == 'collection' or template.name == 'list-collections' -%}
+        {%- comment -%}
+          No collection pages in the store yet: the collection and collection-listing pages send visitors to the home page.
+          replace() keeps the back button working. Not in the theme editor, so the templates stay editable.
+        {%- endcomment -%}
+        <script>
+          window.location.replace({{ routes.root_url | json }});
+        </script>
+      {%- endif -%}
+    {%- endunless -%}
     <meta name="theme-color" content="">
     <link rel="canonical" href="{{ canonical_url }}">
 
@@ -60,9 +72,30 @@
 
     {{ 'tailwind.output.css' | asset_url | stylesheet_tag }}
 
-    {%- if localization.available_languages.size > 1 -%}
+    {%- if localization.available_languages.size > 1 or localization.available_countries.size > 1 -%}
       <script src="{{ 'localization-form.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
+
+    {%- unless request.design_mode -%}
+      {%- if template.name == 'index' -%}
+        <script>
+          // Home page-load intro (Figma: Home / Desktop / Page load). Set before first paint so the header starts under
+          // the hero wordmark; hero-intro.js animates it into place. Desktop only, every home page load, never with reduced motion.
+          // The timer is a safety net: if the script never runs, the page settles into its normal state.
+          (function () {
+            try {
+              var root = document.documentElement;
+              if (!matchMedia('(min-width: 1024px)').matches) return;
+              if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+              root.classList.add('intro');
+              window.__introTimer = setTimeout(function () {
+                root.classList.remove('intro');
+              }, 4000);
+            } catch (e) {}
+          })();
+        </script>
+      {%- endif -%}
+    {%- endunless -%}
 
     <script>
       if (Shopify.designMode) {
@@ -71,7 +104,7 @@
     </script>
   </head>
 
-  <body class="font-primary antialiased has-[[data-scroll-lock=true]]:overflow-hidden">
+  <body class="bg-background text-text font-primary antialiased has-[[data-scroll-lock=true]]:overflow-hidden">
     <a class="sr-only" href="#MainContent"> Skip to main content </a>
 
     {% render 'loading-bar' %}
@@ -87,7 +120,7 @@
 
     <main
       id="MainContent"
-      class="min-h-[50vh]"
+      class=""
       role="main"
       tabindex="-1"
     >

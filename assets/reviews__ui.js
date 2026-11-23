@@ -395,7 +395,8 @@
                         this.goToPage(target);
                     }.bind(this));
                 } else {
-                    button.textContent = String(part);
+                    var number = button.querySelector('[data-reviews-page-number]') || button;
+                    number.textContent = String(part);
                     button.setAttribute('aria-label', String(labels.page || '').replace('__NUMBER__', String(part)));
                     if (part === current) button.setAttribute('aria-current', 'page');
                     button.addEventListener('click', function () {
@@ -937,15 +938,20 @@
                 date.remove();
             }
 
-            var stars = node.querySelector('[data-reviews-stars]');
+            // Two star rows: under the author on mobile, beside the title from lg (CSS shows one).
             var rating = Math.max(0, Math.min(5, Math.round(Number(review.rating) || 0)));
-            stars.setAttribute('aria-label', String(this.config.labels.stars || '').replace('__RATING__', String(rating)));
-            stars.querySelectorAll('[data-reviews-star]').forEach(function (star, index) {
-                if (index >= rating) star.setAttribute('data-empty', '');
-                else star.removeAttribute('data-empty');
+            var starsLabel = String(this.config.labels.stars || '').replace('__RATING__', String(rating));
+            node.querySelectorAll('[data-reviews-stars]').forEach(function (stars) {
+                stars.setAttribute('aria-label', starsLabel);
+                stars.querySelectorAll('[data-reviews-star]').forEach(function (star, index) {
+                    if (index >= rating) star.setAttribute('data-empty', '');
+                    else star.removeAttribute('data-empty');
+                });
             });
 
-            node.querySelector('[data-reviews-body]').innerHTML = review.bodyHtml || '';
+            var body = node.querySelector('[data-reviews-body]');
+            body.innerHTML = review.bodyHtml || '';
+            this.setupReadMore(body, node.querySelector('[data-reviews-read-more]'));
 
             this.renderMedia(node, review);
             this.renderVote(node, review);
@@ -958,6 +964,27 @@
             }
 
             return node;
+        }
+
+        // Mobile: the body is clamped to 6 lines (CSS). Read more shows only while text is really cut off, and opens
+        // the full text. A ResizeObserver re-checks whenever the body changes size (card attached, fonts loaded,
+        // resize, desktop where there is no clamp), so a short review never shows the link.
+        setupReadMore(body, button) {
+            if (!body || !button) return;
+            var check = function () {
+                if (body.hasAttribute('data-expanded')) { button.hidden = true; return; }
+                // The text trim adds a few pixels to scrollHeight; only more than half a line counts as cut off.
+                var line = parseFloat(getComputedStyle(body).lineHeight) || 20;
+                button.hidden = !body.clientHeight || body.scrollHeight - body.clientHeight < line / 2;
+            };
+            button.hidden = true;
+            button.addEventListener('click', function () {
+                body.setAttribute('data-expanded', '');
+                button.setAttribute('aria-expanded', 'true');
+                button.hidden = true;
+            });
+            if ('ResizeObserver' in window) new ResizeObserver(check).observe(body);
+            requestAnimationFrame(check);
         }
 
         renderMedia(node, review) {

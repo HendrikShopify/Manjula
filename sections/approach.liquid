@@ -1,0 +1,50 @@
+{%- comment -%}
+  Figma: Sections / Approach (Templates FEEDBACK Science "Approach" 2701:25927, mobile 2701:25936)
+  Own section (one section per layout) on the breakout grid (.section-breakout, tailwind/tokens.css).
+  Desktop: the bracketed statement (eyebrow lg and heading/2 text, md bracket at 20%) over columns 5 to 12, then a
+  full-bleed photo 630px tall. Mobile: the photo first (320px tall, its own photo when set), then the statement over
+  all columns in heading/3.
+  The photo can be a video instead (Hendrik, 23 Nov): it plays muted and looped and wins over the photo; a mobile photo
+  still replaces it on mobile.
+  Padding: statement 80 top and 48 bottom on desktop, 48 top and bottom on mobile; the photo sits on the section edges.
+{%- endcomment -%}
+{%- liquid
+  assign image = section.settings.video | default: section.settings.image
+  assign mobile_image = section.settings.mobile_image | default: image
+-%}
+<section class="approach flex flex-col bg-background text-text">
+  {%- if section.settings.label != blank or section.settings.text != blank -%}
+    <div class="section-breakout py-section-md lg:pb-section-sm">
+      <div class="relative flex flex-col gap-5 p-3 lg:p-4" style="--start-mobile: 1; --span-mobile: 4; --start: 5; --span: 8;">
+        {% render 'bracket', side: 'left', size: 'md' %}
+        {% render 'eyebrow', label: section.settings.label, size: 'lg' %}
+        {%- if section.settings.text != blank -%}
+          <p class="text-heading-3 lg:text-heading-2">{{ section.settings.text | newline_to_br }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+  <div class="max-lg:order-first">
+    {%- if section.settings.mobile_image != blank -%}
+      {% render 'media', media: mobile_image, ratio: 'fill', autoplay: true, sizes: '100vw', class: 'h-80 w-full lg:hidden' %}
+      {% render 'media', media: image, ratio: 'fill', autoplay: true, sizes: '100vw', class: 'h-157.5 w-full max-lg:hidden' %}
+    {%- else -%}
+      {% render 'media', media: image, ratio: 'fill', autoplay: true, sizes: '100vw', class: 'h-80 w-full lg:h-157.5' %}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Approach",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "MANJULA’s approach" },
+    { "type": "textarea", "id": "text", "label": "Statement", "default": "In Ayurveda, oiling has never been a quick fix. It's a daily act of care, passed from mother to daughter, that asks for nothing more than a few minutes. We believe that's still the best way to look after your skin and hair: gently, consistently, and for the long run." },
+    { "type": "image_picker", "id": "image", "label": "Photo", "info": "Runs edge to edge. Upload it uncropped; set a focal point in Files to keep the subject in view." },
+    { "type": "video", "id": "video", "label": "Video", "info": "Optional. Plays muted and looped instead of the photo; the photo is not needed then." },
+    { "type": "image_picker", "id": "mobile_image", "label": "Mobile photo", "info": "Optional. Shown on mobile instead of the photo." }
+  ],
+  "presets": [{ "name": "Approach" }]
+}
+{% endschema %}

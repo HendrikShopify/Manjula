@@ -6,11 +6,18 @@
   selected   boolean, shows the check                (Figma: State=Selected)
   disabled   boolean                                 (Figma: State=Disabled)
   id         option id, optional
+  size       md (default, 40px, body/base) | sm (32px, label/base, for compact triggers like the cart line delivery choice)
   class, attributes
   Rendered as role="option" for use inside dropdown-menu (listbox). Hover = :hover and :focus-visible. The label span carries data-menu-item-label for scripts that fill items from a template; the check follows aria-selected.
 {%- endcomment -%}
+{%- liquid
+  assign text_style = 'h-10 px-3 text-body-base'
+  if size == 'sm'
+    assign text_style = 'h-8 px-3 text-label-base'
+  endif
+-%}
 <li
-  class="menu-item group/item flex h-10 w-full items-center gap-2 rounded-sm px-3 text-body-base text-text cursor-pointer outline-none transition-colors hover:bg-surface focus:bg-surface aria-disabled:text-text-disabled aria-disabled:cursor-not-allowed aria-disabled:hover:bg-transparent {{ class }}"
+  class="menu-item group/item flex w-full items-center gap-2 {{ text_style }} text-text cursor-pointer outline-none transition-colors hover:bg-surface focus-visible:bg-surface aria-disabled:text-text-disabled aria-disabled:cursor-not-allowed aria-disabled:hover:bg-transparent {{ class }}"
   role="option"
   {%- if id %} id="{{ id }}"{% endif %}
   data-value="{{ value | default: label | escape }}"

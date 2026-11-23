@@ -1,31 +1,256 @@
 {%- comment -%}
-  Figma: Components Molecules / Cart drawer (side-drawer with header / body / footer)
-  Section rendering replaces #cart-drawer-inner, so header, body and footer all live inside it.
-  cart.js: CartItems (updates), DiscountCode. Open/close is side-drawer.js.
+  Figma: Components Molecules / Cart drawer (365:4488; Templates FINAL 2526:25995)
+  side-drawer (640px, full width on mobile) whose content is #cart-drawer-inner: drawer-header ("Your cart" + count
+  without the gift),
+  scrolling body, footer with cart-summary. Section rendering replaces #cart-drawer-inner after every cart change.
+
+  Offer (Manjula, Cart drawer content 2177:26151). An oil is a product with a custom.free_mini_pairs metafield (the other
+  oils); custom.mini is its free mini. The minis must be published to the Online Store (price 0) or the gift can not be added.
+  One-time and subscribed oils both count (Hendrik, 19 Nov: the free mini also comes with a subscription).
+    1 oil                Mini offer under the line items: message plus a row per oil in the oil's custom.free_mini_pairs,
+                         each "+ Free <third> mini" and a 32px add button ([data-cart-add] = variant id).
+    2 different oils     the third oil's mini is the gift: "Free <third> mini added to your order" and the gift line
+                         above the line items. Any mini in the cart is a gift line (no line property, so cart/update
+                         can add it by variant id).
+  One cart request per change: [data-cart-gift-rules] (JSON, re-rendered with the drawer: oils, the mini per oil pair,
+  every cart line) lets cart.js put the gift change in the same request. Adds: CartGift.addRequest() gives cart/add with the gift, or one
+  cart/update when the add means the gift must go (a third oil). Quantity and remove: CartGift.updatesFor() sends one cart/update with the line change plus the gift.
+  <cart-gift> is the fallback for what one request can not do (an add with a selling plan or line properties that makes 3 oils): it renders only when something has to change, adds a missing gift and removes gifts that are not due.
+  The minis cost 0, so no discount is needed; a gift line with a price above 0 shows that price.
+
+  Not rendered in the Manjula drawer (kept for later): free-shipping-bar, discount code, tax note, payment icons.
+  cart.js: CartItems (quantity, remove, plan change, subscribe, add), CartGift. Open/close is side-drawer.js.
 {%- endcomment -%}
 <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
 {%- liquid
   assign title = 'sections.cart.title' | t
-  assign count_label = 'sections.cart.item_count' | t: count: cart.item_count
+
+  # Oils and minis. An oil has custom.free_mini_pairs; its custom.mini is its free mini. A mini in the cart is always
+  # the gift line (minis are not sold on their own, their page sends visitors to the full oil).
+  # Rules for cart.js: oil variant id -> oil product id, "oilA,oilB" (lower id first) -> the third oil's mini variant id.
+  assign mini_ids = ','
+  assign rules_oils = ''
+  assign rules_minis = ''
+  for oil in collections.all.products
+    assign pairs = oil.metafields.custom.free_mini_pairs.value
+    if pairs == blank
+      continue
+    endif
+    assign oil_mini = oil.metafields.custom.mini.value
+    if oil_mini
+      assign mini_ids = mini_ids | append: oil_mini.id | append: ','
+    endif
+    for variant in oil.variants
+      assign rules_oils = rules_oils | append: '"' | append: variant.id | append: '":' | append: oil.id | append: ','
+    endfor
+    for pair in pairs
+      for other in pairs
+        if other.id == pair.id
+          continue
+        endif
+        assign mini_variant = other.metafields.custom.mini.value.selected_or_first_available_variant
+        unless mini_variant.available
+          continue
+        endunless
+        if oil.id < pair.id
+          assign pair_key = oil.id | append: ',' | append: pair.id
+        else
+          assign pair_key = pair.id | append: ',' | append: oil.id
+        endif
+        assign rules_minis = rules_minis | append: '"' | append: pair_key | append: '":' | append: mini_variant.id | append: ','
+      endfor
+    endfor
+  endfor
+
+  # Oils in the cart (distinct products, one-time or subscription), gift lines; rules_lines lists every line for cart.js
+  assign oil_ids = ''
+  assign oil_count = 0
+  assign first_oil = nil
+  assign rules_lines = ''
+  assign item_count = cart.item_count
+  for item in cart.items
+    assign marker = ',' | append: item.product.id | append: ','
+    assign is_mini = false
+    if mini_ids contains marker
+      assign is_mini = true
+    endif
+    assign is_oil = false
+    if item.product.metafields.custom.free_mini_pairs.value != blank
+      assign is_oil = true
+    endif
+    assign has_plan = false
+    if item.selling_plan_allocation
+      assign has_plan = true
+    endif
+    assign line_oil = 0
+    if is_oil
+      assign line_oil = item.product.id
+    endif
+    assign line_key = item.key | json
+    assign rules_lines = rules_lines | append: '{"key":' | append: line_key | append: ',"variant":' | append: item.variant.id | append: ',"oil":' | append: line_oil | append: ',"qty":' | append: item.quantity | append: ',"plan":' | append: has_plan | append: ',"gift":' | append: is_mini | append: '},'
+
+    if is_mini
+      assign item_count = item_count | minus: item.quantity
+      continue
+    endif
+    unless is_oil
+      continue
+    endunless
+    unless oil_ids contains marker
+      assign oil_ids = oil_ids | append: marker
+      assign oil_count = oil_count | plus: 1
+      if first_oil == nil
+        assign first_oil = item.product
+      endif
+    endunless
+  endfor
+
+  # The gift: with 2 different oils, the mini of the third oil (from the first oil's free_mini_pairs)
+  assign gift_product = nil
+  assign third_oil = nil
+  if oil_count == 2
+    for pair in first_oil.metafields.custom.free_mini_pairs.value
+      assign marker = ',' | append: pair.id | append: ','
+      unless oil_ids contains marker
+        assign third_oil = pair
+        break
+      endunless
+    endfor
+    assign gift_product = third_oil.metafields.custom.mini.value
+  endif
+  assign gift_variant = gift_product.selected_or_first_available_variant
+  if gift_variant.available != true
+    assign gift_variant = nil
+  endif
+
+  # What <cart-gift> has to change (fallback for what cart.js can not do in the same request)
+  assign gift_add = ''
+  assign gift_updates = ''
+  assign gift_present = false
+  for item in cart.items
+    assign marker = ',' | append: item.product.id | append: ','
+    unless mini_ids contains marker
+      continue
+    endunless
+    if gift_variant and item.variant.id == gift_variant.id and gift_present == false
+      assign gift_present = true
+      if item.quantity > 1
+        assign gift_updates = gift_updates | append: item.key | append: ':1,'
+      endif
+    else
+      assign gift_updates = gift_updates | append: item.key | append: ':0,'
+    endif
+  endfor
+  if gift_variant and gift_present == false
+    assign gift_add = gift_variant.id
+  endif
 -%}
 {%- capture content -%}
   <div id="cart-drawer-inner" class="flex min-h-0 flex-1 flex-col">
+    <script type="application/json" data-cart-gift-rules>
+      {"oils":{ {{- rules_oils | remove_last: ',' -}} },"minis":{ {{- rules_minis | remove_last: ',' -}} },"lines":[{{ rules_lines | remove_last: ',' }}]}
+    </script>
+    {%- if gift_add != '' or gift_updates != '' -%}
+      <cart-gift hidden data-add="{{ gift_add }}" data-updates="{{ gift_updates }}"></cart-gift>
+    {%- endif -%}
     {%- if cart == empty -%}
       {% render 'drawer-header', title: title, id: 'cart-drawer' %}
       <div class="flex flex-1 flex-col items-center justify-center overflow-y-auto p-6">
         {% render 'cart-empty-state' %}
       </div>
     {%- else -%}
-      {% render 'drawer-header', title: title, subtitle: count_label, id: 'cart-drawer' %}
-      <div class="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto p-6">
-        {% render 'free-shipping-bar' %}
-        {% render 'cart-drawer__line-items' %}
-        {% render 'helper-text', text: '', type: 'error', id: 'cart-drawer-error', attributes: 'hidden' %}
-      </div>
+      {% render 'drawer-header', title: title, count: item_count, id: 'cart-drawer' %}
+      <cart-items class="flex min-h-0 flex-1 flex-col overflow-y-auto">
+        <form action="{{ routes.cart_url }}" id="cart-drawer-form" method="post" class="flex flex-col">
+          {%- if gift_present -%}
+            {%- assign gift_name = third_oil.title | downcase -%}
+            <div class="flex flex-col gap-2 px-6 py-4">
+              <p class="flex items-center gap-2.5 bg-surface-alt px-4 py-3 text-body-sm text-text">
+                <span class="size-3.5 shrink-0 [&_*]:[vector-effect:non-scaling-stroke] [&>svg]:size-full" aria-hidden="true">{{ 'icon__check.svg' | inline_asset_content }}</span>
+                <span>{{- 'sections.cart.gift_added' | t: product: gift_name -}}</span>
+              </p>
+              <ul class="flex flex-col" role="list">
+                {%- for item in cart.items -%}
+                  {%- if item.variant.id == gift_variant.id -%}
+                    {% render 'line-item', item: item, layout: 'drawer', gift: true, id_prefix: 'CartDrawer-Item' %}
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+
+          <ul class="flex flex-col gap-1" role="list">
+            {%- for item in cart.items -%}
+              {%- assign marker = ',' | append: item.product.id | append: ',' -%}
+              {%- unless mini_ids contains marker -%}
+                {% render 'line-item', item: item, layout: 'drawer', id_prefix: 'CartDrawer-Item' %}
+              {%- endunless -%}
+            {%- endfor -%}
+          </ul>
+
+          {%- if oil_count == 1 -%}
+            {%- assign offer_oils = first_oil.metafields.custom.free_mini_pairs.value -%}
+            {%- if offer_oils.size > 0 -%}
+              <div class="flex flex-col gap-2 px-6 py-4">
+                <p class="flex items-center gap-2.5 bg-accent px-4 py-3 text-body-sm text-text-inverse">
+                  <span class="size-3.5 shrink-0 [&_*]:[vector-effect:non-scaling-stroke] [&>svg]:size-full" aria-hidden="true">{{ 'icon__gift.svg' | inline_asset_content }}</span>
+                  <span>{{- 'sections.cart.mini_offer' | t -}}</span>
+                </p>
+                <ul class="flex flex-col gap-2" role="list">
+                  {%- for offer in offer_oils -%}
+                    {%- liquid
+                      assign offer_variant = offer.selected_or_first_available_variant
+                      assign offer_size = offer.metafields.custom.size.value
+                      assign offer_image = offer.metafields.custom.solo_image.value | default: offer.featured_media
+                      assign offer_third = nil
+                      for pair in offer.metafields.custom.free_mini_pairs.value
+                        if pair.id != first_oil.id
+                          assign offer_third = pair
+                        endif
+                      endfor
+                      assign third_name = offer_third.title | downcase
+                      assign add_label = 'sections.cart.add_product' | t: product: offer.title
+                      assign add_attrs = 'data-cart-add="' | append: offer_variant.id | append: '"'
+                    -%}
+                    <li class="flex items-center gap-4 bg-surface pr-6">
+                      <a href="{{ offer.url }}" class="h-27.5 w-22.5 shrink-0 bg-surface-alt" tabindex="-1" aria-hidden="true">
+                        {% render 'media', media: offer_image, ratio: 'fill', sizes: '90px', class: 'size-full' %}
+                      </a>
+                      <div class="flex min-w-0 flex-1 flex-col gap-3 text-label-base text-text">
+                        <p class="flex flex-wrap items-center gap-2">
+                          <a href="{{ offer.url }}" class="hover:underline">{{ offer.title | escape }}</a>
+                          {%- if offer_size != blank -%}
+                            <span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
+                            <span>{{ offer_size | escape }}</span>
+                          {%- endif -%}
+                        </p>
+                        {%- if offer_third -%}
+                          <p>{{ 'sections.cart.mini_offer_free' | t: product: third_name }}</p>
+                        {%- endif -%}
+                      </div>
+                      <div class="flex shrink-0 items-center gap-4">
+                        {% render 'price', price: offer_variant.price, size: 'sm' %}
+                        {%- liquid
+                          assign add_disabled = false
+                          unless offer_variant.available
+                            assign add_disabled = true
+                          endunless
+                        -%}
+                        {% render 'icon-button', icon: 'icon__plus.svg', label: add_label, style: 'primary', size: 'sm', disabled: add_disabled, attributes: add_attrs %}
+                      </div>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+        </form>
+        {% render 'helper-text', text: '', type: 'error', id: 'cart-drawer-error', attributes: 'hidden', class: 'px-6 pb-4' %}
+      </cart-items>
       <div class="border-t border-border bg-background p-6">
-        {% render 'cart-summary', form_id: 'cart-drawer-form', id: 'CartDrawer' %}
+        {% render 'cart-summary', form_id: 'cart-drawer-form', id: 'CartDrawer', show_discount_code: false, show_tax_note: false, show_payment_icons: false %}
       </div>
     {%- endif -%}
   </div>
 {%- endcapture -%}
-{% render 'side-drawer', id: 'cart-drawer', title: title, size: 'sm', content: content %}
+{% render 'side-drawer', id: 'cart-drawer', title: title, width_class: 'max-w-160', content: content %}

@@ -1,0 +1,41 @@
+{
+  "snippet": "hero",
+  "figma": "Sections / Hero, Type=Full-bleed (252:14500)",
+  "matrix": {
+    "type": [
+      "full-bleed"
+    ]
+  },
+  "params": {
+    "heading": "High-performance oils rooted in Ayurveda, made to support healthier looking skin and hair.",
+    "button_label": "Explore the essentials",
+    "button_url": "#",
+    "reviews": [
+      {
+        "settings": {
+          "quote": "Lorem ipsum dolor sit amet",
+          "name": "Kim"
+        }
+      },
+      {
+        "settings": {
+          "quote": "Obsessed with this hair oil",
+          "name": "Jake"
+        }
+      },
+      {
+        "settings": {
+          "quote": "Lorem ipsum dolor sit amet",
+          "name": "Jimmy"
+        }
+      },
+      {
+        "settings": {
+          "quote": "Lorem ipsum dolor sit amet",
+          "name": "July"
+        }
+      }
+    ]
+  },
+  "extras": []
+}

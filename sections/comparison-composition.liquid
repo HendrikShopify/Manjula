@@ -1,0 +1,112 @@
+{%- comment -%}
+  Figma: Sections / Comparison composition (Templates FINAL PDP / Body oil "Differentiator" 2526:26071, mobile 2526:26082)
+  Same frame as Comparison texture and Comparison price: on the breakout grid, the photo bleeds left to the end of column 4 (desktop only), content on columns 5 to 11, then a display
+  heading, small photo and text. Below, two columns (Typical, Manjula). Each has a title, a sub line and a chart:
+  a Composition bar next to a list of Check rows hanging off an xl Bracket.
+  Typical: excluded rows at the top (dimmed to 60%), a summary row at the bottom. Manjula: included rows at the top,
+  minor rows at the bottom. Rows are one per line in textarea settings, so the client can edit them as lists.
+{%- endcomment -%}
+{%- liquid
+  assign left_top = section.settings.left_top | newline_to_br | split: '<br />'
+  assign left_bottom = section.settings.left_bottom | newline_to_br | split: '<br />'
+  assign right_top = section.settings.right_top | newline_to_br | split: '<br />'
+  assign right_bottom = section.settings.right_bottom | newline_to_br | split: '<br />'
+-%}
+<div class="comparison-composition section-breakout bg-background py-section-md">
+  <div class="relative max-lg:hidden" data-bleed="left" style="--start: 1; --span: 4;">
+    {% render 'media', media: section.settings.media, ratio: 'fill', sizes: '485px', class: 'absolute! inset-0 size-full' %}
+  </div>
+
+  <div class="flex flex-col gap-10 lg:gap-20" style="--start: 5; --span: 7;">
+    <div class="flex flex-col gap-6 text-text lg:max-w-117.5 lg:gap-10">
+      {%- if section.settings.image != blank -%}
+        {% render 'media', media: section.settings.image, ratio: 'fill', sizes: '120px', class: 'h-42.25 w-30 lg:order-2' %}
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="text-heading-2 lg:order-1 lg:text-display-2">{{ section.settings.heading | newline_to_br }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p class="text-body-sm lg:order-3 lg:max-w-80">{{ section.settings.text }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="grid w-full grid-cols-2 gap-3 lg:max-w-197 lg:gap-6">
+      {%- for side in (1..2) -%}
+        {%- liquid
+          if side == 1
+            assign col_title = section.settings.left_title
+            assign col_sub = section.settings.left_sub
+            assign share = section.settings.left_share
+            assign top_rows = left_top
+            assign bottom_rows = left_bottom
+            assign top_type = 'excluded'
+            assign bottom_type = 'summary'
+            assign bar_type = 'typical'
+            assign bracket_strength = 'strong'
+          else
+            assign col_title = section.settings.right_title
+            assign col_sub = section.settings.right_sub
+            assign share = section.settings.right_share
+            assign top_rows = right_top
+            assign bottom_rows = right_bottom
+            assign top_type = 'included'
+            assign bottom_type = 'minor'
+            assign bar_type = 'manjula'
+            assign bracket_strength = 'solid'
+          endif
+        -%}
+        <div class="flex min-w-0 flex-col gap-6">
+          <div class="flex flex-col gap-3 text-text lg:gap-5">
+            <h3 class="text-heading-4 lg:text-heading-2">{{ col_title }}</h3>
+            {%- if col_sub != blank -%}<p class="text-body-sm">{{ col_sub }}</p>{%- endif -%}
+          </div>
+          <div class="flex h-104 gap-2 lg:h-124">
+            {% render 'composition-bar', share: share, type: bar_type, class: 'h-full w-4 lg:w-10' %}
+            <div class="relative flex min-w-0 flex-1 flex-col justify-between py-6">
+              {% render 'bracket', side: 'left', size: 'xl', strength: bracket_strength, class: 'max-w-full' %}
+              <ul class="flex flex-col {% if top_type == 'excluded' %}gap-6 opacity-60{% else %}gap-6 lg:gap-8{% endif %}" role="list">
+                {%- for row in top_rows -%}
+                  {%- assign row_label = row | strip -%}
+                  {%- if row_label != blank %}{% render 'check-row', label: row_label, type: top_type %}{% endif -%}
+                {%- endfor -%}
+              </ul>
+              <ul class="flex flex-col gap-6" role="list">
+                {%- for row in bottom_rows -%}
+                  {%- assign row_label = row | strip -%}
+                  {%- if row_label != blank %}{% render 'check-row', label: row_label, type: bottom_type %}{% endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Comparison composition",
+  "tag": "section",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    { "type": "image_picker", "id": "media", "label": "Large photo", "info": "Desktop only, runs to the left edge" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "The base isn't filler.\nIt's the formula." },
+    { "type": "image_picker", "id": "image", "label": "Small photo" },
+    { "type": "textarea", "id": "text", "label": "Text" },
+    { "type": "header", "content": "Left column" },
+    { "type": "text", "id": "left_title", "label": "Title", "default": "Typical body oils" },
+    { "type": "text", "id": "left_sub", "label": "Sub line" },
+    { "type": "range", "id": "left_share", "label": "Plant oil share", "min": 1, "max": 100, "step": 1, "unit": "%", "default": 7 },
+    { "type": "textarea", "id": "left_top", "label": "Left out (crossed)", "info": "One per line" },
+    { "type": "textarea", "id": "left_bottom", "label": "Bottom line", "info": "One per line, e.g. Plant oils last" },
+    { "type": "header", "content": "Right column" },
+    { "type": "text", "id": "right_title", "label": "Title", "default": "MANJULA" },
+    { "type": "text", "id": "right_sub", "label": "Sub line" },
+    { "type": "range", "id": "right_share", "label": "Plant oil share", "min": 1, "max": 100, "step": 1, "unit": "%", "default": 76 },
+    { "type": "textarea", "id": "right_top", "label": "Included (checked)", "info": "One per line" },
+    { "type": "textarea", "id": "right_bottom", "label": "Minor", "info": "One per line" }
+  ],
+  "presets": [{ "name": "Comparison composition" }]
+}
+{% endschema %}

@@ -1,10 +1,172 @@
+{%- comment -%}
+  Figma: Sections / Header {Logo center}, the only header layout (Hendrik, 18 Nov: no layout parameter, markup inline, no snippet).
+  Announcement bar not built yet: it needs merchant text, so it waits for settings.
+  Bar: 52px on desktop, 56px on mobile. Desktop: nav left (items 40px apart), wordmark centred, localization, Account and Cart
+  as 13px caps text right. Mobile: menu button and wordmark left, Account and Cart right. No search, no wishlist.
+  Tone (Figma: Tone): default, or inverse on the homepage ("Transparent over the homepage hero") and on the templates in
+  "Also transparent on templates". Inverse: the header lies over the first section (absolute, transparent) and every text,
+  caret, icon and the wordmark use color/text-on-media. The bar stays transparent while a dropdown is open (Hendrik, 15 Nov).
+  The dropdown panels, the mobile menu and the localization menus inside the bar get the normal text colours back through --header-text
+  and --header-text-muted, read on the header before the bar swaps them.
+  Home intro (desktop): until the page scrolls past 80px the bar sits under the big wordmark and its own logo is hidden;
+  hero-intro.js then plays the wordmark into the logo (see the Home intro note below). The `intro` class on <html> only
+  holds this start state until the script has measured it.
+  Menu: linklists['header-2026'] (new menu, so the live store's menus stay untouched until launch), falling back to main-menu.
+  Top-level links with children open a Dropdown panel (Type=Image) under their nav item, its list text lined up with the
+  item. Hovering any nav item dims the others to 30%, as does an open dropdown. header-nav.js hooks: data-nav-item,
+  data-nav-link (hovering a plain link closes an open dropdown at once), data-nav-toggle, data-nav-panel, data-nav-panel-inner.
+  No backdrop (Manjula: Home / Desktop / Menu open has none); header-nav.js closes the dropdown on any pointerdown outside it.
+  Utility items (localization, Account, Cart, data-header-utility) dim to 30% while another one is hovered. The hover
+  dimming only runs on devices that hover ([@media(hover:hover)]): on touch, not-hover would also dim the tapped item.
+  Hide on scroll down, show on scroll up (Hendrik, 18 Nov): the section wrapper is sticky (schema class, pointer-events-none
+  so its empty box never blocks clicks). Inverse keeps the header absolute inside it, so the wrapper is 0px high and the
+  hero still runs under the bar. sticky-header.js sets data-hidden on [data-header] while scrolling down (the header slides
+  up out of view) and removes it on any scroll up; data-scrolled (off the top) gives the bar the glass background (tint and blur, like the video buttons) and, when
+  inverse, the normal text colours back.
+  Home intro: the big wordmark (<hero-intro>, hero-intro.js) sits in the header, above the bar, so it is never under the
+  bar's background. It spans the page container (max-w-page minus the page margins), like the bar's content; the bar's
+  start offset is that width times the wordmark's ratio (19/160, from logo.svg) plus 20px. It shows while <html> has the `intro` class. The wordmark and the bar text stay light while the intro plays and turn dark together with the bar's background, once it is done (Hendrik, 23 Nov).
+  Account follows shop.customer_accounts_enabled; the localization selectors render nothing for a single language or country.
+{%- endcomment -%}
 <script src="{{ 'header-nav.js' | asset_url }}" type="module"></script>
 <script src="{{ 'mobile-menu.js' | asset_url }}" type="module"></script>
+<script src="{{ 'sticky-header.js' | asset_url }}" type="module"></script>
 
-{% render 'header', layout: 'logo-left' %}
+
+{%- liquid
+  assign tone = 'default'
+  if section.settings.inverse_on_home and template.name == 'index'
+    assign tone = 'inverse'
+  endif
+  assign template_key = template.name
+  if template.suffix != blank
+    assign template_key = template.name | append: '.' | append: template.suffix
+  endif
+  assign inverse_templates = section.settings.inverse_templates | split: ','
+  for t in inverse_templates
+    assign t_key = t | strip
+    if t_key == template_key
+      assign tone = 'inverse'
+    endif
+  endfor
+
+  assign menu = linklists['header-2026']
+  if menu == blank
+    assign menu = linklists['main-menu']
+  endif
+
+  assign header_position = 'relative'
+  assign header_tone = ''
+  # Glass bar: the blur of the buttons over videos on a light Surface tint, with a Border line at the bottom. It fades in
+  # once the page scrolls (data-scrolled) and is clear at the top. The blur sits on a ::before layer, not on the bar,
+  # so the bar does not become the containing block of the fixed mobile menu panel inside it.
+  assign glass = 'before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:border-b before:border-border/40 before:bg-surface/80 before:backdrop-blur-xl before:transition-opacity before:duration-300 before:opacity-0 group-data-scrolled/header:before:opacity-100!'
+  assign bar_tone = glass
+  if tone == 'inverse'
+    assign header_position = 'absolute inset-x-0 top-0'
+    assign header_tone = '[--header-text:var(--color-text)] [--header-text-muted:var(--color-text-muted)]'
+    assign bar_tone = glass | append: ' group-data-scrolled/header:[--color-text:var(--header-text)] group-data-scrolled/header:[--color-text-muted:var(--header-text-muted)] [--color-text:var(--color-text-on-media)] [--color-text-muted:var(--color-text-on-media)] [&_[data-nav-panel],&_[data-mobile-menu-panel],&_.localization-menu]:[--color-text:var(--header-text)] [&_[data-nav-panel],&_[data-mobile-menu-panel],&_.localization-menu]:[--color-text-muted:var(--header-text-muted)]'
+  endif
+
+  # An open selector (its trigger has aria-expanded=true) never dims, so its dropdown stays fully visible
+  assign utility_fade = 'flex transition-opacity duration-150 [@media(hover:hover)]:group-has-[[data-header-utility]:hover]/utility:not-hover:opacity-30 has-[[aria-expanded=true]]:opacity-100!'
+-%}
+{%- capture language_selector -%}{% render 'localization-selector', style: 'ghost', id: 'header-localization' %}{%- endcapture -%}
+{%- capture country_selector -%}{% render 'localization-selector', field: 'country', style: 'ghost', id: 'header-country', trigger_style: 'symbol' %}{%- endcapture -%}
+
+<sticky-header class="contents">
+<header class="header group/header pointer-events-auto transition-transform duration-300 data-hidden:-translate-y-full {{ header_position }} {{ header_tone }} z-20" data-tone="{{ tone }}" data-header>
+  <div class="relative z-10 text-text transition-[color,--color-text,--color-text-muted] duration-300 {{ bar_tone }} lg:in-[.intro]:translate-y-[calc(1.25rem+(min(100vw,var(--container-page))-2*var(--page-margin))*19/160)]" data-header-bar>
+    <div class="mx-auto flex h-14 max-w-page items-center gap-2 px-page-margin lg:grid lg:h-13 lg:grid-cols-[1fr_auto_1fr] lg:gap-6">
+      <div class="flex items-center lg:self-stretch">
+        {% render 'mobile-menu', menu: menu %}
+        <header-nav class="max-lg:hidden lg:self-stretch" data-desktop-query="(min-width: 1024px)">
+          <nav class="h-full" aria-label="Main">
+            <ul class="group/nav flex h-full items-center gap-1 lg:gap-10" role="list">
+              {%- for link in menu.links -%}
+                {%- liquid
+                  assign is_current = false
+                  if link.current or link.child_current
+                    assign is_current = true
+                  endif
+                  assign panel_id = 'NavPanel-' | append: section.id | append: '-' | append: forloop.index
+                -%}
+                {%- if link.links != blank -%}
+                  <li class="group relative flex h-full items-center transition-opacity duration-150 group-has-data-open/nav:not-data-open:opacity-30 [@media(hover:hover)]:group-has-[[data-nav-item]:hover,[data-nav-link]:hover]/nav:not-hover:opacity-30" data-nav-item>
+                    {%- if link.url != blank and link.url != '#' -%}
+                      {% render 'nav-item', label: link.title, href: link.url, type: 'dropdown', current: is_current, controls: panel_id %}
+                    {%- else -%}
+                      {% render 'nav-item', label: link.title, type: 'dropdown', current: is_current, controls: panel_id %}
+                    {%- endif -%}
+                    <div id="{{ panel_id }}" class="absolute -left-6 top-full z-30 hidden group-data-[open]:!block" data-nav-panel>
+                      <div data-nav-panel-inner>
+                        {% render 'dropdown-panel', link: link %}
+                      </div>
+                    </div>
+                  </li>
+                {%- else -%}
+                  <li class="flex h-full items-center transition-opacity duration-150 group-has-data-open/nav:opacity-30 [@media(hover:hover)]:group-has-[[data-nav-item]:hover,[data-nav-link]:hover]/nav:not-hover:opacity-30" data-nav-link>
+                    {% render 'nav-item', label: link.title, href: link.url, type: 'link', current: is_current %}
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </nav>
+        </header-nav>
+      </div>
+      <div class="flex lg:in-[.intro]:opacity-0" data-header-logo>{% render 'header__logo' %}</div>
+      <div class="group/utility ml-auto flex items-center gap-3 lg:ml-0 lg:justify-end lg:gap-10">
+        {%- if language_selector != blank or country_selector != blank -%}
+          <div class="flex items-center gap-10 max-lg:hidden">
+            {%- if language_selector != blank -%}<div class="{{ utility_fade }}" data-header-utility>{{ language_selector }}</div>{%- endif -%}
+            {%- if country_selector != blank -%}<div class="{{ utility_fade }}" data-header-utility>{{ country_selector }}</div>{%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- if shop.customer_accounts_enabled -%}
+          {%- liquid
+            if customer
+              assign account_url = routes.account_url
+            else
+              assign account_url = routes.account_login_url
+            endif
+            assign account_label = 'customer.account_fallback' | t
+          -%}
+          <div class="{{ utility_fade }}" data-header-utility>
+            {% render 'icon-button', type: 'text', href: account_url, label: account_label, size: 'md', attributes: 'rel="nofollow"' %}
+          </div>
+        {%- endif -%}
+        <div id="cart-icon-bubble" class="{{ utility_fade }}" data-header-utility>{% render 'cart-icon-bubble', type: 'text' %}</div>
+      </div>
+    </div>
+  </div>
+  {%- if template.name == 'index' and tone == 'inverse' -%}
+    <script src="{{ 'hero-intro.js' | asset_url }}" defer="defer"></script>
+    <hero-intro class="pointer-events-none absolute inset-x-0 top-5 z-30 mx-auto hidden max-w-page px-page-margin text-text-on-media transition-colors duration-300 in-data-[intro=done]:text-text lg:in-[.intro]:block [&_svg]:block [&_svg]:h-auto [&_svg]:w-full" aria-hidden="true" data-hero-wordmark>
+      {{- 'logo.svg' | inline_asset_content -}}
+    </hero-intro>
+  {%- endif -%}
+</header>
+</sticky-header>
 
 {% schema %}
 {
-  "name": "Header"
+  "name": "Header",
+  "class": "sticky top-0 z-20 pointer-events-none",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "inverse_on_home",
+      "label": "Transparent over the homepage hero",
+      "info": "White text over the hero. Keep the hero as the first homepage section.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "inverse_templates",
+      "label": "Also transparent on templates",
+      "info": "Comma separated template names whose first section is a full-bleed hero, e.g. page.about",
+      "default": "page.about, page.subscription"
+    }
+  ]
 }
 {% endschema %}

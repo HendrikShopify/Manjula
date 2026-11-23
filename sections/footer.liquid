@@ -1,1 +1,132 @@
-{% render 'footer' %}
+{%- comment -%}
+  Footer (Layout=Standard)
+  Manjula: image band (ratio 12:5 from lg, 600px at 1440; the photo 13:12 below lg, 390x360 in Figma) with the newsletter card (Newsletter signup Layout=Card) over its
+  bottom-left 9 columns from lg and stacked under it on mobile; the full-width wordmark; then the menu columns plus
+  Follow us, each in a Light sm Bracket (accordions with a caps title below lg, Follow us stays open).
+  Settings: image (band photo, footer-band-sofa.jpg in the store Files; empty renders the Media placeholder), newsletter_title and newsletter_text (blank falls
+  back to the newsletter.* locale strings). No bottom bar (removed 19 Nov: no copyright, policies, localization or
+  payment icons in the footer).
+  Menus: the top-level links of the `footer-2026` menu (new menu, the live `footer` stays untouched) are the column headings, their child links the column links; a menu without child links becomes one column titled with the menu name; without a `footer-2026` menu the main menu is used. Texts: locale keys `footer.*`.
+  Reveal (lg and up only, none on mobile): the wordmark and menu columns (footer-reveal) are sticky to the bottom of the screen, under the image band
+  (z-10), so the band and newsletter card scroll up off them while they stay put. Nothing is animated. footer-reveal
+  (global.js) only sets --reveal-bottom: 0, or minus the overflow when the part is taller than the screen, so its top
+  stays in view and all of it can be read. While it is revealed, its content ([data-footer-reveal-inner]) moves up from
+  30% lower to its place (scroll-linked, small parallax); overflow-hidden clips it. An Ink overlay
+  ([data-footer-reveal-overlay]) fades from 15% to nothing at the same time (a subtle shade on the part still covered).
+  No parallax: the photos stay still (Hendrik, 23 Nov; the <paralax-img> effect was removed site wide).
+  Show newsletter and Show social are not parameters; a store removes what it does not need from this file.
+{%- endcomment -%}
+{%- liquid
+  assign menu = linklists['footer-2026']
+  if menu == blank
+    assign menu = linklists['main-menu']
+  endif
+  assign nested = false
+  for column in menu.links
+    if column.links.size > 0
+      assign nested = true
+    endif
+  endfor
+  assign menu_label = 'footer.menu_label' | t
+  assign follow_label = 'footer.follow_us' | t
+-%}
+<footer class="footer bg-background text-text">
+  <div class="relative z-10 flex flex-col bg-background lg:block lg:aspect-[12/5]">
+    <div class="relative aspect-[13/12] overflow-hidden bg-surface-alt lg:absolute! lg:inset-0 lg:aspect-auto lg:size-full">
+      {% render 'media', media: section.settings.image, ratio: 'fill', sizes: '100vw', class: 'absolute! inset-0 size-full' %}
+    </div>
+    <div class="relative mx-auto h-full w-full max-w-page lg:grid lg:grid-cols-12 lg:items-end lg:gap-x-gutter lg:px-page-margin lg:pb-5">
+      <div class="bg-background px-page-margin pb-10 pt-8 lg:col-span-9 lg:h-94 lg:p-13">
+        {% render 'newsletter-signup',
+          id: 'footer-newsletter',
+          layout: 'card',
+          input_style: 'underline',
+          title: section.settings.newsletter_title,
+          description: section.settings.newsletter_text,
+          show_fine_print: false,
+          class: 'h-full'
+        %}
+      </div>
+    </div>
+  </div>
+
+  <footer-reveal class="block bg-background lg:sticky lg:bottom-(--reveal-bottom) lg:z-0 lg:overflow-hidden">
+    <div class="pointer-events-none absolute inset-0 z-10 hidden bg-text opacity-0 lg:block" aria-hidden="true" data-footer-reveal-overlay></div>
+    <div data-footer-reveal-inner>
+      <div class="mx-auto flex w-full max-w-page flex-col gap-10 px-page-margin pb-10 pt-5 lg:gap-18 lg:pb-20">
+        <a href="{{ routes.root_url }}" class="block text-text [&_svg]:block [&_svg]:h-auto [&_svg]:w-full" aria-label="{{ shop.name | escape }}">
+          {{- 'logo.svg' | inline_asset_content -}}
+        </a>
+
+        <nav aria-label="{{ menu_label }}">
+          <div class="flex items-start justify-between max-lg:hidden">
+            {%- for column in menu.links -%}
+              {%- if nested and column.links.size == 0 -%}{%- continue -%}{%- endif -%}
+              {%- liquid
+                if nested
+                  assign column_title = column.title | escape
+                  assign column_links = column.links
+                else
+                  assign column_title = menu.title | escape
+                  assign column_links = menu.links
+                endif
+              -%}
+              <div class="relative flex w-50 flex-col gap-10 p-3">
+                {% render 'bracket', size: 'sm', strength: 'light' %}
+                {% render 'menu-heading', title: column_title, style: 'caps' %}
+                {% render 'menu-links', links: column_links, size: 'sm', spacing: 'loose' %}
+              </div>
+              {%- unless nested -%}{%- break -%}{%- endunless -%}
+            {%- endfor -%}
+            <div class="relative flex w-50 flex-col gap-10 p-3">
+              {% render 'bracket', size: 'sm', strength: 'light' %}
+              {% render 'menu-heading', title: follow_label, style: 'caps' %}
+              {% render 'social-links', size: 'sm' %}
+            </div>
+          </div>
+          <div class="flex flex-col gap-8 lg:hidden">
+            <div>
+              {%- assign footer_group = 'footer-' | append: section.id -%}
+              {%- for column in menu.links -%}
+                {%- if nested and column.links.size == 0 -%}{%- continue -%}{%- endif -%}
+                {%- liquid
+                  if nested
+                    assign column_title = column.title | escape
+                    assign column_links = column.links
+                  else
+                    assign column_title = menu.title | escape
+                    assign column_links = menu.links
+                  endif
+                -%}
+                {%- capture column_content -%}{% render 'menu-links', links: column_links, size: 'sm', spacing: 'loose' %}{%- endcapture -%}
+                {% render 'accordion-item', title: column_title, icon: 'plus', style: 'caps', content: column_content, name: footer_group %}
+                {%- unless nested -%}{%- break -%}{%- endunless -%}
+              {%- endfor -%}
+            </div>
+            <div class="flex flex-col gap-4">
+              {% render 'menu-heading', title: follow_label, style: 'caps' %}
+              {% render 'social-links', size: 'sm' %}
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </footer-reveal>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image band" },
+    { "type": "text", "id": "newsletter_title", "label": "Newsletter title", "default": "Sign up to our newsletter" },
+    {
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "Newsletter text",
+      "default": "Get Ayurvedic rituals, ingredient stories, and skincare guidance in your inbox. Plus 10% off your first order."
+    }
+  ]
+}
+{% endschema %}

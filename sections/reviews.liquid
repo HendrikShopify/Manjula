@@ -28,36 +28,64 @@
   assign write_attributes = 'data-reviews-write data-drawer-trigger="' | append: form_drawer_id | append: '" aria-controls="' | append: form_drawer_id | append: '" aria-expanded="false"'
 -%}
 
-<product-reviews class="block bg-background py-section-md">
+<product-reviews class="block bg-background py-section-md" id="reviews">
   {% render 'reviews__templates' %}
-  <div class="mx-auto w-full max-w-page px-page-margin">
-    {%- comment -%} Figma: Components Atoms / Rating summary (12-column grid from lg: heading in columns 1 to 8, average + stars lg + Based on + histogram in columns 10 to 12, bottom border; stacked below lg) {%- endcomment -%}
-    <div class="flex flex-col gap-8 border-b border-border pb-12 lg:grid lg:grid-cols-12 lg:items-end lg:gap-x-gutter" data-reviews-summary>
-      <h2 class="min-w-0 text-heading-1 text-text lg:col-span-8">{{ heading }}</h2>
-      <div class="flex w-full flex-col items-start gap-3 lg:col-span-3 lg:col-start-10">
-        <p class="flex items-start gap-1">
-          <span class="text-heading-1 text-text" data-reviews-average>{{ dummy_average }}</span>
-          <span class="text-body-sm text-text-muted">/ 5</span>
-        </p>
-        <div class="inline-flex gap-1" data-reviews-summary-stars role="img" aria-label="{{ 'reviews.stars' | t: rating: dummy_average }}">
-          {%- for i in (1..5) -%}
-            <span class="relative size-6 shrink-0 text-rating-empty [&_svg]:size-full" data-reviews-summary-star>
-              {{- 'icon__star.svg' | inline_asset_content -}}
-              <span class="absolute inset-y-0 left-0 overflow-hidden text-rating" data-reviews-summary-fill style="width: 0%"><span class="block size-6">{{ 'icon__star.svg' | inline_asset_content }}</span></span>
+  {%- comment -%}
+    Figma (Manjula): Reviews 535:15834, PDP / Face oil 2526:26027, mobile 2526:26038. From lg a 12-column grid: Rating summary
+    Header (heading, average / 5 with a star, recommend share) over columns 4 to 10; Sidebar (Summary histogram, Filter, Sort,
+    Write a review) over columns 1 to 3; review cards and pagination over columns 4 to 10. Mobile stacks them.
+  {%- endcomment -%}
+  <div class="mx-auto grid w-full max-w-page grid-cols-1 gap-y-10 px-page-margin lg:grid-cols-12 lg:gap-x-gutter">
+    <div class="flex flex-col gap-6 lg:col-span-7 lg:col-start-4 lg:row-start-1 lg:flex-row lg:items-start lg:gap-15.5" data-reviews-summary>
+      <h2 class="min-w-0 text-heading-1 text-text lg:w-51 lg:shrink-0">{{ heading }}</h2>
+      <div class="flex items-center gap-6">
+        <div class="flex flex-col gap-4.5">
+          <p class="flex items-start gap-1 text-text">
+            <span class="text-display-2" data-reviews-average>{{ dummy_average }}</span>
+            <span class="text-heading-3">/ 5</span>
+            <span class="inline-flex" data-reviews-summary-stars role="img" aria-label="{{ 'reviews.stars' | t: rating: dummy_average }}">
+              <span class="relative size-3.5 shrink-0 text-rating-empty [&_svg]:size-full" data-reviews-summary-star>
+                {{- 'icon__star.svg' | inline_asset_content -}}
+                <span class="absolute inset-y-0 left-0 overflow-hidden text-rating" data-reviews-summary-fill style="width: 0%"><span class="block size-3.5">{{ 'icon__star.svg' | inline_asset_content }}</span></span>
+              </span>
             </span>
-          {%- endfor -%}
+          </p>
+          <p class="text-body-sm text-text opacity-50" data-reviews-based>{{ 'reviews.based_on_other' | t: count: dummy_count }}</p>
         </div>
-        <p class="text-body-sm text-text-muted" data-reviews-based>{{ 'reviews.based_on_other' | t: count: dummy_count }}</p>
-        <div class="mt-4 w-full">{% render 'reviews__histogram', total: dummy_count, counts: dummy_histogram %}</div>
+        {%- if section.settings.recommend_percent != blank -%}
+          <div class="flex flex-col gap-4.5 text-text">
+            <p class="flex items-start gap-1">
+              <span class="text-display-2">{{ section.settings.recommend_percent }}</span>
+              <span class="text-heading-3">%</span>
+            </p>
+            <p class="text-body-sm opacity-50">{{ recommend_label }}</p>
+          </div>
+        {%- endif -%}
       </div>
     </div>
-    {%- comment -%} Figma: Components Atoms / Reviews toolbar (search, filter chips, sort, Write a review; wraps) {%- endcomment -%}
-    <div class="flex flex-wrap items-center gap-3 py-8" data-reviews-toolbar>
-      {% render 'reviews__search' %}
-      {% render 'reviews__filters' %}
-      <div class="contents" data-reviews-sort></div>
-      {% render 'link', label: write_label, size: 'sm', attributes: write_attributes %}
+
+    {%- comment -%} Sidebar: Summary histogram and Reviews toolbar (Filter, Sort, Write a review) {%- endcomment -%}
+    <div class="flex flex-col gap-12 max-lg:-mb-2 lg:col-span-3 lg:col-start-1 lg:row-start-2 lg:self-start lg:pr-10">
+      <div class="flex flex-col gap-3">
+        <p class="text-label-caps text-text">{{ 'reviews.summary' | t }}</p>
+        {% render 'reviews__histogram', total: dummy_count, counts: dummy_histogram %}
+      </div>
+      <div class="flex flex-col gap-6" data-reviews-toolbar>
+        <div class="flex flex-col gap-3">
+          <p class="text-label-caps text-text">{{ 'reviews.filter' | t }}</p>
+          <div class="-mr-page-margin flex gap-1 overflow-x-auto pr-page-margin lg:mr-0 lg:flex-wrap lg:overflow-visible lg:pr-0" data-select-scroll>
+            {% render 'reviews__filters' %}
+          </div>
+        </div>
+        <div class="flex flex-col items-start gap-3">
+          <p class="text-label-caps text-text">{{ 'reviews.sort' | t }}</p>
+          <div class="contents" data-reviews-sort></div>
+        </div>
+        <div>{% render 'link', label: write_label, size: 'sm', attributes: write_attributes %}</div>
+      </div>
     </div>
+
+    <div class="flex min-w-0 flex-col gap-10 lg:col-span-7 lg:col-start-4 lg:row-start-2 lg:pr-15">
     {% render 'reviews__chips' %}
     {%- comment -%} Figma: Components Atoms / Reviews empty state (No reviews, No results, Error) {%- endcomment -%}
     <div class="flex flex-col items-start gap-3 py-10" data-reviews-empty hidden>
@@ -69,9 +97,10 @@
     </div>
     {% render 'reviews__block' %}
     {% render 'reviews__pagination' %}
+    </div>
   </div>
   {%- assign lightbox_label = 'reviews.photo' | t -%}
-  {% render 'media-lightbox', dynamic: true, label: lightbox_label %}
+  {% render 'media-lightbox', dynamic: true, style: 'overlay', label: lightbox_label %}
   {% render 'side-drawer', id: form_drawer_id, title: form_drawer_title %}
   <div data-reviews-form-root hidden></div>
   <script type="application/json" data-reviews-config>
@@ -163,6 +192,12 @@
       "default": "Would recommend this product."
     },
     {
+      "type": "text",
+      "id": "recommend_percent",
+      "label": "Recommend share",
+      "info": "Number shown as a percentage next to the average, e.g. 100. Empty hides it."
+    },
+    {
       "type": "select",
       "id": "name_format",
       "label": "Name format",
@@ -185,19 +220,6 @@
       "id": "form_success_message",
       "label": "Form success message",
       "default": "Thanks for your review. It will appear once it's approved."
-    },
-    {
-      "type": "checkbox",
-      "id": "show_voting",
-      "label": "Show helpful votes",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_downvote",
-      "label": "Show downvote",
-      "info": "When off, only the Yes button is shown.",
-      "default": true
     }
   ],
   "presets": [

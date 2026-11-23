@@ -1,10 +1,33 @@
 {
   "sections": {
+    "faq": {
+      "type": "faq-categories",
+      "blocks": {
+        "shipping": { "type": "category", "settings": { "title": "Shipping and delivery", "questions": ["shipping-where", "shipping-time", "shipping-cost", "shipping-tracking"] } },
+        "subscription": {
+          "type": "category",
+          "settings": {
+            "title": "Subscription",
+            "questions": ["subscription-how", "subscription-often", "subscription-skip", "subscription-charged", "subscription-save", "subscription-discount", "subscription-notice"]
+          }
+        },
+        "product": { "type": "category", "settings": { "title": "Product", "questions": ["product-which-oil", "product-sensitive-skin", "product-how-long", "product-storage"] } }
+      },
+      "block_order": ["shipping", "subscription", "product"],
+      "settings": {
+        "heading": "Questions and answers",
+        "image": "shopify://shop_images/contact-faq-smile.jpg"
+      }
+    },
     "main": {
       "type": "main-contact",
+      "blocks": {
+        "care": { "type": "contact", "settings": { "label": "Customer service", "email": "Care@manjulaessentials.com" } },
+        "info": { "type": "contact", "settings": { "label": "Business partnerships and press:", "email": "Info@manjulaessentials.com" } }
+      },
+      "block_order": ["care", "info"],
+      "settings": { "heading": "Contact us for help" }
     }
   },
-  "order": [
-    "main"
-  ]
+  "order": ["faq", "main"]
 }

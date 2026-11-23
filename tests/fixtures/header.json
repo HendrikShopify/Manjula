@@ -1,0 +1,138 @@
+{
+  "snippet": "header",
+  "figma": "Sections / Header, Layout=Logo center (209:831)",
+  "matrix": {
+    "tone": [
+      "default",
+      "inverse"
+    ]
+  },
+  "params": {
+    "layout": "logo-center",
+    "linklists": {
+      "header-menu": {
+        "links": [
+          {
+            "title": "Shop",
+            "url": "/collections/all",
+            "links": [
+              {
+                "title": "Face oil",
+                "url": "#",
+                "links": []
+              },
+              {
+                "title": "Hair oil",
+                "url": "#",
+                "links": []
+              },
+              {
+                "title": "Body oil",
+                "url": "#",
+                "links": []
+              }
+            ]
+          },
+          {
+            "title": "About",
+            "url": "#",
+            "links": [
+              {
+                "title": "Our story",
+                "url": "#",
+                "links": []
+              }
+            ]
+          }
+        ]
+      },
+      "main-menu": {
+        "links": [
+          {
+            "title": "Shop",
+            "url": "/collections/all",
+            "links": [
+              {
+                "title": "Face oil",
+                "url": "#",
+                "links": []
+              },
+              {
+                "title": "Hair oil",
+                "url": "#",
+                "links": []
+              },
+              {
+                "title": "Body oil",
+                "url": "#",
+                "links": []
+              }
+            ]
+          },
+          {
+            "title": "About",
+            "url": "#",
+            "links": [
+              {
+                "title": "Our story",
+                "url": "#",
+                "links": []
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "routes": {
+      "root_url": "/",
+      "cart_url": "/cart",
+      "account_url": "/account",
+      "account_login_url": "/account/login"
+    },
+    "shop": {
+      "name": "Manjula",
+      "customer_accounts_enabled": true
+    },
+    "cart": {
+      "item_count": 2
+    },
+    "localization": {
+      "country": {
+        "iso_code": "CA",
+        "currency": {
+          "iso_code": "CAD",
+          "symbol": "$"
+        }
+      },
+      "available_countries": [
+        {
+          "iso_code": "CA",
+          "name": "Canada",
+          "currency": {
+            "iso_code": "CAD",
+            "symbol": "$"
+          }
+        },
+        {
+          "iso_code": "US",
+          "name": "United States",
+          "currency": {
+            "iso_code": "USD",
+            "symbol": "$"
+          }
+        }
+      ],
+      "language": {
+        "iso_code": "en"
+      },
+      "available_languages": [
+        {
+          "iso_code": "en",
+          "endonym_name": "English"
+        }
+      ]
+    }
+  },
+  "extras": [],
+  "height": 120
+}

@@ -1,0 +1,115 @@
+{%- comment -%}
+  Figma: Sections / Timeline (2149:37749; Templates FINAL About us 2526:25861, mobile 2526:25871), Timeline row (2149:24791),
+  Timeline card (2460:49)
+  Desktop: label and display/2 title, then Timeline rows across the full width (240px year at 60%, event in caps, dashed
+  rules that fade out to the right from 20%, as Figma's gradient stroke; stacked with -1px). All rows are full strength
+  until the list is hovered; then the hovered row stays full and the others dim to 30% (CSS; the same for keyboard
+  focus). Hovering, focusing or pressing a row makes it Active (aria-pressed). No pointer cursor (Hendrik, 20 Nov).
+  The 300x380 photo frame follows the cursor (GSAP quickTo) but never covers text: it stays right of the widest year
+  and event text (plus a gutter), within the list's right edge and inside the section, and below or right of the label
+  and heading; its centre otherwise follows the cursor between the list's top and bottom. From lg to xl the heading
+  keeps 312px clear on the right (lg:pr-78), so the frame always has room beside it. It shows only while the list is hovered
+  or has keyboard focus (grows in, CSS group-has); on keyboard focus it centres on the focused row's right part.
+  Inside the frame the photos are one stacked column in list order ([data-timeline-strip]); timeline.js moves the
+  column so the active row's photo fills the frame, so a jump from the first to the last row runs past every photo in
+  between, blurred 3px while it moves (strong blur on the change after the Sunset Row retailers section); each photo is
+  zoomed to 105% inside its own slot. Hendrik 20 Nov.
+  Mobile: Timeline cards (250px photo, year, event) on Swiper, like the UGC slider: the first card starts on the page
+  margin and the last stops on it, a swipe moves one card, and one glass Next button over the track (on the right page
+  margin of the screen) moves one card forward and fades out once the visitor is past the first card (data-past-first).
+  Entries are blocks (year, event, image); the first row starts active (Hendrik, 23 Nov: no "Active at start" setting).
+  JS: timeline.js, hooks data-timeline-*.
+{%- endcomment -%}
+{%- liquid
+  assign entries = section.blocks | where: 'type', 'entry'
+  assign active_index = 0
+-%}
+<script src="{{ 'timeline.js' | asset_url }}" defer="defer"></script>
+<timeline-section class="group/timeline timeline relative text-balance mx-auto flex w-full max-w-page flex-col gap-6 bg-background pt-section-sm pb-section-lg text-text lg:px-page-margin lg:pt-section-md">
+  <div class="flex flex-col gap-5 px-page-margin lg:px-0 lg:pr-78 xl:pr-0" data-timeline-heading>
+    {%- if section.settings.label != blank -%}
+      <p class="text-body-sm opacity-60">{{ section.settings.label }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2 class="text-heading-2 lg:text-display-2">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} Desktop: rows and the photo frame {%- endcomment -%}
+  <ol class="group/list flex flex-col max-lg:hidden" role="list" data-timeline-list>
+    {%- for block in entries -%}
+      <li class="-mb-px last:mb-0" {{ block.shopify_attributes }}>
+        <button
+          type="button"
+          class="relative flex w-full items-center py-4 text-left before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-[repeating-linear-gradient(to_right,var(--color-text)_0_1px,transparent_1px_2px)] before:[mask-image:linear-gradient(to_right,black_20%,transparent)] after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-[repeating-linear-gradient(to_right,var(--color-text)_0_1px,transparent_1px_2px)] after:[mask-image:linear-gradient(to_right,black_20%,transparent)] transition-opacity duration-300 group-hover/list:not-hover:opacity-30 group-has-[:focus-visible]/list:not-focus-visible:opacity-30 focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-focus motion-reduce:transition-none"
+          aria-pressed="{% if forloop.index0 == active_index %}true{% else %}false{% endif %}"
+          data-timeline-row="{{ forloop.index0 }}"
+        >
+          <span class="w-60 shrink-0 text-label-xl opacity-60">{{ block.settings.year }}</span>
+          <span class="min-w-0 flex-1 text-label-caps-xl">{{ block.settings.event }}</span>
+        </button>
+      </li>
+    {%- endfor -%}
+  </ol>
+  <div class="pointer-events-none absolute top-0 left-0 z-10 h-95 w-75 max-lg:hidden [@media(hover:none)]:hidden" aria-hidden="true" data-timeline-frame>
+    <div class="relative size-full scale-0 overflow-hidden opacity-0 transition-[scale,opacity] duration-600 ease-out-quint group-has-[[data-timeline-list]:hover]/timeline:scale-100 group-has-[[data-timeline-list]:hover]/timeline:opacity-100 group-has-[[data-timeline-list]_:focus-visible]/timeline:scale-100 group-has-[[data-timeline-list]_:focus-visible]/timeline:opacity-100 motion-reduce:transition-none" data-timeline-frame-inner>
+      <div class="flex flex-col" data-timeline-strip>
+        {%- for block in entries -%}
+          <div class="relative h-95 w-75 shrink-0 overflow-hidden" data-timeline-image="{{ forloop.index0 }}">
+            {% render 'media', media: block.settings.image, ratio: 'fill', sizes: '300px', class: 'absolute! inset-0 size-full scale-105' %}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Mobile: cards {%- endcomment -%}
+  <div class="relative overflow-x-clip lg:hidden">
+    <div class="swiper w-full" data-timeline-track>
+      <ol class="swiper-wrapper flex" role="list">
+      {%- for block in entries -%}
+        <li class="swiper-slide flex w-62.5 shrink-0 flex-col gap-4" data-timeline-slide>
+          {% render 'media', media: block.settings.image, ratio: 'fill', sizes: '250px', class: 'aspect-[250/313] w-full bg-surface-alt' %}
+          <p class="flex flex-col gap-2 text-label-caps-base">
+            <span class="text-text-muted">{{ block.settings.year }}</span>
+            <span>{{ block.settings.event }}</span>
+          </p>
+        </li>
+      {%- endfor -%}
+      </ol>
+    </div>
+    {%- if entries.size > 1 -%}
+      <button
+        type="button"
+        class="absolute top-33.25 right-page-margin z-10 flex size-12 cursor-pointer items-center justify-center border border-background/40 bg-text/30 text-background backdrop-blur-sm transition-[opacity,visibility] duration-300 group-data-past-first/timeline:invisible group-data-past-first/timeline:opacity-0 focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus motion-reduce:transition-none"
+        aria-label="{{ 'sections.timeline.next' | t | escape }}"
+        data-timeline-next
+      >
+        <span class="size-6 [&>svg]:size-full" aria-hidden="true">{{ 'icon__arrow-right.svg' | inline_asset_content }}</span>
+      </button>
+    {%- endif -%}
+  </div>
+</timeline-section>
+
+{% schema %}
+{
+  "name": "Timeline",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "MANJULA’s timeline" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "From tradition to modern routine" }
+  ],
+  "blocks": [
+    {
+      "type": "entry",
+      "name": "Entry",
+      "settings": [
+        { "type": "text", "id": "year", "label": "Year", "default": "2020" },
+        { "type": "text", "id": "event", "label": "Event", "default": "First formula experiments" },
+        { "type": "image_picker", "id": "image", "label": "Photo" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Timeline", "blocks": [{ "type": "entry" }, { "type": "entry" }, { "type": "entry" }] }]
+}
+{% endschema %}

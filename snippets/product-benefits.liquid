@@ -1,0 +1,32 @@
+{%- comment -%}
+  Figma: Components Molecules / Product form / Benefits (inside Product form 206:2430)
+  product the page product; its custom.benefits metafield (list of "Title--Description") gives the rows
+  column  default (160px label: PDP) | compact (120px label: Quick view details, Hendrik 23 Nov)
+  class   placement only
+  Rows of a muted label and the benefit text (body/sm), 8px padding per row, 4px apart. Renders nothing without the metafield.
+  "Smooths frizz--Helps control frizz." becomes the label "Smooths frizz" and the text "Helps control frizz.".
+{%- endcomment -%}
+{%- liquid
+  assign label_class = 'w-40'
+  if column == 'compact'
+    assign label_class = 'w-30'
+  endif
+  assign meta_benefits = product.metafields.custom.benefits.value
+-%}
+{%- if meta_benefits != blank -%}
+  <dl class="product-benefits flex flex-col gap-1 text-body-sm text-text {{ class }}">
+    {%- for item in meta_benefits -%}
+      {%- liquid
+        assign parts = item | split: '--'
+        assign benefit_title = parts | first | strip
+        assign benefit_text = item | remove_first: parts.first | remove_first: '--' | strip
+      -%}
+      {%- if benefit_title != blank -%}
+        <div class="flex items-start gap-3 py-2">
+          <dt class="{{ label_class }} shrink-0 opacity-60">{{ benefit_title | escape }}</dt>
+          <dd class="min-w-0 flex-1">{{ benefit_text | escape }}</dd>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </dl>
+{%- endif -%}

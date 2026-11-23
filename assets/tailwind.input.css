@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../tailwind/tokens.css";
+@import "../tailwind/text-trim.css";
 
 /* Legacy aliases until milestone 4 replaces the component CSS. */
 @theme {
@@ -7,8 +8,42 @@
     --font-secondary: var(--font-heading);
 }
 
+/* Manjula has square corners everywhere (Hendrik, 19 Nov): the Tailwind radius scale is 0. rounded-full (dots) stays. */
+@theme {
+    --radius-xs: 0px;
+    --radius-sm: 0px;
+    --radius-md: 0px;
+    --radius-lg: 0px;
+    --radius-xl: 0px;
+    --radius-2xl: 0px;
+    --radius-3xl: 0px;
+    --radius-4xl: 0px;
+}
 
-@import "../tailwind/components/mobile-menu.css";
+/* Motion for the PDP gallery (Hendrik, 20 Nov): media eases from a slight zoom and blur into focus.
+   blur-3xs is the lighter blur of the header dropdown images (Hendrik, 23 Nov). */
+@theme {
+    --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
+    --blur-2xs: 2px;
+    --blur-3xs: 1px;
+}
+
+/* The text colour tokens are registered as colours, so a change of the variable itself can fade (Hendrik, 23 Nov):
+   the home header switches --color-text when its background comes in, and every item that reads it fades along.
+   The initial values are the token values (text and text-muted). */
+@property --color-text {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #1e1e1e;
+}
+@property --color-text-muted {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #5f5f5f;
+}
+
+
 @import "../tailwind/components/range-slider.css";
 
 
@@ -34,6 +69,11 @@ cart-items[loading] {
 @layer base {
   :root {
     interpolate-size: allow-keywords;
+  }
+
+  /* Keeps the layout from jumping when a drawer or menu locks the scroll and the scrollbar goes away. */
+  html {
+    scrollbar-gutter: stable;
   }
 }
 

@@ -2,17 +2,19 @@
   Figma: Components Molecules / Social links
   size    sm | md                                   (Figma: Size)
   class
-  Row of ghost icon buttons, one per platform with a link in the theme settings (social_*_link). Renders nothing when no link is set.
+  Row of ghost icon buttons, one per platform with a link in the store's brand settings
+  (Settings > Brand > Social links, read as shop.brand.metafields.social_links.<platform>). Renders nothing when no link is set.
+  Order as in Figma: Facebook, Instagram, TikTok, then the rest. Platforms without an icon in assets/ are skipped.
 {%- endcomment -%}
 {%- liquid
   assign size = size | default: 'md'
-  assign platforms = 'instagram,facebook,tiktok,youtube,pinterest,twitter,linkedin' | split: ','
-  assign icons = 'icon__instagram.svg,icon__facebook.svg,icon__tiktok.svg,icon__youtube.svg,icon__pinterest.svg,icon__x-social.svg,icon__linkedin.svg' | split: ','
-  assign labels = 'Instagram,Facebook,TikTok,YouTube,Pinterest,X,LinkedIn' | split: ','
+  assign platforms = 'facebook,instagram,tiktok,youtube,pinterest,twitter,linkedin' | split: ','
+  assign icons = 'icon__facebook.svg,icon__instagram.svg,icon__tiktok.svg,icon__youtube.svg,icon__pinterest.svg,icon__x-social.svg,icon__linkedin.svg' | split: ','
+  assign labels = 'Facebook,Instagram,TikTok,YouTube,Pinterest,X,LinkedIn' | split: ','
+  assign links = shop.brand.metafields.social_links
   assign count = 0
   for platform in platforms
-    assign key = 'social_' | append: platform | append: '_link'
-    if settings[key] != blank
+    if links[platform].value != blank
       assign count = count | plus: 1
     endif
   endfor
@@ -20,12 +22,9 @@
 {%- if count > 0 -%}
   <ul class="social-links flex flex-wrap items-center gap-1 {{ class }}" role="list" data-size="{{ size }}">
     {%- for platform in platforms -%}
-      {%- liquid
-        assign key = 'social_' | append: platform | append: '_link'
-        assign href = settings[key]
-      -%}
+      {%- assign href = links[platform].value -%}
       {%- if href != blank -%}
-        <li>{% render 'icon-button', icon: icons[forloop.index0], label: labels[forloop.index0], style: 'ghost', size: size, href: href, attributes: 'target="_blank" rel="noopener"' %}</li>
+        <li class="flex">{% render 'icon-button', icon: icons[forloop.index0], label: labels[forloop.index0], style: 'ghost', size: size, href: href, attributes: 'target="_blank" rel="noopener"' %}</li>
       {%- endif -%}
     {%- endfor -%}
   </ul>

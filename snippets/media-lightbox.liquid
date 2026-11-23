@@ -3,6 +3,10 @@
   product    Product object (omit with dynamic: true)
   dynamic    true = no server-rendered slides; scripts call setItems([{ type: 'photo'|'video', src, poster }]) then open(index), e.g. reviews
   label      dialog aria-label for dynamic mode
+  style      'page' (default): full-screen white viewer with zoom, as on the product gallery.
+             'overlay' (dynamic only): the media sits on a dimmed overlay like the hero video lightbox; it fades in, scales
+             from 110% to 100% and comes into focus from a blur. Close sits on the media's top right; a click outside the media
+             closes. No zoom. The previous / next pill shows only with more than one item. Used by reviews.
   Full-screen viewer in a native <dialog>. The image fills the window height (4:5, cover, like the gallery) and is centered; close top right;
   one control pill at the bottom with previous, counter and next. No thumbnails, no dots.
   Click the image to zoom to ~2.5x at the click point (Figma: State=Zoomed); while zoomed, drag to pan. Click again to zoom out.
@@ -11,6 +15,10 @@
   JS: media-gallery.js
 {%- endcomment -%}
 {%- liquid
+  assign overlay = false
+  if dynamic and style == 'overlay'
+    assign overlay = true
+  endif
   assign media_list = product.media
   assign count = media_list.size
   if dynamic
@@ -23,7 +31,48 @@
   assign zoom_media = 'cursor-zoom-in [&_img]:transition-transform [&_img]:duration-200 [&_img]:origin-center data-[zoomed=true]:cursor-grab data-[zoomed=true]:touch-none data-[dragging=true]:cursor-grabbing [&[data-zoomed=true]_img]:scale-250 [&[data-zoomed=true]_img]:translate-x-[var(--tx,0px)] [&[data-zoomed=true]_img]:translate-y-[var(--ty,0px)] [&[data-dragging=true]_img]:transition-none'
   assign media_class = zoom_media | append: ' w-full lg:aspect-[4/5] lg:h-full lg:w-auto select-none [&_img]:pointer-events-none'
 -%}
-<media-lightbox class="media-lightbox" data-count="{{ count }}">
+<media-lightbox class="media-lightbox" data-count="{{ count }}"{% if overlay %} data-style="overlay"{% endif %}>
+  {%- if overlay -%}
+  <dialog
+    class="group/lb m-0 size-full max-h-none max-w-none overflow-hidden bg-overlay/30 p-0 text-text-on-media opacity-0 transition-[opacity,display,overlay] duration-300 ease-out-quint transition-discrete backdrop:bg-transparent open:opacity-100 starting:open:opacity-0 motion-reduce:transition-none"
+    aria-label="{{ dialog_label }}"
+    data-scroll-lock="false"
+    data-zoomed="false"
+  >
+    <div class="relative flex size-full flex-col">
+      <div class="swiper size-full overflow-hidden" data-lightbox-track>
+        <div class="swiper-wrapper flex h-full"></div>
+      </div>
+      <div class="absolute bottom-6 left-1/2 z-[2] flex -translate-x-1/2 items-center gap-2 bg-background p-2 text-text" data-lightbox-controls hidden>
+        {% render 'icon-button', icon: 'icon__chevron-left.svg', label: prev_label, style: 'ghost', size: 'md', attributes: 'data-lightbox-prev' %}
+        <span class="px-1 text-label-sm text-text" aria-live="polite"><span data-lightbox-current>1</span> / <span data-lightbox-total>0</span></span>
+        {% render 'icon-button', icon: 'icon__chevron-right.svg', label: next_label, style: 'ghost', size: 'md', attributes: 'data-lightbox-next' %}
+      </div>
+    </div>
+  </dialog>
+  {%- capture overlay_close -%}
+    <button type="button" class="absolute top-2 right-2 z-[1] flex size-10 cursor-pointer items-center justify-center text-text-on-media focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus [&>svg]:size-5" aria-label="{{ close_label | escape }}" data-lightbox-close>
+      {{- 'icon__close.svg' | inline_asset_content -}}
+    </button>
+  {%- endcapture -%}
+  {%- assign overlay_media = 'relative max-w-full origin-center scale-110 blur-md transition-[scale,filter] duration-300 ease-out-quint group-open/lb:scale-100 group-open/lb:blur-none starting:group-open/lb:scale-110 starting:group-open/lb:blur-md motion-reduce:transition-none' -%}
+  <template data-lightbox-photo>
+    <div class="swiper-slide flex size-full shrink-0 items-center justify-center lg:px-page-margin" data-lightbox-slide>
+      <div class="{{ overlay_media }}" data-lightbox-media>
+        <img class="block max-h-[80dvh] w-auto max-w-full object-contain lg:max-w-[80vw]" width="2048" height="2048" alt="" data-lightbox-photo-img>
+        {{ overlay_close }}
+      </div>
+    </div>
+  </template>
+  <template data-lightbox-video>
+    <div class="swiper-slide flex size-full shrink-0 items-center justify-center lg:px-page-margin" data-lightbox-slide>
+      <div class="{{ overlay_media }} w-full lg:w-auto" data-lightbox-media>
+        <video class="block max-h-[80dvh] w-full object-contain lg:w-auto lg:max-w-[80vw]" controls playsinline preload="metadata" data-lightbox-video></video>
+        {{ overlay_close }}
+      </div>
+    </div>
+  </template>
+  {%- else -%}
   <dialog
     class="group/lb fixed inset-0 m-0 h-dvh max-h-none w-screen max-w-none overflow-hidden bg-background p-0 text-text backdrop:bg-transparent"
     aria-label="{{ dialog_label }}"
@@ -67,5 +116,6 @@
         <div class="w-full bg-surface-alt lg:aspect-[4/5] lg:h-full lg:w-auto"><video class="size-full object-contain" controls playsinline preload="metadata" data-lightbox-video></video></div>
       </div>
     </template>
+  {%- endif -%}
   {%- endif -%}
 </media-lightbox>

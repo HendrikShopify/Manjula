@@ -174,13 +174,16 @@ if (!customElements.get('bundle-builder')) {
 
         const config = fetchConfig('javascript');
         config.headers['X-Requested-With'] = 'XMLHttpRequest';
+        const cartRequest = typeof CartGift === 'undefined'
+          ? { url: routes.cart_add_url, body: { items } }
+          : CartGift.addRequest(items);
         config.body = JSON.stringify({
-          items,
+          ...cartRequest.body,
           sections: ['cart-drawer', 'cart-icon-bubble', 'main-cart'],
           sections_url: window.location.pathname,
         });
 
-        fetch(routes.cart_add_url, config)
+        fetch(cartRequest.url, config)
           .then((res) => res.json())
           .then((data) => {
             if (data.status) {

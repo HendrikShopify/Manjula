@@ -1,0 +1,39 @@
+{%- comment -%}
+  Figma: Components Molecules / Bundle item (2142:22600)
+  Item inside a bundle on the Bundle Product form: 82x100 packshot on a subtle fill, name · size, benefits at 60%,
+  and a View details link, on Surface. View details opens the Quick view drawer (data-quick-view-trigger, quick-view.js);
+  without JS it is a plain link to the product.
+  product      product object; gives the image, the fallback name and the link
+  name         optional name override, e.g. Face oil
+  size_label   e.g. 10ml
+  benefits     e.g. Brightens, Calms, Hydrates
+  class, attributes   placement and JS hooks
+{%- endcomment -%}
+{%- liquid
+  assign item_name = name | default: product.title
+  assign view_label = 'products.product.bundle.view_details' | t
+-%}
+<div class="bundle-item flex h-25 items-center bg-surface text-text {{ class }}"{% if attributes %} {{ attributes }}{% endif %}>
+  <div class="h-25 w-20.5 shrink-0 bg-text/3">
+    {%- if product.featured_image -%}
+      {{ product.featured_image | image_url: width: 164 | image_tag: alt: '', class: 'size-full object-cover', loading: 'lazy', sizes: '82px' }}
+    {%- endif -%}
+  </div>
+  <div class="flex min-w-0 flex-1 items-center justify-between gap-3 px-3 py-6">
+    <div class="flex min-w-0 flex-col gap-3">
+      <p class="flex items-center gap-1 text-label-base">
+        {{- item_name -}}
+        {%- if size_label != blank -%}
+          <span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span>{{ size_label }}
+        {%- endif -%}
+      </p>
+      {%- if benefits != blank -%}
+        <p class="text-body-xs opacity-60">{{ benefits }}</p>
+      {%- endif -%}
+    </div>
+    {%- if product.url -%}
+      {%- capture view_attributes %}aria-haspopup="dialog" data-quick-view-trigger data-product-url="{{ product.url | split: '?' | first }}"{% endcapture -%}
+      {% render 'link', label: view_label, href: product.url, size: 'sm', class: 'shrink-0', attributes: view_attributes %}
+    {%- endif -%}
+  </div>
+</div>

@@ -2,7 +2,10 @@
   Figma: Components Atoms / Cart summary
   form_id   the cart form the checkout button submits
   id        base id for the discount code input
+  show_discount_code, show_tax_note, show_payment_icons   booleans, default true (the Manjula drawer turns them off)
   Discount code, totals, tax note, checkout button, payment icons.
+  Subtotal is before subscription prices; "Subscription savings" is what the selling plans take off (only when a line has
+  a plan), then Total discounts (codes, the free gift), Shipping and Total.
 {%- endcomment -%}
 {%- liquid
   assign id = id | default: 'CartSummary'
@@ -11,7 +14,25 @@
   assign shipping_label = 'sections.cart.shipping' | t
   assign shipping_value = 'sections.cart.calculated_at_checkout' | t
   assign total_label = 'sections.cart.total' | t
-  assign subtotal = cart.original_total_price | money
+  if show_discount_code == nil
+    assign show_discount_code = true
+  endif
+  if show_tax_note == nil
+    assign show_tax_note = true
+  endif
+  if show_payment_icons == nil
+    assign show_payment_icons = true
+  endif
+  assign plan_savings = 0
+  for item in cart.items
+    if item.selling_plan_allocation
+      assign line_saving = item.selling_plan_allocation.compare_at_price | minus: item.selling_plan_allocation.price | times: item.quantity
+      assign plan_savings = plan_savings | plus: line_saving
+    endif
+  endfor
+  assign subtotal = cart.original_total_price | plus: plan_savings | money
+  assign plan_savings_label = 'sections.cart.subscription_savings' | t
+  assign plan_savings_value = plan_savings | money | prepend: '−'
   assign discount_total = cart.total_discount | money | prepend: '-'
   assign total = cart.total_price | money
   assign checkout_label = 'sections.cart.checkout' | t
@@ -23,10 +44,11 @@
   assign discount_id = id | append: '-discount'
 -%}
 <div class="cart-summary flex w-full flex-col gap-5 {{ class }}">
-  {% render 'discount-code', id: discount_id %}
+  {%- if show_discount_code %}{% render 'discount-code', id: discount_id %}{% endif -%}
 
-  <dl class="flex flex-col gap-2 m-0" aria-live="polite">
+  <dl class="m-0 flex flex-col gap-3" aria-live="polite">
     {% render 'summary-row', label: subtotal_label, value: subtotal %}
+    {%- if plan_savings > 0 %}{% render 'summary-row', label: plan_savings_label, value: plan_savings_value, type: 'discount' %}{% endif -%}
     {%- if cart.total_discount > 0 %}{% render 'summary-row', label: discounts_label, value: discount_total, type: 'discount' %}{% endif -%}
     {% render 'summary-row', label: shipping_label, value: shipping_value, type: 'muted' %}
     {%- if cart.cart_level_discount_applications.size > 0 -%}
@@ -38,11 +60,10 @@
         {%- endfor -%}
       </div>
     {%- endif -%}
-    {% render 'divider', class: 'my-1' %}
     {% render 'summary-row', label: total_label, value: total, type: 'total' %}
   </dl>
 
-  <p class="text-body-xs text-text-muted">{{ tax_note }}</p>
+  {%- if show_tax_note %}<p class="text-body-xs text-text-muted">{{ tax_note }}</p>{% endif -%}
 
   {%- liquid
     assign checkout_attrs = 'form="' | append: form_id | append: '"'
@@ -51,7 +72,7 @@
       assign checkout_disabled = true
     endif
   -%}
-  {% render 'button', label: checkout_label, style: 'primary', size: 'lg', type: 'submit', name: 'checkout', class: 'w-full', attributes: checkout_attrs, disabled: checkout_disabled %}
+  {% render 'button', label: checkout_label, style: 'primary', size: 'md', type: 'submit', name: 'checkout', class: 'w-full', attributes: checkout_attrs, disabled: checkout_disabled %}
 
-  {% render 'payment-icons', class: 'justify-center' %}
+  {%- if show_payment_icons %}{% render 'payment-icons', class: 'justify-center' %}{% endif -%}
 </div>

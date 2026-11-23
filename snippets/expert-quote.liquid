@@ -1,0 +1,33 @@
+{%- comment -%}
+  Figma: Components Molecules / Expert quote (Viewport Desktop 2072:7043, Mobile 2295:1497)
+  image    portrait image; empty shows the media placeholder until the real portrait is uploaded   (Figma: Portrait)
+  quote    endorsement text                                   (Figma: Quote)
+  name     e.g. Dr. Anika Sharma                              (Figma: Name)
+  role     e.g. Ayurvedic Practitioner                        (Figma: Role)
+  class    placement only
+  Desktop: 90x116 portrait beside the quote (body/sm), name (muted) · role in caps at the bottom.
+  Mobile: quote first, then a 56x72 portrait with name and role stacked. Renders nothing without a quote.
+{%- endcomment -%}
+{%- if quote != blank -%}
+  <figure class="expert-quote flex flex-col gap-4 text-text lg:flex-row lg:items-center lg:gap-6 {{ class }}">
+    <div class="order-2 flex items-center gap-3 lg:order-1 lg:contents">
+      {%- if image -%}
+        {{ image | image_url: width: 270 | image_tag: widths: '112, 180, 270', sizes: '(min-width: 1024px) 90px, 56px', alt: name, class: 'h-18 w-14 shrink-0 object-cover lg:h-29 lg:w-22.5', loading: 'lazy' }}
+      {%- else -%}
+        {% render 'media', media: nil, ratio: 'fill', class: 'h-18 w-14 shrink-0 lg:h-29 lg:w-22.5' %}
+      {%- endif -%}
+      <figcaption class="flex flex-col gap-2 pb-1 text-label-caps-lg lg:hidden">
+        {%- if name != blank %}<span class="text-text-muted">{{ name | escape }}</span>{% endif -%}
+        {%- if role != blank %}<span>{{ role | escape }}</span>{% endif -%}
+      </figcaption>
+    </div>
+    <div class="order-1 flex flex-col lg:order-2 lg:h-29 lg:min-w-0 lg:flex-1 lg:justify-between lg:py-1">
+      <blockquote class="text-body-sm">{{ quote }}</blockquote>
+      <p class="hidden items-center gap-1.5 text-label-caps-lg lg:flex">
+        {%- if name != blank %}<span class="text-text-muted">{{ name | escape }}</span>{% endif -%}
+        {%- if name != blank and role != blank %}<span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span>{% endif -%}
+        {%- if role != blank %}<span>{{ role | escape }}</span>{% endif -%}
+      </p>
+    </div>
+  </figure>
+{%- endif -%}

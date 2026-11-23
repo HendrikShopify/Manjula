@@ -3,7 +3,7 @@
   Data (one of):
     product           Product object; prices come from it            (Dawn: product)
     use_variant       boolean; use selected_or_first_available_variant instead of product price range
-    price             amount in cents, with optional compare_at_price (line items, custom)
+    price             amount in cents, with optional compare_at_price (line items, custom); wins over product
   Parameters:
     size              sm | md | lg                                   (Figma: Size)
     from              boolean override for the "From" prefix; defaults to product.price_varies (Figma: From)
@@ -15,7 +15,8 @@
 {%- endcomment -%}
 {%- liquid
   assign size = size | default: 'md'
-  if product
+  # A passed price wins: on product pages the global product object is always set, even when not passed.
+  if product and price == blank
     if use_variant
       assign target = product.selected_or_first_available_variant
     else

@@ -1,0 +1,103 @@
+{
+  "snippet": "ugc-slider",
+  "figma": "Sections / UGC, Slider (2093:26210 desktop, 2093:26246 mobile)",
+  "matrix": {},
+  "params": {
+    "title": "The MANJULA experience",
+    "items": [
+      {
+        "settings": {
+          "product": {
+            "title": "Face oil",
+            "url": "#",
+            "featured_image": {
+              "src": "https://placehold.co/164x200/ebebe9/1e1e1e?text=Pack",
+              "width": 164,
+              "height": 200,
+              "alt": "Face oil"
+            },
+            "selected_or_first_available_variant": {
+              "title": "30ml"
+            }
+          },
+          "benefits": "Brightens, Calms, Hydrates"
+        }
+      },
+      {
+        "settings": {
+          "product": {
+            "title": "Face oil",
+            "url": "#",
+            "featured_image": {
+              "src": "https://placehold.co/164x200/ebebe9/1e1e1e?text=Pack",
+              "width": 164,
+              "height": 200,
+              "alt": "Face oil"
+            },
+            "selected_or_first_available_variant": {
+              "title": "30ml"
+            }
+          },
+          "benefits": "Brightens, Calms, Hydrates"
+        }
+      },
+      {
+        "settings": {
+          "product": {
+            "title": "Face oil",
+            "url": "#",
+            "featured_image": {
+              "src": "https://placehold.co/164x200/ebebe9/1e1e1e?text=Pack",
+              "width": 164,
+              "height": 200,
+              "alt": "Face oil"
+            },
+            "selected_or_first_available_variant": {
+              "title": "30ml"
+            }
+          },
+          "benefits": "Brightens, Calms, Hydrates"
+        }
+      },
+      {
+        "settings": {
+          "product": {
+            "title": "Face oil",
+            "url": "#",
+            "featured_image": {
+              "src": "https://placehold.co/164x200/ebebe9/1e1e1e?text=Pack",
+              "width": 164,
+              "height": 200,
+              "alt": "Face oil"
+            },
+            "selected_or_first_available_variant": {
+              "title": "30ml"
+            }
+          },
+          "benefits": "Brightens, Calms, Hydrates"
+        }
+      },
+      {
+        "settings": {
+          "product": {
+            "title": "Face oil",
+            "url": "#",
+            "featured_image": {
+              "src": "https://placehold.co/164x200/ebebe9/1e1e1e?text=Pack",
+              "width": 164,
+              "height": 200,
+              "alt": "Face oil"
+            },
+            "selected_or_first_available_variant": {
+              "title": "30ml"
+            }
+          },
+          "benefits": "Brightens, Calms, Hydrates"
+        }
+      }
+    ],
+    "card_link_label": "View product",
+    "section_id": "test"
+  },
+  "extras": []
+}

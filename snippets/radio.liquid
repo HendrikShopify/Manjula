@@ -1,8 +1,28 @@
 {%- comment -%}
   Figma: Components Atoms / Radio
   label, count, id, name, value, checked, disabled, required, class, attributes
+  shape   circle | square   (Figma: Shape) square = 14px box with an 8px Ink square, Manjula purchase choices
   States: Hover = :hover, Focus = :focus-visible, Checked = :checked, Disabled = [disabled]
 {%- endcomment -%}
+{%- if shape == 'square' -%}
+<label class="radio inline-flex items-center gap-3 text-body-base text-text cursor-pointer has-[:disabled]:text-text-disabled has-[:disabled]:cursor-not-allowed {{ class }}">
+  <span class="relative inline-flex size-3.5 shrink-0">
+    <input
+      type="radio"
+      class="peer size-3.5 shrink-0 appearance-none border border-border bg-transparent transition-colors cursor-pointer hover:border-text focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus checked:border-text disabled:cursor-not-allowed"
+      {%- if id %} id="{{ id }}"{% endif -%}
+      {%- if name %} name="{{ name }}"{% endif -%}
+      {%- if value %} value="{{ value | escape }}"{% endif -%}
+      {%- if checked %} checked{% endif -%}
+      {%- if disabled %} disabled{% endif -%}
+      {%- if required %} required{% endif -%}
+      {%- if attributes %} {{ attributes }}{% endif -%}
+    >
+    <span class="pointer-events-none absolute inset-0 m-auto size-2 bg-text opacity-0 peer-checked:opacity-100" aria-hidden="true"></span>
+  </span>
+  {%- if label %}<span>{{ label }}</span>{% endif -%}
+</label>
+{%- else -%}
 <label class="radio inline-flex items-center gap-3 text-body-base text-text cursor-pointer has-[:disabled]:text-text-disabled has-[:disabled]:cursor-not-allowed {{ class }}">
   <span class="relative inline-flex size-5 shrink-0">
     <input
@@ -25,3 +45,4 @@
     </span>
   {%- endif -%}
 </label>
+{%- endif -%}
