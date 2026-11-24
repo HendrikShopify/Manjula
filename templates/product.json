@@ -187,6 +187,13 @@
     "faq": {
       "type": "faq-image",
       "blocks": {
+        "question_4NNAMX": {
+          "type": "question",
+          "settings": {
+            "question": "Are the formulations the same as the full-sized products?",
+            "answer": "<p>Yes. The Discovery Set features our three signature formulations, just in smaller sizes. They're designed to introduce you to our essentials or help you travel lighter so you can take your ritual with you wherever you go.</p>"
+          }
+        },
         "question_b7yYHY": {
           "type": "question",
           "settings": {
@@ -194,17 +201,18 @@
             "answer": "<p>The Discovery Set includes 10 mL of Face Oil, 30 mL of Hair Oil and 30 mL of Body Oil. How long each lasts will depend on the frequency and method of application, but each is designed to give you enough time to experience the formulations and find what works for your routine.</p>"
           }
         },
-        "question_4NNAMX": {
+        "question_j3yGyw": {
           "type": "question",
           "settings": {
-            "question": "Are the formulations the same as the full-sized products?",
-            "answer": "<p>Yes. The Discovery Set features our three signature formulations, just in smaller sizes. They're designed to introduce you to our essentials or help you travel lighter so you can take your ritual with you wherever you go.</p>"
+            "question": "Do I need to change my existing routine to use these products?",
+            "answer": "<p>Not at all. Our oils are designed to complement what you already use. Each one serves multiple functions, allowing you to simplify your routine without compromising on care or effort.</p>"
           }
         }
       },
       "block_order": [
+        "question_4NNAMX",
         "question_b7yYHY",
-        "question_4NNAMX"
+        "question_j3yGyw"
       ],
       "settings": {
         "image": "shopify://shop_images/contact-faq-smile.jpg",
