@@ -50,6 +50,7 @@
         "result-2",
         "result-3"
       ],
+      "disabled": true,
       "settings": {
         "heading": "Effects after 4 week consistent use trial",
         "text": "Participants used the face oil every day for four weeks. Photos were taken at the start and at the end, in the same light.",
@@ -185,9 +186,29 @@
     },
     "faq": {
       "type": "faq-image",
+      "blocks": {
+        "question_b7yYHY": {
+          "type": "question",
+          "settings": {
+            "question": "How long will the Discovery Set last?",
+            "answer": "<p>The Discovery Set includes 10 mL of Face Oil, 30 mL of Hair Oil and 30 mL of Body Oil. How long each lasts will depend on the frequency and method of application, but each is designed to give you enough time to experience the formulations and find what works for your routine.</p>"
+          }
+        },
+        "question_4NNAMX": {
+          "type": "question",
+          "settings": {
+            "question": "Are the formulations the same as the full-sized products?",
+            "answer": "<p>Yes. The Discovery Set features our three signature formulations, just in smaller sizes. They're designed to introduce you to our essentials or help you travel lighter so you can take your ritual with you wherever you go.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "question_b7yYHY",
+        "question_4NNAMX"
+      ],
       "settings": {
         "image": "shopify://shop_images/contact-faq-smile.jpg",
-        "heading": "Questions\nand answers"
+        "heading": "Frequently Asked Questions"
       }
     }
   },
