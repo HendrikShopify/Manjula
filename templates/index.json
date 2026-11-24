@@ -111,8 +111,8 @@
     "founder": {
       "type": "image-with-text-centered",
       "settings": {
-        "video": "shopify://files/videos/D48F1185-6396-48FA-A98D-14EC3EB65F05 2.mov",
         "heading": "What we inherit, we transform. Generations of knowledge, reimagined into modern formulations. Your three-oil system made in Toronto, developed for every part of your body.",
+        "video": "shopify://files/videos/D48F1185-6396-48FA-A98D-14EC3EB65F05 2.mov",
         "button_label": "About Manjula",
         "button_url": "shopify://pages/about"
       }
@@ -134,17 +134,18 @@
       "type": "bundle-offer",
       "settings": {
         "product": "essentials-set",
-        "eyebrow": "The complete MANJULA ritual",
-        "heading": "All three oils, [savings] off",
-        "button_label": "Add all three to cart",
-        "note_text": "Not sure yet?",
-        "note_link_label": "Try all three essentials oils in discovery size",
-        "note_link_url": "shopify://products/discovery-set",
         "items": [
           "hair-oil",
           "face-oil",
           "body-oil"
         ],
+        "eyebrow": "The complete MANJULA ritual",
+        "heading": "All three oils, [savings] off",
+        "heading_no_savings": "All three oils",
+        "button_label": "Add all three to cart",
+        "note_text": "Not sure yet?",
+        "note_link_label": "Try all three essentials oils in discovery size",
+        "note_link_url": "shopify://products/discovery-set",
         "image_left": "shopify://shop_images/R1-06128-0030-Edit.jpg",
         "image_right": "shopify://shop_images/offer-body-oil-hands.jpg"
       }
