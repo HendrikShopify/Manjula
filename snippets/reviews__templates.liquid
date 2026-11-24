@@ -92,7 +92,7 @@
         {% render 'chip', type: 'filter', input_type: 'radio', name: 'name-format', value: 'anonymous', label: format_anonymous %}
       </div>
     {%- endcapture -%}
-    {% render 'field', group: true, label: format_label, control: control, attributes: 'data-reviews-form-name-format' %}
+    {% render 'field', group: true, label: format_label, control: control %}
 
     <div class="sr-only" aria-hidden="true">
       <label for="ReviewsFormWebsite-{{ sid }}">{{ website_label }}</label>

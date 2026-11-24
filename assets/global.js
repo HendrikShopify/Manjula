@@ -444,7 +444,7 @@ customElements.define('footer-reveal', FooterReveal);
 // the grid row and fade back to 0) and removes [open] once that is done. It runs on a click on the summary of an open
 // item, and in a group (same name) on the open sibling when another item opens: its name comes off for the close, so
 // the browser does not shut it at once, and goes back on after. Opening stays native. Reduced motion: native toggle.
-const ACCORDION_CLOSE_MS = 300; // duration-300 on ::details-content
+const ACCORDION_CLOSE_MS = 300; // duration-300 on [data-accordion-panel]
 
 function closeAccordion(details) {
   const name = details.getAttribute('name');
@@ -458,7 +458,7 @@ function closeAccordion(details) {
     if (name) details.setAttribute('name', name);
   };
   const onEnd = (event) => {
-    if (event.target === details && event.propertyName === 'grid-template-rows') finish();
+    if (event.target.matches('[data-accordion-panel]') && event.target.parentElement === details && event.propertyName === 'grid-template-rows') finish();
   };
   const timer = setTimeout(finish, ACCORDION_CLOSE_MS + 50);
   details.addEventListener('transitionend', onEnd);

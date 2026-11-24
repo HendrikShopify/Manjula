@@ -575,3 +575,64 @@ The FAQ metaobject has only Question and Answer (Hendrik, 23 Nov). The Category 
 
 - Cart lines show product metafield `custom.packaging_image` ("Bottle with packaging", file image), else the line's own image (Hendrik, 23 Nov). Face, Hair and Body oil have the bottle-and-box packshots from Figma (node 2810:26069), uploaded as face/hair/body-oil-packshot.jpg.
 - The three minis had no photo. Their single-bottle shots (Figma node 2809:26064, transparent PNG) are now their product photo and their `solo_image`, so the free mini shows a bottle in the cart and the mini offer.
+
+## 2026-11-24: Newsletter popup off, mobile product tile
+
+- The newsletter popup is off (Hendrik, 23 Nov). `layout/theme.liquid` keeps the render line inside a comment; the snippet and script stay for later.
+- Product card `tile`, mobile only (Figma 2795:26123, Hendrik 24 Nov): the subtitle wraps, and the size moves next to the price (price • 100ml). The card fills its grid row with the content at the bottom, so the cards in a row are the same height. Desktop is unchanged.
+
+## 2026-11-24: Hair oil page feedback (Results timeline, Comparison price)
+
+- Results timeline (Hendrik's Figma notes, 24 Nov): the step line is 1px dots (1 on, 1 off) fading from 60% to 0 downwards; the markers use the same dots; the first marker is invisible but keeps its space; the caret is the thin up caret from Figma (`icon__caret-up-thin.svg`).
+- Desktop: not tied to the scroll position (Hendrik, 24 Nov). When the steps scroll into view (`top 75%`) it plays once: one caret slides from step to step, 1s per step with a strong ease (power4.inOut), and each step turns Active when the caret reaches it. The caret ends on the last step and stays there. Steps not reached yet start at 30% (label, text) and 15% (image).
+- Mobile: the steps are a Swiper track with one glass Next button that fades out after the first card, like the UGC slider and the About timeline.
+- Comparison price: the left total label counts the Separate product blocks ("Four bottles", locale `sections.comparison_price`); the Total label setting is gone. The benefit check in `check-row` is a thin 1px check (`icon__check-thin.svg`), as in Figma.
+- Images for both sections are existing photos from the admin files.
+
+## 2026-11-24: Review filters only when reviews use them
+
+- A custom question gets a filter only when at least two of its options were picked in at least one review; the filter lists only those options, with their count (Hendrik, 24 Nov). Questions no review answered, or with one used option, get no filter.
+- Judge.me's widget response has no per-option counts, so `reviews__judgeme.js` has `countAnswers`: it reads every review of the product (30 per page, at most 20 pages) and counts the answers. The aggregates metafield is still used first when it exists.
+- Hair oil has no custom questions in Judge.me yet (24 Nov), so it shows no filters.
+
+## 2026-11-24: Ingredient photos
+
+- The ingredient photos from Figma (2836:26108) are uploaded to Files as PNGs with their photo background (`ingredient-<handle>.png`, alt is the plant name) and set as the `image` of 29 Ingredient entries. The ingredient explorer shows them on hover.
+- Saffron uses "Saffron 2" (the flower with its threads) and replaces the earlier photo (Hendrik, 24 Nov). Safflower and Sweet Almond have no photo in Figma, so they have none yet.
+
+## 2026-11-24: Body oil page feedback (Comparison composition)
+
+- Check row icons are 1px lines at any size (Hendrik's Figma note, 24 Nov): Included uses `icon__check-thin.svg`, Excluded the new `icon__x-thin.svg` (9px). The old 24px icons drawn at 9 to 18px came out thinner than 1px.
+- The two comparison columns share one subgrid, so the charts line up at top and bottom even when a title or sub line wraps (Hendrik, 24 Nov: "always"). Comparison texture uses the same subgrid (title, illustration, rows); Comparison price already lined up with `justify-between`.
+- The intro text has a max width on mobile too (280px; 320px from lg).
+- Photos picked from the admin files: `offer-body-oil-hands.jpg` (large) and `formula-philosophy-body-oil.jpg` (small).
+
+## 2026-11-24: Text trim fallback for Safari before 18.2 and Firefox
+
+- Hendrik's Safari 17.5 has no native `text-box`, so it used the CSS fallback, which only trims headings and paragraphs. Every other text box (labels in flex rows, buttons, header items, prices, USP tags) kept its full line box: the USP tag dots sat about 2px below the capitals.
+- `assets/text-trim-fallback.js` (loaded on every page, returns at once where `text-box` is supported) marks those boxes with `[data-text-trim]`, and `tailwind/text-trim.css` trims them with negative margins, as clamped text. It marks a box that holds text directly, lays out as a block or flex/grid item, is not a flex or grid container, is not already covered by the CSS fallback, and has no block padding, border or margin. Later content (drawers, reviews) is marked when it arrives.
+- Checked in Firefox 132 (same fallback path) against Chrome on home, body oil and collection: text boxes off by more than 1px went from about 70% to 0 or 1 per page.
+- The USP tag strip (`product-tags`) clipped the trimmed letters in Safari 17 (its clip and fade mask were exactly 12px tall). It is now 20px tall with -4px margins: same place in the layout, room for the letters.
+- Truncated and clamped text (`truncate`, `line-clamp-*`, `text-ellipsis`: every Select label, excerpts) was untrimmed in the fallback: the native branch handled it, the fallback skipped it, so the Select caret sat 2.3px below the capitals. The fallback now gives it the same margin method; the ::before / ::after rules skip it.
+- The accordion plus was an SVG (circle and horizontal line) with the vertical line as a separate 1px span. On a half pixel the two snapped apart and the line looked off centre and blurry. Now both lines are in `icon__plus-circle.svg` and opening rotates the vertical one (`[data-plus-vertical]`) to make the minus.
+- Clamped text is matched with `[class*="truncate"]` (and line-clamp, text-ellipsis) in both branches, so responsive `lg:truncate` counts: the product card subtitle was trimmed to the baseline and its `overflow: hidden` cut the descenders, in every browser.
+- The fallback script also trims boxes whose text sits in inline elements (`li > a`), and boxes with block padding (menu links, chips): their padding shrinks by the trim, set inline so it beats the padding utilities. The footer menu was 41px per link in Firefox and Safari 17, now 29.3px as in Chrome.
+- Accordion: the open and close animation moved from `::details-content` (Safari 18.4+ only, so Safari 17 had no animation) to our own panel `[data-accordion-panel]`, opening from `@starting-style`. The panel has 4px of room at the top (pt-1 with -mt-1) because Safari has no `overflow-clip-margin`. global.js waits for the panel's grid-template-rows transition to close.
+- Rule from Hendrik (24 Nov): text is never cut off, in any browser. Every trim or overflow change is checked in Chrome, WebKit and Firefox.
+- Not fixed: Playwright's WebKit 18.2 (which has native `text-box`) trims too much when line-height is below 1 (big headings sit up to 5px higher) and uses a taller cap height for Sabon. That is a WebKit bug in 18.2 and may be fixed in newer Safari; to be checked on a Mac with a current Safari.
+
+## 2026-11-24: Discovery set page feedback
+
+- Bundle items show the solo bottle shot (`custom.solo_image`, else the main image), contained on the fill, as the mini picker rows (Hendrik's Figma note, 24 Nov).
+- The dots in the bundle item name row (name • size) and the delivery row (date • Free shipping) were not centred: the text was bare text in a flex row, which is never trimmed, so the dot centred on the full line box. Each text is now its own span (same gotcha as the header items, 15 Nov).
+- Reviews: new section setting "Show reviews of" (product list, up to 3). When set, the Filter group gets one more Select first, with one option per product; the first is selected (Discovery: Hair, Body, Face; Hendrik: hair first). Picking another product starts a new reviews core for it, so summary, histogram, list, question filters and the review form follow that product (a review written there goes to that product). The bundle's own reviews are not shown.
+- The Use guide is in the template, but renders nothing: its steps come from `custom.use_steps` and the Discovery Set has none (only Face Oil has steps; Hair and Body Oil have none either).
+- Second round (24 Nov): the bundle item thumb fill is Surface alt, the product card tile fill, darker than the old 3% fill. The item benefits line now comes from the product (card subtitle, else the benefit titles), so it is the same text as the product card; the block's Benefits setting only overrides it. Before, all three items said "Brightens, Calms, Hydrates".
+- `ingredient-explorer.js` had a method called `matches`, which hid the browser's own `Element.matches` on that element, so any script or test that called `.matches()` on the page broke there. Renamed to `itemMatches`.
+
+## 2026-11-24: Essentials set page feedback (Reviews)
+
+- The Reviews section has no development settings any more (shop domain, product ID): it always reads this shop and this product (or the first of "Show reviews of").
+- The recommend share next to the average is no longer a typed number. reviews__ui.js works it out: the share of "Yes" among the answers to the recommend question, over every review of the product (aggregates metafield first, else Judge.me's reviews read page by page; one request shared with the filters). The recommend question is any custom question with "recommend" in its title. Without answers the share is hidden. On 24 Nov no product had custom questions in Judge.me yet, so it is hidden everywhere until the question exists and people answer it.
+- The form has no settings any more: customers always choose how their name is shown, the thank-you message is the locale string, and questions are optional (Judge.me's widget data does not say which are required).
+

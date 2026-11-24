@@ -44,7 +44,7 @@ Highest revenue impact, so it goes first. The Bundle template reuses almost all 
 | 3 | Use guide | Use guide | `use-guide` | Done (15 Nov) |
 | 4 | Trial results | Trial results | `trial-results` | Done (15 Nov) |
 | 5 | Ingredient explorer | Ingredient explorer, plus Ingredient modal | `ingredient-explorer`, `ingredient-modal` | Done (21 Nov), reads product ingredients |
-| 6 | Formula comparison | Comparison composition (Body), Comparison texture (Face), Comparison price (Hair) | `comparison-texture` (Face), `comparison-composition` (Body), `comparison-price` (Hair) | Done (15 Nov): three Figma layouts, three sections |
+| 6 | Formula comparison | Comparison composition (Body), Comparison texture (Face), Comparison price (Hair) | `comparison-texture` (Face), `comparison-composition` (Body), `comparison-price` (Hair) | Done (15 Nov): three Figma layouts, three sections. Body oil feedback done (24 Nov): thin 1px icons, columns on one subgrid, photos set |
 | 7 | Reviews | Reviews | `sections/reviews.liquid` (Judge.me) | Done (15 Nov) |
 | 8 | Founder note | Image with text {Founder note} | `image-with-text-founder-note` | Done (15 Nov) |
 | 9 | FAQ | FAQ {Image} | `faq-image` | Done (15 Nov) |
@@ -52,7 +52,7 @@ Highest revenue impact, so it goes first. The Bundle template reuses almost all 
 
 `templates/product.bundle.json`: Product main, Experience (UGC), Use guide, Ingredient explorer, Reviews, FAQ {Image}, Products {Tiles}. Only UGC is extra and it already exists (`ugc-carousel`).
 
-Update 15 Nov (Templates FINAL): one template per product instead. Built: `product.face.json`, `product.hair.json`, `product.body.json`, `product.discovery.json`, `product.essentials.json` (Essentials set), `product.gua-sha.json` (renamed 22 Nov, see below), each in its Figma frame order. Templates FINAL has no Products {Tiles} or UGC on the product pages. Not yet assigned to the products in the store (store data, needs an OK).
+Update 15 Nov (Templates FINAL): one template per product instead. Built: `product.face.json`, `product.hair.json`, `product.body.json`, `product.discovery.json`, `product.essentials.json` (Essentials set), `product.gua-sha.json` (renamed 22 Nov, see below), each in its Figma frame order. Templates FINAL has no Products {Tiles} or UGC on the product pages. Not yet assigned to the products in the store (store data, needs an OK). Discovery set feedback done (24 Nov): solo shots and centred dots in the bundle items, a product switch in the review filters; second round: darker item thumbs (Surface alt) and item benefits read from the product; its Use guide still needs steps in the admin. Essentials set feedback done (24 Nov): Reviews section without development and form settings, recommend share worked out from the reviews.
 
 ## Phase 3. Home (13 to 16 Nov)
 

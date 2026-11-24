@@ -4,7 +4,8 @@
   heading, small photo and text. Below, two columns (Typical, Manjula). Each has a title, a sub line and a chart:
   a Composition bar next to a list of Check rows hanging off an xl Bracket.
   Typical: excluded rows at the top (dimmed to 60%), a summary row at the bottom. Manjula: included rows at the top,
-  minor rows at the bottom. Rows are one per line in textarea settings, so the client can edit them as lists.
+  minor rows at the bottom. The two columns share one subgrid, so the charts line up at top and bottom even when
+  the titles or sub lines wrap differently (Hendrik, 24 Nov). Rows are one per line in textarea settings, so the client can edit them as lists.
 {%- endcomment -%}
 {%- liquid
   assign left_top = section.settings.left_top | newline_to_br | split: '<br />'
@@ -26,11 +27,11 @@
         <h2 class="text-heading-2 lg:order-1 lg:text-display-2">{{ section.settings.heading | newline_to_br }}</h2>
       {%- endif -%}
       {%- if section.settings.text != blank -%}
-        <p class="text-body-sm lg:order-3 lg:max-w-80">{{ section.settings.text }}</p>
+        <p class="max-w-70 text-body-sm lg:order-3 lg:max-w-80">{{ section.settings.text }}</p>
       {%- endif -%}
     </div>
 
-    <div class="grid w-full grid-cols-2 gap-3 lg:max-w-197 lg:gap-6">
+    <div class="grid w-full grid-cols-2 gap-x-3 gap-y-6 lg:max-w-197 lg:gap-x-6">
       {%- for side in (1..2) -%}
         {%- liquid
           if side == 1
@@ -55,7 +56,7 @@
             assign bracket_strength = 'solid'
           endif
         -%}
-        <div class="flex min-w-0 flex-col gap-6">
+        <div class="row-span-2 grid min-w-0 grid-rows-subgrid">
           <div class="flex flex-col gap-3 text-text lg:gap-5">
             <h3 class="text-heading-4 lg:text-heading-2">{{ col_title }}</h3>
             {%- if col_sub != blank -%}<p class="text-body-sm">{{ col_sub }}</p>{%- endif -%}

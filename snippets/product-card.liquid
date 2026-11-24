@@ -11,7 +11,8 @@
   Rating reads product.metafields.reviews.rating / rating_count (Shopify standard product reviews metafields).
   Tile (Manjula): Fill-subtle card, square from lg. Packshot centred (product.metafields.custom.solo_image, the bottle
     without packaging, else the featured image), then name • variant, subtitle at 60% and price.
-    Mobile: 12px padding, image square on top, info stacked, subtitle one line. Desktop: 24px padding, info in one row.
+    Mobile (Figma 2795:26123, Hendrik 24 Nov): 12px padding, content at the bottom, image square on top, name in label/base,
+    subtitle wraps, then price • variant in one row. Desktop: 24px padding, info in one row, name • variant, subtitle one line.
     Variant label = product.metafields.custom.size (e.g. 100ml), else the first variant title (hidden for a default-only product). Subtitle = product.metafields.custom.product_card_subtitle (single line text), else the titles of
     product.metafields.custom.benefits (list of "Title--Description"), comma separated.
     Hover with a lifestyle image: all text turns white, also a sale price and its struck compare-at price (Hendrik, 21 Nov).
@@ -103,7 +104,7 @@
       endif
     endif
   -%}
-  <product-card class="product-card group/tile relative isolate flex flex-col gap-3 overflow-hidden bg-surface-alt p-3 transition-colors lg:aspect-square lg:justify-end lg:gap-6 lg:p-6 lg:hover:bg-accent-subtle has-focus-visible:outline-1 has-focus-visible:outline-offset-2 has-focus-visible:outline-focus {% if lifestyle %}lg:hover:[--color-text:var(--color-text-on-media)] lg:hover:[--color-text-muted:var(--color-text-on-media)] lg:hover:[--color-sale:var(--color-text-on-media)]{% endif %} {{ class }}" id="{{ card_id }}" data-layout="tile">
+  <product-card class="product-card group/tile relative isolate flex flex-col justify-end gap-3 max-lg:h-full overflow-hidden bg-surface-alt p-3 transition-colors lg:aspect-square lg:gap-6 lg:p-6 lg:hover:bg-accent-subtle has-focus-visible:outline-1 has-focus-visible:outline-offset-2 has-focus-visible:outline-focus {% if lifestyle %}lg:hover:[--color-text:var(--color-text-on-media)] lg:hover:[--color-text-muted:var(--color-text-on-media)] lg:hover:[--color-sale:var(--color-text-on-media)]{% endif %} {{ class }}" id="{{ card_id }}" data-layout="tile">
     {%- if lifestyle -%}
       <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden opacity-0 transition-opacity duration-150 max-lg:hidden lg:group-hover/tile:opacity-100" aria-hidden="true">
         <div class="absolute inset-0 motion-safe:scale-105 motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out lg:group-hover/tile:scale-100">
@@ -120,15 +121,21 @@
         <h3 class="flex items-center gap-1 text-label-base">
           <a href="{{ product.url }}" class="after:absolute after:inset-0 after:z-0 focus-visible:outline-none">{{ product.title | escape }}</a>
           {%- if tile_variant != blank -%}
-            <span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
-            <span>{{ tile_variant | escape }}</span>
+            <span class="size-1 shrink-0 rounded-full bg-current max-lg:hidden" aria-hidden="true"></span>
+            <span class="max-lg:hidden">{{ tile_variant | escape }}</span>
           {%- endif -%}
         </h3>
         {%- if subtitle != blank -%}
-          <p class="max-w-full truncate text-body-xs opacity-60">{{ subtitle | escape }}</p>
+          <p class="max-w-full text-body-xs opacity-60 lg:truncate">{{ subtitle | escape }}</p>
         {%- endif -%}
       </div>
-      {% render 'price', product: product, size: 'sm', class: 'shrink-0' %}
+      <div class="flex shrink-0 items-center gap-1">
+        {% render 'price', product: product, size: 'sm' %}
+        {%- if tile_variant != blank -%}
+          <span class="size-1 shrink-0 rounded-full bg-current lg:hidden" aria-hidden="true"></span>
+          <span class="text-label-base lg:hidden">{{ tile_variant | escape }}</span>
+        {%- endif -%}
+      </div>
     </div>
   </product-card>
 {%- else -%}

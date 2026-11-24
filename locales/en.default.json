@@ -493,6 +493,13 @@
         "results_timeline": {
             "next": "Next result"
         },
+        "comparison_price": {
+            "number_words": "One,Two,Three,Four,Five,Six",
+            "total_bottles": {
+                "one": "{{ number }} bottle",
+                "other": "{{ number }} bottles"
+            }
+        },
         "horizontal_scroll": {
             "next": "Next benefit"
         },

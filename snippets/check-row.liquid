@@ -3,12 +3,13 @@
   Ingredient list row hanging off a bracket: a tick line, then the label.
   label    text
   type     included | excluded | minor | summary | benefit          (Figma: Type)
-             included  32px tick at 60%, check icon, label/xl
-             excluded  32px tick, cross icon, label/base (dim the whole list to 60% where it is used)
+             included  32px tick at 60%, thin check icon, label/xl
+             excluded  32px tick, thin cross icon, label/base (dim the whole list to 60% where it is used)
              minor     32px tick, label/base only
              summary   40px tick at 60%, label/xl (e.g. Plant oils last)
-             benefit   no tick, small check, label/base at 60%
+             benefit   no tick, small thin check (1px line, Hendrik 24 Nov), label/base at 60%
   class    placement only
+  All icons are drawn with a 1px line at any size (vector-effect: non-scaling-stroke, Hendrik 24 Nov).
   Below lg the ticks shorten to 20px and the xl labels drop to label/base, as in the mobile frames.
 {%- endcomment -%}
 {%- liquid
@@ -16,7 +17,7 @@
   case type
     when 'excluded'
       assign tick = 'w-5 lg:w-8'
-      assign icon = 'icon__x.svg'
+      assign icon = 'icon__x-thin.svg'
       assign icon_size = 'size-2.25'
       assign text = 'text-label-base'
     when 'minor'
@@ -29,12 +30,12 @@
       assign text = 'text-label-base lg:text-label-xl'
     when 'benefit'
       assign tick = ''
-      assign icon = 'icon__check.svg'
+      assign icon = 'icon__check-thin.svg'
       assign icon_size = 'h-2.25 w-3.5'
       assign text = 'text-body-xs lg:text-label-base'
     else
       assign tick = 'w-5 opacity-60 lg:w-8'
-      assign icon = 'icon__check.svg'
+      assign icon = 'icon__check-thin.svg'
       assign icon_size = 'h-3.25 w-4.5'
       assign text = 'text-label-base lg:text-label-xl'
   endcase
