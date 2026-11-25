@@ -11,21 +11,13 @@
   "sections": {
     "main": {
       "type": "main-product",
-      "blocks": {},
-      "block_order": [],
       "settings": {
         "popular_frequency": "Deliver every 3 months",
         "community_title": "",
+        "expert_image": "shopify://shop_images/unnamed.jpg",
         "expert_quote": "“High quality Ayurvedic oils, like those from Manjula, are a powerful way to support healthy skin and hair using time-tested botanical ingredients.”",
         "expert_name": "Dr. Anika Sharma",
         "expert_role": "Ayurvedic Practitioner"
-      }
-    },
-    "reviews": {
-      "type": "reviews",
-      "settings": {
-        "heading": "Customer reviews",
-        "recommend_label": "Would recommend this face oil."
       }
     },
     "trial_results": {
@@ -63,10 +55,10 @@
         "text": "Participants used the face oil every day for four weeks. Photos were taken at the start and at the end, in the same light.",
         "case_label": "",
         "case_text": "Aged 34, combination skin with redness on the cheeks. Three drops every evening after cleansing, with no other changes to the routine.",
-        "show_labels": true,
-        "disclaimer": "*Individual results shown, from participants using Manjula Hair Oil twice weekly for four weeks. Results vary from person to person and depend on factors including diet, stress, sleep and underlying health. Not intended to treat or prevent any condition.",
         "before_image": "shopify://shop_images/face-oil-trial-before-aligned.jpg",
-        "after_image": "shopify://shop_images/face-oil-trial-after-crop.jpg"
+        "after_image": "shopify://shop_images/face-oil-trial-after-crop.jpg",
+        "show_labels": true,
+        "disclaimer": "*Individual results shown, from participants using Manjula Hair Oil twice weekly for four weeks. Results vary from person to person and depend on factors including diet, stress, sleep and underlying health. Not intended to treat or prevent any condition."
       }
     },
     "differentiator": {
@@ -121,13 +113,13 @@
         "row-5"
       ],
       "settings": {
+        "media": "shopify://shop_images/DSC06847-copy-5.jpg",
         "heading": "Most oils sit.\nOurs sinks in.",
         "text": "Oil doesn't have to mean greasy. What an oil feels like on skin comes down to its fatty acids, its wax esters, and the ratio it's blended in. Most face oils lean on one heavy carrier. Ours is five lipid structures, blended so they spread instead of pool.",
         "left_title": "Most face oils",
         "left_sub": "Sits on top, leaves a film",
         "right_title": "MANJULA",
-        "right_sub": "Sinks in, leaves nothing",
-        "media": "shopify://shop_images/DSC06847-copy-5.jpg"
+        "right_sub": "Sinks in, leaves nothing"
       }
     },
     "use_guide": {
@@ -160,27 +152,36 @@
       "type": "ingredient-explorer",
       "settings": {
         "heading": "Explore all ingredients",
-        "functions": "Brightens, Nourishes, Smoothes, Protects, Barrier support",
         "products": [
           "face-oil",
           "hair-oil",
           "body-oil"
-        ]
+        ],
+        "functions": "Brightens, Nourishes, Smoothes, Protects, Barrier support"
+      }
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {
+        "heading": "Customer reviews",
+        "review_products": [],
+        "recommend_label": "Would recommend this face oil."
       }
     },
     "founder_note": {
       "type": "image-with-text-founder-note",
       "settings": {
-        "image": "shopify://shop_images/subscription-founder.jpg"
+        "image": "shopify://shop_images/subscription-founder.jpg",
+        "label": "Founders note",
+        "text": "<p>I've had eczema since infancy, so I've always been careful about what goes on my skin. I wanted Kumkumadi, the classical Ayurvedic brightening oil, but the traditional recipe was too rich for skin like mine.</p><p>So we rebuilt it. My mother, an Ayurvedic practitioner, and a team of Canadian chemists kept what made it work and removed what my skin couldn't take.</p><p>I made it for myself. Now it belongs to whoever needs it.</p>",
+        "name": "Founder MANJULA"
       }
     },
     "faq": {
       "type": "faq-image",
-      "blocks": {},
-      "block_order": [],
       "settings": {
-        "heading": "Questions\nand answers",
-        "image": "shopify://shop_images/contact-faq-smile.jpg"
+        "image": "shopify://shop_images/contact-faq-smile.jpg",
+        "heading": "Questions\nand answers"
       }
     }
   },

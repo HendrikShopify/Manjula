@@ -11,8 +11,6 @@
   "sections": {
     "main": {
       "type": "main-product",
-      "blocks": {},
-      "block_order": [],
       "settings": {
         "popular_frequency": "Deliver every 3 months",
         "community_title": "",
@@ -71,8 +69,8 @@
       "type": "comparison-composition",
       "settings": {
         "media": "shopify://shop_images/offer-body-oil-hands.jpg",
-        "image": "shopify://shop_images/formula-philosophy-body-oil.jpg",
         "heading": "The base isn't filler.\nIt's the formula.",
+        "image": "shopify://shop_images/formula-philosophy-body-oil.jpg",
         "text": "Most body oils are a cheap carrier with a few drops of the oil on the front of the box. Ours is six active plant oils, from the first drop to the last. You pay for the treatment, not the filler.",
         "left_title": "Typical body oils",
         "left_sub": "The base consists mainly of filler, with plant oils listed last.",
@@ -116,12 +114,12 @@
       "type": "ingredient-explorer",
       "settings": {
         "heading": "Explore all ingredients",
-        "functions": "Brightens, Nourishes, Smoothes, Protects, Barrier support",
         "products": [
           "face-oil",
           "hair-oil",
           "body-oil"
-        ]
+        ],
+        "functions": "Brightens, Nourishes, Smoothes, Protects, Barrier support"
       }
     },
     "founder_note": {
@@ -132,11 +130,9 @@
     },
     "faq": {
       "type": "faq-image",
-      "blocks": {},
-      "block_order": [],
       "settings": {
-        "heading": "Questions\nand answers",
-        "image": "shopify://shop_images/contact-faq-smile.jpg"
+        "image": "shopify://shop_images/contact-faq-smile.jpg",
+        "heading": "Questions\nand answers"
       }
     }
   },

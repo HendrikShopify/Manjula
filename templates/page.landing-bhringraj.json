@@ -1,17 +1,16 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "hero",
-      "settings": {
-        "background": "image",
-        "image": "shopify://shop_images/Hair_Oil_for_Hair_Growth_e8048456-132e-471e-8ffb-7f0f704d7151.png",
-        "overlay_opacity": 30,
-        "alignment": "center",
-        "height": "custom",
-        "custom_height": 700,
-        "custom_height_mobile": 600,
-        "gap": "10"
-      },
       "blocks": {
         "heading_1": {
           "type": "_landing-heading",
@@ -50,7 +49,17 @@
         "paragraph_2",
         "rating_3",
         "button_4"
-      ]
+      ],
+      "settings": {
+        "background": "image",
+        "image": "shopify://shop_images/Hair_Oil_for_Hair_Growth_e8048456-132e-471e-8ffb-7f0f704d7151.png",
+        "overlay_opacity": 30,
+        "alignment": "center",
+        "height": "custom",
+        "custom_height": 700,
+        "custom_height_mobile": 600,
+        "gap": "10"
+      }
     },
     "press": {
       "type": "logo-strip",
@@ -58,10 +67,10 @@
     },
     "glance": {
       "type": "two-columns",
-      "settings": {},
       "blocks": {
         "left": {
           "type": "_landing-column",
+          "static": true,
           "settings": {
             "show_bracket": true
           },
@@ -139,11 +148,11 @@
             "heading_11",
             "spec-table_12",
             "button_13"
-          ],
-          "static": true
+          ]
         },
         "right": {
           "type": "_landing-column",
+          "static": true,
           "settings": {
             "show_bracket": false,
             "sticky": true,
@@ -160,20 +169,17 @@
           },
           "block_order": [
             "media_14"
-          ],
-          "static": true
+          ]
         }
       },
-      "block_order": []
+      "settings": {}
     },
     "what": {
       "type": "two-columns",
-      "settings": {
-        "right_first_mobile": true
-      },
       "blocks": {
         "left": {
           "type": "_landing-column",
+          "static": true,
           "settings": {
             "show_bracket": false,
             "sticky": true,
@@ -190,11 +196,11 @@
           },
           "block_order": [
             "media_15"
-          ],
-          "static": true
+          ]
         },
         "right": {
           "type": "_landing-column",
+          "static": true,
           "settings": {
             "show_bracket": true
           },
@@ -245,15 +251,15 @@
             "quote_19",
             "image_20",
             "paragraph_21"
-          ],
-          "static": true
+          ]
         }
       },
-      "block_order": []
+      "settings": {
+        "right_first_mobile": true
+      }
     },
     "how": {
       "type": "tabs",
-      "settings": {},
       "blocks": {
         "tab_39": {
           "type": "_landing-tab",
@@ -428,14 +434,15 @@
         "tab_40",
         "tab_41",
         "tab_42"
-      ]
+      ],
+      "settings": {}
     },
     "faq": {
       "type": "two-columns",
-      "settings": {},
       "blocks": {
         "left": {
           "type": "_landing-column",
+          "static": true,
           "settings": {
             "show_bracket": true
           },
@@ -497,11 +504,11 @@
             "eyebrow_47",
             "heading_48",
             "accordion_49"
-          ],
-          "static": true
+          ]
         },
         "right": {
           "type": "_landing-column",
+          "static": true,
           "settings": {
             "show_bracket": false,
             "sticky": true,
@@ -518,18 +525,17 @@
           },
           "block_order": [
             "media_50"
-          ],
-          "static": true
+          ]
         }
       },
-      "block_order": []
+      "settings": {}
     },
     "product": {
       "type": "two-columns",
-      "settings": {},
       "blocks": {
         "left": {
           "type": "_landing-column",
+          "static": true,
           "settings": {
             "show_bracket": false,
             "sticky": true,
@@ -546,11 +552,11 @@
           },
           "block_order": [
             "media_51"
-          ],
-          "static": true
+          ]
         },
         "right": {
           "type": "_landing-column",
+          "static": true,
           "settings": {
             "show_bracket": true
           },
@@ -616,11 +622,10 @@
             "testimonial_56",
             "products_57",
             "button_58"
-          ],
-          "static": true
+          ]
         }
       },
-      "block_order": []
+      "settings": {}
     }
   },
   "order": [
