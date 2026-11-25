@@ -26,22 +26,22 @@
         "result-1": {
           "type": "result",
           "settings": {
-            "title": "Improved skin texture",
-            "text": "A reduction in the appearance of closed comedones and uneven surface texture."
+            "title": "A Calmer Scalp",
+            "text": "By week four, our participant experienced a noticeable improvement in scalp comfort and a reduction in irritation."
           }
         },
         "result-2": {
           "type": "result",
           "settings": {
-            "title": "Clearer complexion",
-            "text": "Visible improvement in existing breakouts following adjustments to the skincare routine."
+            "title": "Visible New Growth",
+            "text": "From week six, new growth became increasingly visible, particularly around the hairline."
           }
         },
         "result-3": {
           "type": "result",
           "settings": {
-            "title": "Calmer-looking skin",
-            "text": "A less inflamed appearance, with fewer visible active blemishes."
+            "title": "Improved Hair Density",
+            "text": "By week twelve, our participant observed fuller-looking hair and continued improvements in scalp psoriasis."
           }
         }
       },
@@ -51,10 +51,10 @@
         "result-3"
       ],
       "settings": {
-        "heading": "Five weeks of use on acne-prone skin.",
-        "text": "Documenting changes in skin texture, clarity and the appearance of breakouts over five weeks of consistent use.",
+        "heading": "Twelve weeks of consistent use.",
+        "text": "Documenting changes in scalp comfort, hair growth and visible density over twelve weeks of consistent oiling and scalp massage.",
         "case_label": "Case Study 003",
-        "case_text": "Our participant was experiencing persistent hormonal-related breakouts, closed comedones and post-inflammatory hyperpigmentation. The Face Oil was incorporated into an adapted skincare routine, alongside salicylic acid, gentle exfoliation and a moisturizer.",
+        "case_text": "Our participant had fine, curly hair and a history of scalp psoriasis, persistent irritation and excessive shedding. Having previously found other scalp oils irritating or too heavy, she added the Hair Oil into her routine 2–3 times a week, accompanied by a scalp massage.",
         "before_image": "shopify://shop_images/tayma-before.png",
         "after_image": "shopify://shop_images/tayma-after.png",
         "show_labels": true,
