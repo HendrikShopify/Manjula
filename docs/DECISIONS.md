@@ -575,3 +575,121 @@ The FAQ metaobject has only Question and Answer (Hendrik, 23 Nov). The Category 
 
 - Cart lines show product metafield `custom.packaging_image` ("Bottle with packaging", file image), else the line's own image (Hendrik, 23 Nov). Face, Hair and Body oil have the bottle-and-box packshots from Figma (node 2810:26069), uploaded as face/hair/body-oil-packshot.jpg.
 - The three minis had no photo. Their single-bottle shots (Figma node 2809:26064, transparent PNG) are now their product photo and their `solo_image`, so the free mini shows a bottle in the cart and the mini offer.
+
+## 2026-11-24: Newsletter popup off, mobile product tile
+
+- The newsletter popup is off (Hendrik, 23 Nov). `layout/theme.liquid` keeps the render line inside a comment; the snippet and script stay for later.
+- Product card `tile`, mobile only (Figma 2795:26123, Hendrik 24 Nov): the subtitle wraps, and the size moves next to the price (price • 100ml). The card fills its grid row with the content at the bottom, so the cards in a row are the same height. Desktop is unchanged.
+
+## 2026-11-24: Hair oil page feedback (Results timeline, Comparison price)
+
+- Results timeline (Hendrik's Figma notes, 24 Nov): the step line is 1px dots (1 on, 1 off) fading from 60% to 0 downwards; the markers use the same dots; the first marker is invisible but keeps its space; the caret is the thin up caret from Figma (`icon__caret-up-thin.svg`).
+- Desktop: not tied to the scroll position (Hendrik, 24 Nov). When the steps scroll into view (`top 75%`) it plays once: one caret slides from step to step, 1s per step with a strong ease (power4.inOut), and each step turns Active when the caret reaches it. The caret ends on the last step and stays there. Steps not reached yet start at 30% (label, text) and 15% (image).
+- Mobile: the steps are a Swiper track with one glass Next button that fades out after the first card, like the UGC slider and the About timeline.
+- Comparison price: the left total label counts the Separate product blocks ("Four bottles", locale `sections.comparison_price`); the Total label setting is gone. The benefit check in `check-row` is a thin 1px check (`icon__check-thin.svg`), as in Figma.
+- Images for both sections are existing photos from the admin files.
+
+## 2026-11-24: Review filters only when reviews use them
+
+- A custom question gets a filter only when at least two of its options were picked in at least one review; the filter lists only those options, with their count (Hendrik, 24 Nov). Questions no review answered, or with one used option, get no filter.
+- Judge.me's widget response has no per-option counts, so `reviews__judgeme.js` has `countAnswers`: it reads every review of the product (30 per page, at most 20 pages) and counts the answers. The aggregates metafield is still used first when it exists.
+- Hair oil has no custom questions in Judge.me yet (24 Nov), so it shows no filters.
+
+## 2026-11-24: Ingredient photos
+
+- The ingredient photos from Figma (2836:26108) are uploaded to Files as PNGs with their photo background (`ingredient-<handle>.png`, alt is the plant name) and set as the `image` of 29 Ingredient entries. The ingredient explorer shows them on hover.
+- Saffron uses "Saffron 2" (the flower with its threads) and replaces the earlier photo (Hendrik, 24 Nov). Safflower and Sweet Almond have no photo in Figma, so they have none yet.
+
+## 2026-11-24: Body oil page feedback (Comparison composition)
+
+- Check row icons are 1px lines at any size (Hendrik's Figma note, 24 Nov): Included uses `icon__check-thin.svg`, Excluded the new `icon__x-thin.svg` (9px). The old 24px icons drawn at 9 to 18px came out thinner than 1px.
+- The two comparison columns share one subgrid, so the charts line up at top and bottom even when a title or sub line wraps (Hendrik, 24 Nov: "always"). Comparison texture uses the same subgrid (title, illustration, rows); Comparison price already lined up with `justify-between`.
+- The intro text has a max width on mobile too (280px; 320px from lg).
+- Photos picked from the admin files: `offer-body-oil-hands.jpg` (large) and `formula-philosophy-body-oil.jpg` (small).
+
+## 2026-11-24: Text trim fallback for Safari before 18.2 and Firefox
+
+- Hendrik's Safari 17.5 has no native `text-box`, so it used the CSS fallback, which only trims headings and paragraphs. Every other text box (labels in flex rows, buttons, header items, prices, USP tags) kept its full line box: the USP tag dots sat about 2px below the capitals.
+- `assets/text-trim-fallback.js` (loaded on every page, returns at once where `text-box` is supported) marks those boxes with `[data-text-trim]`, and `tailwind/text-trim.css` trims them with negative margins, as clamped text. It marks a box that holds text directly, lays out as a block or flex/grid item, is not a flex or grid container, is not already covered by the CSS fallback, and has no block padding, border or margin. Later content (drawers, reviews) is marked when it arrives.
+- Checked in Firefox 132 (same fallback path) against Chrome on home, body oil and collection: text boxes off by more than 1px went from about 70% to 0 or 1 per page.
+- The USP tag strip (`product-tags`) clipped the trimmed letters in Safari 17 (its clip and fade mask were exactly 12px tall). It is now 20px tall with -4px margins: same place in the layout, room for the letters.
+- Truncated and clamped text (`truncate`, `line-clamp-*`, `text-ellipsis`: every Select label, excerpts) was untrimmed in the fallback: the native branch handled it, the fallback skipped it, so the Select caret sat 2.3px below the capitals. The fallback now gives it the same margin method; the ::before / ::after rules skip it.
+- The accordion plus was an SVG (circle and horizontal line) with the vertical line as a separate 1px span. On a half pixel the two snapped apart and the line looked off centre and blurry. Now both lines are in `icon__plus-circle.svg` and opening rotates the vertical one (`[data-plus-vertical]`) to make the minus.
+- Clamped text is matched with `[class*="truncate"]` (and line-clamp, text-ellipsis) in both branches, so responsive `lg:truncate` counts: the product card subtitle was trimmed to the baseline and its `overflow: hidden` cut the descenders, in every browser.
+- The fallback script also trims boxes whose text sits in inline elements (`li > a`), and boxes with block padding (menu links, chips): their padding shrinks by the trim, set inline so it beats the padding utilities. The footer menu was 41px per link in Firefox and Safari 17, now 29.3px as in Chrome.
+- Accordion: the open and close animation moved from `::details-content` (Safari 18.4+ only, so Safari 17 had no animation) to our own panel `[data-accordion-panel]`, opening from `@starting-style`. The panel has 4px of room at the top (pt-1 with -mt-1) because Safari has no `overflow-clip-margin`. global.js waits for the panel's grid-template-rows transition to close.
+- Rule from Hendrik (24 Nov): text is never cut off, in any browser. Every trim or overflow change is checked in Chrome, WebKit and Firefox.
+- Not fixed: Playwright's WebKit 18.2 (which has native `text-box`) trims too much when line-height is below 1 (big headings sit up to 5px higher) and uses a taller cap height for Sabon. That is a WebKit bug in 18.2 and may be fixed in newer Safari; to be checked on a Mac with a current Safari.
+
+## 2026-11-24: Discovery set page feedback
+
+- Bundle items show the solo bottle shot (`custom.solo_image`, else the main image), contained on the fill, as the mini picker rows (Hendrik's Figma note, 24 Nov).
+- The dots in the bundle item name row (name • size) and the delivery row (date • Free shipping) were not centred: the text was bare text in a flex row, which is never trimmed, so the dot centred on the full line box. Each text is now its own span (same gotcha as the header items, 15 Nov).
+- Reviews: new section setting "Show reviews of" (product list, up to 3). When set, the Filter group gets one more Select first, with one option per product; the first is selected (Discovery: Hair, Body, Face; Hendrik: hair first). Picking another product starts a new reviews core for it, so summary, histogram, list, question filters and the review form follow that product (a review written there goes to that product). The bundle's own reviews are not shown.
+- The Use guide is in the template, but renders nothing: its steps come from `custom.use_steps` and the Discovery Set has none (only Face Oil has steps; Hair and Body Oil have none either).
+- Second round (24 Nov): the bundle item thumb fill is Surface alt, the product card tile fill, darker than the old 3% fill. The item benefits line now comes from the product (card subtitle, else the benefit titles), so it is the same text as the product card; the block's Benefits setting only overrides it. Before, all three items said "Brightens, Calms, Hydrates".
+- `ingredient-explorer.js` had a method called `matches`, which hid the browser's own `Element.matches` on that element, so any script or test that called `.matches()` on the page broke there. Renamed to `itemMatches`.
+
+## 2026-11-24: Essentials set page feedback (Reviews)
+
+- The Reviews section has no development settings any more (shop domain, product ID): it always reads this shop and this product (or the first of "Show reviews of").
+- The recommend share next to the average is no longer a typed number. reviews__ui.js works it out: the share of "Yes" among the answers to the recommend question, over every review of the product (aggregates metafield first, else Judge.me's reviews read page by page; one request shared with the filters). The recommend question is any custom question with "recommend" in its title. Without answers the share is hidden. On 24 Nov no product had custom questions in Judge.me yet, so it is hidden everywhere until the question exists and people answer it.
+- The form has no settings any more: customers always choose how their name is shown, the thank-you message is the locale string, and questions are optional (Judge.me's widget data does not say which are required).
+
+## 2026-11-24: Landing page system
+
+- Four sections, one per Figma section: `hero` (Figma Hero centered; renamed Hero, Hendrik 24 Nov), `logo-strip`, `two-columns-equal`, `two-columns-narrow`. The narrow one is only for topics as tabs (Hendrik, 24 Nov): a topic list on 4 columns, the selected topic's content on 6.
+- The columns and their content are theme blocks in `blocks/` (the first in this theme). Every one is private (`_landing-*`): the underscore keeps them out of every other section; only the landing sections and columns list them (Hendrik: restrict the blocks to these sections).
+- Content blocks: eyebrow, heading, paragraph, image (sm, lg), quote (sm, lg), testimonial, spec table (rows), button (hug, full), accordion (items), rating, products (mini product cards), photo or video, before and after.
+- Every block has top and bottom padding settings on the Figma Spacing scale (spacing/N = N x 4px, the same steps as Tailwind pt-N), and every column a space between blocks (default 40px, as Figma) and padding for desktop and mobile. The classes are built from the setting, so `tailwind.input.css` generates them with `@source inline`.
+- The bracket is a column checkbox; with it the column always has 24px side padding (Hendrik). Without it, Side padding gives 24px from lg and a 560px content width; off, a photo or before/after fills the column.
+- Shopify wraps every theme block in a div. The sections set `*:contents` on their grid so the columns (and the topic rows and panels) are the grid items; otherwise a sticky column cannot move and the topic list cannot form one column.
+- A section cannot read the settings of its theme blocks (`section.blocks` gives type and id only), so each topic renders its own list row and its own panel; the grid puts them in place (rows in the first rows, every panel across all rows, a last 1fr row takes the extra height).
+- New snippets: `landing-column` (shared by the column and topic blocks) and `mini-product-card` (adds the first available variant with product-form.js, which opens the cart drawer). `rating` got `tone: 'inverse'` for the compact rating on the hero photo.
+- Hero options (Hendrik, 24 Nov): Background photo or video (the matching picker shows with visible_if), content alignment centered (Figma) or left, and section height custom (300 to 1000px, default 700) or full screen (the screen below the header). Alignment is a setting here at Hendrik's request, an exception to one layout per section.
+- Logo strip: Press logos is a metaobject list of Press items, picked and ordered in the section (the template has the 6 Figma logos). Logos are balanced as in the Press grid (about 60x60px each, at most 40px tall), so they match Figma's sizes.
+
+
+### 2026-11-24: Hero content is blocks, the same as the other landing sections
+
+The Hero's heading, text and rating were section settings; now the content is blocks (Hendrik: "Just like the other sections"). The Hero lists the same private landing blocks as a Landing column: Eyebrow, Heading, Paragraph, Rating and Button, each with top and bottom padding on the Spacing scale. No separate hero blocks (one name, one file). The hero look is a block option: Heading Size Large (heading/1, display/2 from lg) with level H1, Paragraph Size Large (body/lg), Button style Light (inverse) on the photo. The blocks no longer set text colour: they take Text from the page and Text inverse from the Hero (the Rating block renders `rating` with `tone: 'current'`). Space between blocks is a Hero setting (default 40px, Figma).
+
+### 2026-11-24: Landing Heading and Paragraph sizes are full text-style lists, per breakpoint
+
+Heading has "Size on desktop" and "Size on mobile" with every heading text style except Display (Heading 1 to 6, Serif display, Serif large; Hendrik: remove the three Display sizes), and "Heading level" H1 to H6 or Paragraph (the level changes the outline, not the look). Paragraph has the same two size settings with body/lg, base, sm and xs. Classes are `text-{mobile} lg:text-{desktop}`, generated with `@source inline` in tailwind.input.css. The Hero headline is now Heading 1 (48px) on desktop and mobile, no longer Display 2 (64px) as in Figma.
+Note: when a template sets a block setting that is new in the same change, save the template again after the block has synced; the store drops settings its schema does not know yet.
+
+### 2026-11-24: Every addable landing block has a preset
+
+A theme block shows in the editor's Add block list only when its own schema has `presets`. The landing blocks were built without them, so Hero and the two-column sections showed "No blocks available" (Hendrik, 24 Nov). All landing blocks now have a preset (Topic comes with a Heading and a Paragraph), except Landing column, which is static. Check the Add block list in the editor after building blocks.
+
+### 2026-11-25: Landing spacing options stop at 48px
+
+Block top and bottom padding, column and topic padding (desktop and mobile) and Space between blocks offer 0px to 48px only (spacing 0 to 12; Hendrik, 25 Nov). The larger steps (64 to 128px) are gone from the settings and from the `@source inline` list. Section padding (None, Small, Medium, Large through the section shell) is a separate setting and is unchanged.
+
+### 2026-11-25: Hero overlay opacity and mobile height; Two columns narrow is now Tabs
+
+Hero: "Overlay opacity" (0 to 100%, default 30% as Figma) sets the dark layer over the photo or video (`bg-overlay` with `opacity-(--hero-overlay)`). With Section height Custom there are two heights, "Height on desktop" and "Height on mobile" (both 700px as Figma), as `h-(--hero-height-mobile) lg:h-(--hero-height)`.
+The Two columns narrow section is renamed Tabs (`sections/tabs.liquid`, Hendrik 25 Nov): it only holds topics as tabs. The Figma component keeps its name.
+
+### 2026-11-25: Two columns, bracket padding, photo and video size, button height
+
+- Two columns equal is renamed Two columns (`sections/two-columns.liquid`).
+- Bracket: in Figma the Landing column's bracket is the xs instance stretched to 32px, with 24px padding on all four sides, so the content sits 8px inside the arms (desktop and mobile). Code: `bracket` has a `depth` parameter (`depth: '8'`); the column's bracket box is `relative p-6` and holds its own padding. The separate Side padding checkbox is gone: bracket on is padding on. Column Top and Bottom padding now sit outside the bracket and default to 0.
+- Photo, Photo or video and Before and after blocks: Aspect ratio (list or Custom width and height) and Width on desktop and on mobile in %. The Image block's Small/Large size became widths (default 40% desktop, 75% mobile, about the old 230px). Media sits `absolute! inset-0` in a `relative aspect-(--media-ratio)` box: WebKit did not resolve `height: 100%` in an aspect-ratio box and grew 674:602 to 608px.
+- Button block: the block is `flex`, so its height is the full button. As a block box around an inline button, native text trim cut it to the label (11px for 32px) in Chrome and Safari. Width (Fit the label or Full width) is set for desktop and mobile.
+- Spec table on mobile: label above value, 12px apart (Figma 8px; Hendrik asked for more room, 25 Nov), rows 24px apart.
+
+### 2026-11-25: Landing page starts empty; no 674:602 ratio; right column first on mobile
+
+- The landing template (`templates/page.landing.json`) holds no content: one hidden Hero without blocks, because Shopify does not accept a template with zero sections. Sections and blocks are added in the editor. The full demo version is not kept in the repo.
+- Aspect ratio lists start at Square 1:1 (default); the 674:602 option is gone (Hendrik, 25 Nov).
+- Two columns: "Show the right column first on mobile" (section setting, `max-lg:[&>*:last-child>*]:order-first`).
+
+### 2026-11-25: Section library cleanup
+
+- Deleted from code: `main-index` (the starter atom showcase), `ugc-grid`, `ugc-carousel`, and the `ugc` snippet that only those two rendered. `ugc-slider` (Experience) stays.
+- Not in the editor's Add section list any more (no preset), files kept: Newsletter, Blog posts, Comparison table.
+- Use guide: product templates only (`enabled_on`).
+- Horizontal scroll: no preset, so it can't be added anywhere; it stays on the subscription page template. Shopify's `enabled_on` takes template types (page), not one page template, so this is the only way to keep it to the subscription page.
+- Atoms only the showcase rendered are deleted too (Hendrik, 25 Nov): `divider`, `tabs`, `tab-item`, `variant-option-group`.

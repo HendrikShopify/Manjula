@@ -5,6 +5,8 @@
   size         sm | md | compact   compact = one Ink star, score · "156 reviews" at 50% (Manjula PDP)   (Figma: Size)
   show_score   boolean, default true                         (Figma: Show score)
   show_count   boolean, default true                         (Figma: Show count)
+  tone         default | inverse | current   compact only: inverse is Text inverse, for text on photos; current takes
+               the colour of the block around it (landing blocks, also on the Hero photo)
   class        placement only
 {%- endcomment -%}
 {%- liquid
@@ -25,7 +27,8 @@
 -%}
 {%- if size == 'compact' -%}
   {%- assign count_label = 'products.product.rating_count' | t: count: count -%}
-  <div class="rating inline-flex items-center gap-2 text-label-base text-text {{ class }}" data-size="compact">
+  {%- assign tone_class = 'text-text' -%}{%- if tone == 'inverse' %}{% assign tone_class = 'text-text-inverse' %}{% elsif tone == 'current' %}{% assign tone_class = '' %}{% endif -%}
+  <div class="rating inline-flex items-center gap-2 text-label-base {{ tone_class }} {{ class }}" data-size="compact">
     <span class="size-3 shrink-0 [&>svg]:size-full" aria-hidden="true">{{ 'icon__star.svg' | inline_asset_content }}</span>
     <span class="sr-only">{{ 'products.product.rating_stars' | t: value: value }}</span>
     {%- if show_score %}<span aria-hidden="true">{{ value | times: 1.0 | round: 1 }}</span>{% endif -%}

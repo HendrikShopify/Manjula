@@ -3,7 +3,8 @@
   Same frame as Comparison texture: on the breakout grid, the photo bleeds left to the end of column 4 (desktop only), content on columns 5 to 12, then a display heading, small photo and text.
   Below, two Surface columns: "Buy them separately" lists the products this one replaces with their prices and a struck
   total; "Or one bottle" shows this product, its price and a check list.
-  Rows are blocks (title, sub, price in whole currency units). The left total is the sum of the rows. The right price is
+  Rows are blocks (title, sub, price in whole currency units). The left total is the sum of the rows; its label counts
+  the rows ("Four bottles", locale sections.comparison_price.total_bottles, Hendrik 24 Nov). The right price is
   the product's own price. These are display figures at heading size, not the Price atom (see DECISIONS).
 {%- endcomment -%}
 {%- liquid
@@ -13,6 +14,10 @@
     assign row_cents = block.settings.price | times: 100
     assign total = total | plus: row_cents
   endfor
+  assign number_words = 'sections.comparison_price.number_words' | t | split: ','
+  assign word_index = rows.size | minus: 1
+  assign count_word = number_words[word_index] | default: rows.size
+  assign left_total = 'sections.comparison_price.total_bottles' | t: count: rows.size, number: count_word
   assign product_name = section.settings.product_title | default: product.title
   assign checks = section.settings.checks | newline_to_br | split: '<br />'
 -%}
@@ -55,7 +60,7 @@
         </div>
         <div class="flex flex-col gap-5 border-t border-surface-alt pt-5">
           <p class="flex items-center justify-between gap-2">
-            <span class="text-label-base lg:text-heading-4">{{ section.settings.left_total }}</span>
+            <span class="text-label-base lg:text-heading-4">{{ left_total }}</span>
             <s class="text-heading-4 opacity-60 lg:text-heading-2">{{ total | money_without_trailing_zeros }}</s>
           </p>
         </div>
@@ -111,7 +116,6 @@
     { "type": "textarea", "id": "text", "label": "Text", "default": "Most hair routines split scalp care, growth support, conditioning and styling across four products. This one was formulated to move through all of it." },
     { "type": "header", "content": "Separate products" },
     { "type": "text", "id": "left_label", "label": "Label", "default": "Buy them separately" },
-    { "type": "text", "id": "left_total", "label": "Total label", "default": "Four bottles" },
     { "type": "header", "content": "This product" },
     { "type": "text", "id": "right_label", "label": "Label", "default": "Or one bottle" },
     { "type": "text", "id": "product_title", "label": "Name", "info": "Empty uses the product title" },

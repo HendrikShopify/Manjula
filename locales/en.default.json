@@ -470,6 +470,10 @@
         // }
     },
     "sections": {
+        "landing": {
+            "topics": "Topics",
+            "add_to_cart": "Add {{ name }} to cart"
+        },
         "trial_results": {
             "case_study": "The case study",
             "before": "Before",
@@ -492,6 +496,13 @@
         },
         "results_timeline": {
             "next": "Next result"
+        },
+        "comparison_price": {
+            "number_words": "One,Two,Three,Four,Five,Six",
+            "total_bottles": {
+                "one": "{{ number }} bottle",
+                "other": "{{ number }} bottles"
+            }
         },
         "horizontal_scroll": {
             "next": "Next benefit"

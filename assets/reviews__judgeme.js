@@ -5,6 +5,7 @@
  * Judge.me request URLs and maps Judge.me responses into our own data format.
  * To support another review app, write a new adapter with the same interface:
  *   capabilities, buildUrl(config, state), parse(json), load(config, state, options),
+ *   countAnswers(config, options) (optional: { [questionKey]: { [value]: count } } over all reviews, for the filters),
  *   submitReview(config, data, options), voteReview(reviewId, direction, options), openForm()
  *
  * voteReview: direction is 'up' or 'down'. options: { signal }.
@@ -227,6 +228,38 @@
                 }
                 return parse(json);
             });
+    }
+
+    /**
+     * Count the answers to the custom questions over every review of the product (all pages, unfiltered), for the
+     * filters. Judge.me's widget response has no per-option counts, so the adapter reads the reviews themselves.
+     * Resolves { [questionKey]: { [value]: count } }. At most MAX_COUNT_PAGES pages (30 reviews each).
+     */
+    var MAX_COUNT_PAGES = 20;
+    function countAnswers(config, options) {
+        var countConfig = Object.assign({}, config, { perPage: MAX_PER_PAGE });
+        var signal = options && options.signal;
+        var counts = {};
+        var add = function (data) {
+            data.reviews.forEach(function (review) {
+                review.answers.forEach(function (answer) {
+                    if (answer.value === '') return;
+                    var entry = (counts[answer.key] = counts[answer.key] || {});
+                    entry[answer.value] = (entry[answer.value] || 0) + 1;
+                });
+            });
+        };
+        return load(countConfig, { page: 1 }, { signal: signal }).then(function (first) {
+            add(first);
+            var pages = Math.min(first.page.totalPages || 1, MAX_COUNT_PAGES);
+            var rest = [];
+            for (var page = 2; page <= pages; page++) {
+                rest.push(load(countConfig, { page: page }, { signal: signal }).then(add));
+            }
+            return Promise.all(rest).then(function () {
+                return counts;
+            });
+        });
     }
 
     function createError(message, details) {
@@ -527,6 +560,7 @@
         buildUrl: buildUrl,
         parse: parse,
         load: load,
+        countAnswers: countAnswers,
         submitReview: submitReview,
         voteReview: voteReview,
         openForm: openForm,

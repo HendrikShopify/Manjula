@@ -1,0 +1,247 @@
+{%- comment -%}
+  Figma: Sections / Hero centered (2743:4663; Templates FEEDBACK Landing / Desktop 2701:25985, Mobile 2701:25995)
+  Named Hero in code and the editor (Hendrik, 24 Nov).
+  A photo or a video (Background setting) with a dark overlay (Overlay opacity, default 30% as Figma), and on it a stack of blocks (432px wide at most,
+  Text inverse; Space between blocks, default 40px as Figma). The blocks are the same as in the other landing sections
+  (Hendrik, 24 Nov): Eyebrow, Heading (Size Heading 1 and H1 for the headline; no Display sizes, Hendrik 24 Nov), Paragraph (Size Large on desktop and mobile), Rating and
+  Button (Light style on the photo), added, removed and ordered in the editor, each with its own top and bottom padding.
+  alignment   center (Figma): the content in the middle of the section | left: on the left page margin, text left
+  height      custom: a height in px on desktop and one on mobile (Figma 700 both) | screen: the screen height below the header (56px mobile, 52px lg)
+  A video plays muted on a loop (the media snippet; the image shows with reduced motion when there is one). Video picked
+  but empty falls back to the photo. Markup inline in this section.
+{%- endcomment -%}
+{%- liquid
+  assign shown = section.settings.image
+  if section.settings.background == 'video' and section.settings.video != blank
+    assign shown = section.settings.video
+  endif
+  if section.settings.height == 'screen'
+    assign height_class = 'h-[calc(100svh-var(--spacing)*14)] lg:h-[calc(100svh-var(--spacing)*13)]'
+    assign height_style = ''
+  else
+    assign height_class = 'h-(--hero-height-mobile) lg:h-(--hero-height)'
+    assign height_style = '--hero-height: ' | append: section.settings.custom_height | append: 'px; --hero-height-mobile: ' | append: section.settings.custom_height_mobile | append: 'px;'
+  endif
+  if section.settings.alignment == 'left'
+    assign place = 'justify-start'
+    assign content_align = 'items-start text-left'
+  else
+    assign place = 'justify-center'
+    assign content_align = 'items-center text-center'
+  endif
+-%}
+{%- assign overlay = section.settings.overlay_opacity | divided_by: 100.0 -%}
+<section class="hero relative flex {{ height_class }} items-center overflow-hidden bg-surface-alt" style="{{ height_style }} --hero-overlay: {{ overlay }};">
+  <div class="absolute inset-0">
+    {% render 'media', media: shown, ratio: 'fill', autoplay: true, loading: 'eager', sizes: '100vw', class: 'size-full' %}
+    <span class="absolute inset-0 bg-overlay opacity-(--hero-overlay)" aria-hidden="true"></span>
+  </div>
+  <div class="relative mx-auto flex w-full max-w-page {{ place }} px-page-margin">
+    <div class="flex w-full max-w-108 flex-col {{ content_align }} gap-y-{{ section.settings.gap }} text-text-inverse">
+      {% content_for 'blocks' %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "tag": "section",
+  "class": "section-hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "select",
+      "id": "background",
+      "label": "Background",
+      "default": "image",
+      "options": [
+        {
+          "value": "image",
+          "label": "Photo"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo",
+      "visible_if": "{{ section.settings.background == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "info": "Plays muted on a loop.",
+      "visible_if": "{{ section.settings.background == 'video' }}"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 30,
+      "info": "A dark layer over the photo or video, so the text stays readable."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Content alignment",
+      "default": "center",
+      "options": [
+        {
+          "value": "center",
+          "label": "Centered"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Section height",
+      "default": "custom",
+      "options": [
+        {
+          "value": "custom",
+          "label": "Custom"
+        },
+        {
+          "value": "screen",
+          "label": "Full screen"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "custom_height",
+      "label": "Height on desktop",
+      "min": 300,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 700,
+      "visible_if": "{{ section.settings.height == 'custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "custom_height_mobile",
+      "label": "Height on mobile",
+      "min": 300,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 700,
+      "visible_if": "{{ section.settings.height == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "gap",
+      "label": "Space between blocks",
+      "options": [
+        {
+          "value": "0",
+          "label": "0px"
+        },
+        {
+          "value": "1",
+          "label": "4px"
+        },
+        {
+          "value": "2",
+          "label": "8px"
+        },
+        {
+          "value": "3",
+          "label": "12px"
+        },
+        {
+          "value": "4",
+          "label": "16px"
+        },
+        {
+          "value": "5",
+          "label": "20px"
+        },
+        {
+          "value": "6",
+          "label": "24px"
+        },
+        {
+          "value": "8",
+          "label": "32px"
+        },
+        {
+          "value": "10",
+          "label": "40px"
+        },
+        {
+          "value": "12",
+          "label": "48px"
+        }
+      ],
+      "default": "10"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero",
+      "blocks": [
+        {
+          "type": "_landing-heading",
+          "settings": {
+            "heading": "This is a headline",
+            "size": "heading-1",
+            "size_mobile": "heading-1",
+            "tag": "h1"
+          }
+        },
+        {
+          "type": "_landing-paragraph",
+          "settings": {
+            "size": "body-lg",
+            "size_mobile": "body-lg"
+          }
+        },
+        {
+          "type": "_landing-rating"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "_landing-eyebrow"
+    },
+    {
+      "type": "_landing-heading"
+    },
+    {
+      "type": "_landing-paragraph"
+    },
+    {
+      "type": "_landing-rating"
+    },
+    {
+      "type": "_landing-button"
+    }
+  ]
+}
+{% endschema %}

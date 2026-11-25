@@ -3,11 +3,13 @@
   side      left (default) | right | top                        (Figma: Side; "[", "]", "⊓")
   size      xs 20 | sm 24 | md 52 (default) | lg 80 | xl 200, the depth   (Figma: Size; xl = Comparison composition list)
   strength  light 10% | default 20% | strong 60% | solid 100%    (Figma: Strength; solid = Comparison composition, Manjula)
+  depth     optional depth override as a Spacing step (8 = 32px): an instance stretched in Figma (Landing column: xs, 32px deep)
   class     placement only
   Open bracket: 1px Ink line with 4px corners (radius-bracket, the only rounded element in Manjula). Decorative. It is absolute, so the parent needs `relative`; it stretches
   along the open axis (full height for left/right, full width for top).
 {%- endcomment -%}
 {%- liquid
+  assign depth_step = depth
   assign side = side | default: 'left'
   assign size = size | default: 'md'
   assign strength = strength | default: 'default'
@@ -34,6 +36,9 @@
     else
       assign depth = axis | append: '-13'
   endcase
+  if depth_step != blank
+    assign depth = axis | append: '-' | append: depth_step
+  endif
   case strength
     when 'light'
       assign opacity = 'opacity-10'
@@ -46,4 +51,4 @@
   endcase
 -%}
 <span class="bracket pointer-events-none absolute {{ side_class }} {{ depth }} border-text {{ opacity }} {{ class }}" aria-hidden="true" data-side="{{ side }}"></span>
-{%- comment -%} Tailwind sources for the composed depth classes: w-5 w-6 w-13 w-20 w-50 h-5 h-6 h-13 h-20 h-50 {%- endcomment -%}
+{%- comment -%} Tailwind sources for the composed depth classes: w-5 w-6 w-8 w-13 w-20 w-50 h-5 h-6 h-8 h-13 h-20 h-50 {%- endcomment -%}

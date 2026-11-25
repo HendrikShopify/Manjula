@@ -1,0 +1,42 @@
+{%- comment -%}
+  Figma: Components Atoms / Landing column (2171:25782): Type Content, Media, Before after; Sticky
+  The shell of a Landing column (blocks/_landing-column) and a Landing topic (blocks/_landing-tab): both render it,
+  so the two look the same.
+  content      captured blocks ({% content_for 'blocks' %})
+  settings     the block's settings:
+                 show_bracket   the light bracket on the left, 32px deep (Figma: xs stretched to 32). It brings its own
+                                padding: 24px on all four sides, so the content sits 8px inside the bracket's arms, and
+                                blocks at most 560px wide from lg (Figma: Content, desktop and mobile). Off: no padding,
+                                for a photo or before/after that fills the column (Figma: Media, Before after). One
+                                setting, no separate side padding (Hendrik, 25 Nov)
+                 sticky         stays in view from lg while the other column scrolls (Figma: Sticky=Yes)
+                 gap            space between blocks
+                 padding_top, padding_bottom, padding_top_mobile, padding_bottom_mobile: space outside the
+                                bracket (Figma Media: 40px top on desktop)
+               Spacing values are steps of the Figma Spacing scale (spacing/N = N x 4px), used as Tailwind pt-N, pb-N
+               and gap-y-N (generated in tailwind.input.css with @source inline).
+  attributes   block.shopify_attributes and, for a topic, its panel id and hooks
+  class        placement only (a topic's grid cell)
+  Sticky follows the header like Botanical farm: top 0, or below the header (52px) while it shows.
+{%- endcomment -%}
+{%- liquid
+  assign pad = 'pt-' | append: settings.padding_top_mobile | append: ' pb-' | append: settings.padding_bottom_mobile | append: ' lg:pt-' | append: settings.padding_top | append: ' lg:pb-' | append: settings.padding_bottom
+  assign sticky = ''
+  if settings.sticky
+    assign sticky = 'lg:sticky lg:top-0 lg:self-start lg:transition-[top] lg:duration-300 lg:[body:has([data-header]:not([data-hidden]))_&]:top-13'
+  endif
+-%}
+<div class="landing-column min-w-0 {{ pad }} {{ sticky }} {{ class }}" {{ attributes }}>
+  {%- if settings.show_bracket -%}
+    <div class="relative p-6">
+      {% render 'bracket', side: 'left', size: 'xs', depth: '8', strength: 'light' %}
+      <div class="flex flex-col gap-y-{{ settings.gap }} lg:max-w-140">
+        {{ content }}
+      </div>
+    </div>
+  {%- else -%}
+    <div class="flex flex-col gap-y-{{ settings.gap }}">
+      {{ content }}
+    </div>
+  {%- endif -%}
+</div>

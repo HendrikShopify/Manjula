@@ -1,14 +1,16 @@
 {%- liquid
-  assign shop_domain = section.settings.dev_shop_domain | default: shop.permanent_domain
-  assign product_id = section.settings.dev_product_id | default: product.id
-  assign aggregates = product.metafields.reviews.aggregates.value
+  assign shop_domain = shop.permanent_domain
+  assign sources = section.settings.review_products
+  assign first_source = sources | first
+  assign product_id = first_source.id | default: product.id
+  if first_source
+    assign aggregates = first_source.metafields.reviews.aggregates.value
+  else
+    assign aggregates = product.metafields.reviews.aggregates.value
+  endif
   assign recommend_label = section.settings.recommend_label | default: 'Would recommend this product.'
   assign heading = section.settings.heading | default: 'Customer reviews'
-  assign name_format = section.settings.name_format | default: 'customer'
-  assign form_success = section.settings.form_success_message
-  if form_success == blank
-    assign form_success = 'reviews.form.success' | t
-  endif
+  assign form_success = 'reviews.form.success' | t
   assign form_remove_photo = 'reviews.form.remove_photo' | t: name: '__NAME__'
   assign form_photo_count = 'reviews.form.error_photo_count' | t: count: '__COUNT__'
   assign form_photo_size = 'reviews.form.error_photo_size' | t: name: '__NAME__'
@@ -52,15 +54,14 @@
           </p>
           <p class="text-body-sm text-text opacity-50" data-reviews-based>{{ 'reviews.based_on_other' | t: count: dummy_count }}</p>
         </div>
-        {%- if section.settings.recommend_percent != blank -%}
-          <div class="flex flex-col gap-4.5 text-text">
-            <p class="flex items-start gap-1">
-              <span class="text-display-2">{{ section.settings.recommend_percent }}</span>
-              <span class="text-heading-3">%</span>
-            </p>
-            <p class="text-body-sm opacity-50">{{ recommend_label }}</p>
-          </div>
-        {%- endif -%}
+        {%- comment -%} Recommend share: the share of Yes answers to the recommend question, from the reviews (reviews__ui.js). Hidden without answers. {%- endcomment -%}
+        <div class="flex flex-col gap-4.5 text-text" data-reviews-recommend-stat hidden>
+          <p class="flex items-start gap-1">
+            <span class="text-display-2" data-reviews-recommend-percent></span>
+            <span class="text-heading-3">%</span>
+          </p>
+          <p class="text-body-sm opacity-50">{{ recommend_label }}</p>
+        </div>
       </div>
     </div>
 
@@ -71,7 +72,9 @@
         {% render 'reviews__histogram', total: dummy_count, counts: dummy_histogram %}
       </div>
       <div class="flex flex-col gap-6" data-reviews-toolbar>
-        <div class="flex flex-col gap-3">
+        {%- comment -%} The Filter group hides while reviews__ui.js has built no filters (empty [data-reviews-filters]).
+          With "Show reviews of" set (a set like the Discovery set), the first filter switches between those products. {%- endcomment -%}
+        <div class="flex flex-col gap-3 has-[[data-reviews-filters]:empty]:hidden">
           <p class="text-label-caps text-text">{{ 'reviews.filter' | t }}</p>
           <div class="-mr-page-margin flex gap-1 overflow-x-auto pr-page-margin lg:mr-0 lg:flex-wrap lg:overflow-visible lg:pr-0" data-select-scroll>
             {% render 'reviews__filters' %}
@@ -110,9 +113,13 @@
       "perPage": 6,
       "locale": {{ request.locale.iso_code | json }},
       "aggregates": {% if aggregates %}{{ aggregates | json }}{% else %}null{% endif %},
+      "sources": [
+        {%- for source in sources -%}
+          {%- assign source_aggregates = source.metafields.reviews.aggregates.value -%}
+          { "id": {{ source.id | json }}, "label": {{ source.title | json }}, "aggregates": {% if source_aggregates %}{{ source_aggregates | json }}{% else %}null{% endif %} }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ],
       "recommendLabel": {{ recommend_label | json }},
-      "nameFormat": {{ name_format | json }},
-      "requiredQuestions": {{ section.settings.required_questions | default: '' | json }},
       "formSuccessMessage": {{ form_success | json }},
       "labels": {
         "anonymous": {{ 'reviews.anonymous' | t | json }},
@@ -169,57 +176,22 @@
   "settings": [
     {
       "type": "text",
-      "id": "dev_shop_domain",
-      "label": "Shop domain",
-      "info": "Development only. Leave empty on client stores."
-    },
-    {
-      "type": "text",
-      "id": "dev_product_id",
-      "label": "Product ID",
-      "info": "Development only. Leave empty on client stores."
-    },
-    {
-      "type": "text",
       "id": "heading",
       "label": "Heading",
       "default": "Customer reviews"
+    },
+    {
+      "type": "product_list",
+      "id": "review_products",
+      "label": "Show reviews of",
+      "limit": 3,
+      "info": "For a set: customers switch between these products in the filters, the first is selected. Leave empty to show this product's reviews."
     },
     {
       "type": "text",
       "id": "recommend_label",
       "label": "Recommend label",
       "default": "Would recommend this product."
-    },
-    {
-      "type": "text",
-      "id": "recommend_percent",
-      "label": "Recommend share",
-      "info": "Number shown as a percentage next to the average, e.g. 100. Empty hides it."
-    },
-    {
-      "type": "select",
-      "id": "name_format",
-      "label": "Name format",
-      "default": "customer",
-      "options": [
-        { "value": "customer", "label": "Let customer choose" },
-        { "value": "full", "label": "Full name" },
-        { "value": "last_initial", "label": "First name and last initial" },
-        { "value": "anonymous", "label": "Anonymous" }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "required_questions",
-      "label": "Required questions",
-      "info": "Question keys are the question titles in lowercase with underscores."
-    },
-    {
-      "type": "text",
-      "id": "form_success_message",
-      "label": "Form success message",
-      "default": "Thanks for your review. It will appear once it's approved."
     }
   ],
   "presets": [

@@ -1,53 +1,55 @@
 {%- comment -%}
-  Figma: Sections / Results timeline (2104:34198; Templates FINAL PDP / Hair oil 2526:26046, mobile 2526:26058)
+  Figma: Sections / Results timeline (2104:34198; Templates FEEDBACK PDP / Hair oil 2701:26053, mobile 2701:26065)
   Desktop: title, a strong top bracket across the row, then four Timeline steps of 3 columns each.
-  Mobile: the steps scroll sideways (230px cards), with a glass Next button over the second card.
-  Timeline step (2104:23471): tick marker, dashed line, caps label, image, description.
-  The first step is Active; the rest are Upcoming (label and text 60%, image 30%). The caret sits on step 2 and marks
-  "you are here" (Figma: Show caret). Steps are blocks.
-  JS: results-timeline.js (mobile Next button), hooks data-results-timeline-*.
+  Mobile: the steps are a Swiper card track (230px cards) with one glass Next button, as the UGC slider.
+  Timeline step (2104:23471): dotted tick marker, dotted line that fades out downwards (1px dots, 60% to 0), caps label,
+  image, description. The first step's marker is invisible but keeps its space (Hendrik, 24 Nov).
+  Desktop: when the steps scroll into view, the caret (Figma: Show caret) slides from step to step, 1s per step (power4.inOut), and
+  each step turns Active as the caret reaches it (data-active). It plays once and the caret stays on the last step
+  (Hendrik, 24 Nov). Upcoming: label and text 30%, image 15% (Hendrik, 24 Nov; Figma has 60% and 30%). Steps are blocks.
+  JS: results-timeline.js, hooks data-results-timeline-*.
 {%- endcomment -%}
-{%- assign steps = section.blocks | where: 'type', 'step' -%}
+{%- liquid
+  assign steps = section.blocks | where: 'type', 'step'
+  assign dots = 'bg-[repeating-linear-gradient(to_bottom,var(--color-text)_0_1px,transparent_1px_2px)]'
+-%}
 <script src="{{ 'results-timeline.js' | asset_url }}" defer="defer"></script>
-<results-timeline class="results-timeline mx-auto flex w-full max-w-page flex-col gap-6 bg-background py-section-md lg:px-page-margin">
+<results-timeline class="results-timeline group/timeline mx-auto flex w-full max-w-page flex-col gap-6 bg-background py-section-md lg:px-page-margin">
   {%- if section.settings.heading != blank -%}
-    <h2 class="px-page-margin text-heading-2 text-text lg:px-0 lg:text-heading-1">{{ section.settings.heading }}</h2>
+    <h2 class="px-page-margin text-heading-2 text-text lg:px-0 lg:text-heading-1" data-results-timeline-edge>{{ section.settings.heading }}</h2>
   {%- endif -%}
 
-  <div class="relative">
-    <ol class="flex snap-x snap-mandatory scroll-px-page-margin gap-gutter overflow-x-auto px-page-margin [scrollbar-width:none] lg:grid lg:grid-cols-12 lg:gap-x-gutter lg:overflow-visible lg:px-0 lg:pt-11 lg:pb-11" role="list" data-results-timeline-track>
-      {%- for block in steps -%}
-        {%- liquid
-          assign upcoming = true
-          assign image_class = 'h-62.5 w-50 lg:h-31.25 lg:w-25 lg:opacity-30'
-          if forloop.first
-            assign upcoming = false
-            assign image_class = 'h-62.5 w-50 lg:h-31.25 lg:w-25'
-          endif
-        -%}
-        <li class="relative flex w-57.5 shrink-0 snap-start flex-col gap-6 lg:col-span-3 lg:w-auto" {{ block.shopify_attributes }}>
-          <span class="absolute -top-11 left-0 h-5 border-l border-dashed border-text opacity-60 max-lg:hidden" aria-hidden="true"></span>
-          {%- if forloop.index == 2 -%}
-            <span class="absolute -top-4.75 -left-1 h-1.25 w-2.25 rotate-180 text-text max-lg:hidden [&>svg]:size-full" aria-hidden="true">{{ 'icon__caret-down.svg' | inline_asset_content }}</span>
-          {%- endif -%}
-          <div class="flex gap-3">
-            <span class="w-px shrink-0 self-stretch border-l border-dashed border-text/60" aria-hidden="true"></span>
-            <div class="flex min-w-0 flex-1 flex-col gap-6 text-text">
-              <p class="text-label-caps-lg{% if upcoming %} lg:opacity-60{% endif %}">{{ block.settings.label }}</p>
-              {% render 'media', media: block.settings.image, ratio: 'fill', sizes: '(min-width: 1024px) 100px, 200px', class: image_class %}
-              {%- if block.settings.text != blank -%}
-                <p class="text-body-sm{% if upcoming %} lg:opacity-60{% endif %}">{{ block.settings.text }}</p>
-              {%- endif -%}
+  <div class="relative overflow-x-clip lg:overflow-visible">
+    <div class="swiper w-full" data-results-timeline-track>
+      <ol class="swiper-wrapper flex lg:grid lg:grid-cols-12 lg:gap-x-gutter lg:pt-11 lg:pb-11" role="list">
+        {%- for block in steps -%}
+          <li
+            class="swiper-slide group/step relative flex w-57.5 shrink-0 flex-col gap-6 lg:col-span-3 lg:w-auto"
+            data-results-timeline-step
+            data-active="{% if forloop.first %}true{% else %}false{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            <span class="absolute -top-11 left-0 h-5 w-px opacity-60 max-lg:hidden {{ dots }}{% if forloop.first %} invisible{% endif %}" aria-hidden="true"></span>
+            <div class="flex gap-3">
+              <span class="w-px shrink-0 self-stretch opacity-60 [mask-image:linear-gradient(to_bottom,black,transparent)] {{ dots }}" aria-hidden="true"></span>
+              <div class="flex min-w-0 flex-1 flex-col gap-6 text-text">
+                <p class="text-label-caps-lg transition-opacity duration-500 lg:opacity-30 lg:group-data-[active=true]/step:opacity-100 motion-reduce:transition-none">{{ block.settings.label }}</p>
+                {% render 'media', media: block.settings.image, ratio: 'fill', sizes: '(min-width: 1024px) 100px, 200px', class: 'h-62.5 w-50 transition-opacity duration-500 lg:h-31.25 lg:w-25 lg:opacity-15 lg:group-data-[active=true]/step:opacity-100 motion-reduce:transition-none' %}
+                {%- if block.settings.text != blank -%}
+                  <p class="max-w-70 text-body-sm text-balance transition-opacity duration-500 lg:opacity-30 lg:group-data-[active=true]/step:opacity-100 motion-reduce:transition-none">{{ block.settings.text }}</p>
+                {%- endif -%}
+              </div>
             </div>
-          </div>
-        </li>
-      {%- endfor -%}
-    </ol>
+          </li>
+        {%- endfor -%}
+      </ol>
+    </div>
     {%- if steps.size > 1 -%}
       {% render 'bracket', side: 'top', size: 'xs', strength: 'strong', class: 'max-lg:hidden' %}
+      <span class="absolute top-6 left-0 -ml-1.25 h-1.75 w-2.5 text-text opacity-60 max-lg:hidden [&>svg]:size-full" aria-hidden="true" data-results-timeline-caret>{{ 'icon__caret-up-thin.svg' | inline_asset_content }}</span>
       <button
         type="button"
-        class="absolute top-33.5 left-68.5 flex size-12 cursor-pointer items-center justify-center border border-background/40 bg-text/30 text-background backdrop-blur-sm focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus lg:hidden"
+        class="absolute top-33.5 right-page-margin z-10 flex size-12 cursor-pointer items-center justify-center border border-background/40 bg-text/30 text-background backdrop-blur-sm transition-[opacity,visibility] duration-300 group-data-past-first/timeline:invisible group-data-past-first/timeline:opacity-0 focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus motion-reduce:transition-none lg:hidden"
         aria-label="{{ 'sections.results_timeline.next' | t | escape }}"
         data-results-timeline-next
       >

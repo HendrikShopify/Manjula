@@ -113,7 +113,7 @@ class IngredientExplorer extends BaseComponent {
     this.apply();
   }
 
-  matches(item, type, fn) {
+  itemMatches(item, type, fn) {
     const okType = type === 'all' || item.dataset.types.split(' ').includes(type);
     const okFn = fn === 'all' || item.dataset.functions.split(' ').includes(fn);
     return okType && okFn;
@@ -126,7 +126,7 @@ class IngredientExplorer extends BaseComponent {
     let selectedVisible = true;
     this.querySelectorAll('[data-ingredient-filter="function"]').forEach((row) => {
       const value = row.dataset.value;
-      const empty = value !== 'all' && !this.items.some((item) => this.matches(item, type, value));
+      const empty = value !== 'all' && !this.items.some((item) => this.itemMatches(item, type, value));
       row.hidden = empty;
       if (empty && value === this.dataset.function) selectedVisible = false;
     });
@@ -140,7 +140,7 @@ class IngredientExplorer extends BaseComponent {
     let shown = 0;
     let matches = 0;
     this.items.forEach((item, i) => {
-      const match = this.matches(item, type, fn);
+      const match = this.itemMatches(item, type, fn);
       if (match) matches += 1;
       const visible = match && (!mobile || this.expanded || shown < MOBILE_LIMIT);
       if (visible) shown += 1;

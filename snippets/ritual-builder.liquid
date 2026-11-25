@@ -184,9 +184,9 @@
       {% render 'helper-text', text: '', type: 'error', id: error_id, attributes: 'hidden data-product-form-error' %}
     </product-form>
     <p class="flex items-center gap-2.5 text-label-sm text-text">
-      {{- delivery_text -}}
+      <span>{{ delivery_text }}</span>
       {%- if delivery_note != blank -%}
-        <span class="size-1 rounded-full bg-current" aria-hidden="true"></span>{{ delivery_note }}
+        <span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span><span>{{ delivery_note }}</span>
       {%- endif -%}
     </p>
   </div>

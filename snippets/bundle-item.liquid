@@ -1,34 +1,55 @@
 {%- comment -%}
   Figma: Components Molecules / Bundle item (2142:22600)
-  Item inside a bundle on the Bundle Product form: 82x100 packshot on a subtle fill, name · size, benefits at 60%,
+  Item inside a bundle on the Bundle Product form: 82x100 solo bottle shot (custom.solo_image, else the main image;
+  Hendrik 24 Nov) on a subtle fill, name · size, benefits at 60%,
   and a View details link, on Surface. View details opens the Quick view drawer (data-quick-view-trigger, quick-view.js);
   without JS it is a plain link to the product.
   product      product object; gives the image, the fallback name and the link
   name         optional name override, e.g. Face oil
   size_label   e.g. 10ml
-  benefits     e.g. Brightens, Calms, Hydrates
+  benefits     optional override, e.g. Brightens, Calms, Hydrates. Without it the line comes from the product, as the
+               product card subtitle: custom.product_card_subtitle, else the titles of custom.benefits (Hendrik 24 Nov).
   class, attributes   placement and JS hooks
+  Name and size are each in their own span: bare text in the flex row is not trimmed, so the dot sat off the capitals.
 {%- endcomment -%}
 {%- liquid
   assign item_name = name | default: product.title
   assign view_label = 'products.product.bundle.view_details' | t
+  assign benefit_line = benefits
+  if benefit_line == blank
+    assign benefit_line = product.metafields.custom.product_card_subtitle.value
+  endif
+  if benefit_line == blank
+    assign benefit_line = ''
+    for item in product.metafields.custom.benefits.value
+      assign benefit_title = item | split: '--' | first | strip
+      if benefit_title == blank
+        continue
+      endif
+      if benefit_line != ''
+        assign benefit_line = benefit_line | append: ', '
+      endif
+      assign benefit_line = benefit_line | append: benefit_title
+    endfor
+  endif
 -%}
 <div class="bundle-item flex h-25 items-center bg-surface text-text {{ class }}"{% if attributes %} {{ attributes }}{% endif %}>
-  <div class="h-25 w-20.5 shrink-0 bg-text/3">
-    {%- if product.featured_image -%}
-      {{ product.featured_image | image_url: width: 164 | image_tag: alt: '', class: 'size-full object-cover', loading: 'lazy', sizes: '82px' }}
+  <div class="h-25 w-20.5 shrink-0 bg-surface-alt">
+    {%- assign thumb = product.metafields.custom.solo_image.value | default: product.featured_image -%}
+    {%- if thumb -%}
+      {{ thumb | image_url: width: 246 | image_tag: widths: '82, 164, 246', alt: '', class: 'size-full object-contain', loading: 'lazy', sizes: '82px' }}
     {%- endif -%}
   </div>
   <div class="flex min-w-0 flex-1 items-center justify-between gap-3 px-3 py-6">
     <div class="flex min-w-0 flex-col gap-3">
       <p class="flex items-center gap-1 text-label-base">
-        {{- item_name -}}
+        <span>{{ item_name }}</span>
         {%- if size_label != blank -%}
-          <span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span>{{ size_label }}
+          <span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span><span>{{ size_label }}</span>
         {%- endif -%}
       </p>
-      {%- if benefits != blank -%}
-        <p class="text-body-xs opacity-60">{{ benefits }}</p>
+      {%- if benefit_line != blank -%}
+        <p class="text-body-xs opacity-60">{{ benefit_line }}</p>
       {%- endif -%}
     </div>
     {%- if product.url -%}

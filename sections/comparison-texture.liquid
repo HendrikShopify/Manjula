@@ -10,6 +10,8 @@
   The value sits in its own block next to the mark, so it is trimmed to cap height and the 16px mark centres on the
   capitals (a bare text node in a flex row is not trimmed and sat higher than the mark).
   The small photo falls back to the large photo when it is empty.
+  The two columns share one subgrid (title, illustration, rows), so the illustrations and rows line up even when a
+  title or subtitle wraps (Hendrik, 24 Nov).
 {%- endcomment -%}
 {%- assign small_image = section.settings.image | default: section.settings.media -%}
 <div class="comparison-texture section-breakout bg-background py-section-md">
@@ -30,7 +32,7 @@
       {%- endif -%}
     </div>
 
-    <div class="grid w-full grid-cols-2 gap-2 lg:max-w-205 lg:gap-1">
+    <div class="grid w-full grid-cols-2 gap-x-2 gap-y-5 lg:max-w-205 lg:gap-x-1">
       {%- for side in (1..2) -%}
         {%- liquid
           if side == 1
@@ -45,7 +47,7 @@
             assign mark = 'icon__plus-thick.svg'
           endif
         -%}
-        <div class="flex min-w-0 flex-col gap-5">
+        <div class="row-span-3 grid min-w-0 grid-rows-subgrid">
           <div class="flex flex-col gap-3 text-text">
             <h3 class="text-heading-3 lg:text-heading-2">{{ col_title }}</h3>
             {%- if col_sub != blank -%}<p class="text-body-sm">{{ col_sub }}</p>{%- endif -%}

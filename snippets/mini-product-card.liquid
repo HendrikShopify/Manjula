@@ -1,0 +1,41 @@
+{%- comment -%}
+  Figma: Components Atoms / Mini product card (2170:25662), used by the Landing Products block
+  product   product object
+  class     placement only
+  122px wide on Surface alt: a square bottle shot (custom.solo_image, else the main image), title (label/base) and
+  price (Price sm), centred; a 24px Add button in the top right corner adds the first available variant to the cart
+  (product-form.js, which opens the cart drawer). Sold out: the button is disabled.
+  Fixed width: it is a small card in a row, like carousel cards.
+{%- endcomment -%}
+{%- liquid
+  assign thumb = product.metafields.custom.solo_image.value | default: product.featured_image
+  assign variant = product.selected_or_first_available_variant
+  assign add_label = 'sections.landing.add_to_cart' | t: name: product.title
+-%}
+<div class="mini-product-card relative flex w-30.5 shrink-0 flex-col bg-surface-alt text-text {{ class }}">
+  <a href="{{ product.url }}" class="flex flex-col focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus">
+    <span class="block aspect-square w-full">
+      {%- if thumb -%}
+        {{ thumb | image_url: width: 366 | image_tag: alt: '', widths: '122, 244, 366', sizes: '122px', loading: 'lazy', class: 'size-full object-contain' }}
+      {%- endif -%}
+    </span>
+    <span class="flex flex-col items-center gap-2 p-3 text-center">
+      <span class="text-label-base">{{ product.title | escape }}</span>
+      {% render 'price', product: product, use_variant: true, size: 'sm' %}
+    </span>
+  </a>
+  <product-form class="absolute top-0 right-0">
+    {%- form 'product', product, novalidate: 'novalidate' -%}
+      <input type="hidden" name="id" value="{{ variant.id }}">
+      <button
+        type="submit"
+        name="add"
+        class="flex size-6 cursor-pointer items-center justify-center bg-accent text-accent-contrast transition-colors hover:bg-accent-hover focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:cursor-not-allowed disabled:opacity-30 aria-busy:opacity-60 [&>svg]:size-4"
+        aria-label="{{ add_label | escape }}"
+        {% unless variant.available %}disabled{% endunless %}
+      >
+        {{- 'icon__plus.svg' | inline_asset_content -}}
+      </button>
+    {%- endform -%}
+  </product-form>
+</div>

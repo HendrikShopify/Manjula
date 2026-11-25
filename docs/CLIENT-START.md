@@ -20,7 +20,7 @@ Starting from a client's existing site? Read its colours and fonts first (`docs/
 ## 3. Replace placeholders
 
 - `assets/logo.svg` and `assets/logo-symbol.svg` are the Blanc placeholder (outlined "Blanc"). Replace both, and in Figma the Logo component.
-- `templates/index.json` renders `main-index`, a temporary atom showcase. Swap it for real sections once the homepage is designed.
+- The starter atom showcase section (`main-index`) is removed (Manjula, 25 Nov); `templates/index.json` holds the real homepage sections.
 - `sections/comparison-table.liquid` holds placeholder strings (Blanc, Others, Shop now). Edit the strings or feed the snippet real data.
 - Locale strings in `locales/en.default.json` carry the copy. Product, collection and page content comes from the store.
 

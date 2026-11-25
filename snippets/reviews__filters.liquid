@@ -2,6 +2,8 @@
   Figma: Components Atoms / Reviews toolbar, Filter and Sort (Select in the chip style: a Filter chip with a caret, Width Hug on every screen; on mobile the chips scroll sideways and the sort does not fill the row, + Dropdown menu of Menu items)
   JS: reviews__ui.js clones one Select per custom question and one for the sort from the templates below, fills the options before it is attached, and listens for select:change (custom-select.js drives opening, keyboard and the check marks).
   A filter shows the question label as placeholder; picking the selected value again clears the filter.
+  Only questions with at least 2 options that reviews picked get a filter, listing only those options with their count
+  (counted over all reviews by the adapter's countAnswers; Hendrik, 24 Nov).
 {%- endcomment -%}
 <div class="contents" data-reviews-filters></div>
 

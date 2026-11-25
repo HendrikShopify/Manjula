@@ -5,7 +5,11 @@
 (function () {
     'use strict';
 
-    var RECOMMEND_KEY = 'recommend';
+    // The "would you recommend" question: any custom question whose title has "recommend" in it (key is the slug).
+    function isRecommend(key) {
+        return String(key || '').indexOf('recommend') !== -1;
+    }
+    var FILTER_MIN_OPTIONS = 2; // a filter needs at least two options that reviews picked (Hendrik, 24 Nov)
     var VOTES_KEY = 'reviews_votes';
 
     function voteEntry(value) {
@@ -56,6 +60,7 @@
             this.config = JSON.parse(configNode.textContent);
             this.list = this.querySelector('[data-reviews-list]');
             this.summary = this.querySelector('[data-reviews-summary]');
+            this.recommendStat = this.querySelector('[data-reviews-recommend-stat]');
             this.histogram = this.querySelector('[data-reviews-histogram]');
             this.histogramTemplate = this.querySelector('template[data-reviews-histogram-row]');
             this.filtersEl = this.querySelector('[data-reviews-filters]');
@@ -97,6 +102,60 @@
             this.bindControls();
             this.mountReviewForm();
             this.buildSort();
+            this.buildSources();
+            this.unsubscribe = this.core.subscribe(this.onSnapshot.bind(this));
+            this.core.load();
+        }
+
+        // Review sources (Hendrik, 24 Nov): a bundle (Discovery set) can show the reviews of the products in it.
+        // config.sources lists them ({ id, label, aggregates }); the first is selected. One more Select goes first in the
+        // Filter group; picking a product starts a new core for it, so summary, histogram, list, question filters and
+        // the form all follow that product. A source is always selected, so picking it again does nothing.
+        buildSources() {
+            var sources = this.config.sources || [];
+            if (sources.length < 2 || !this.filtersEl || !this.dropdownTemplate) return;
+            var options = sources.map(function (source) {
+                return { value: String(source.id), label: source.label };
+            });
+            this.sourceDropdown = this.createDropdown(sources[0].label, options, this.setSource.bind(this));
+            this.filtersEl.prepend(this.sourceDropdown.root);
+            this.setSelectValue(this.sourceDropdown, String(this.config.productId), this.sourceLabel(this.config.productId));
+        }
+
+        sourceLabel(id) {
+            var source = (this.config.sources || []).find(function (item) {
+                return String(item.id) === String(id);
+            });
+            return source ? source.label : '';
+        }
+
+        setSource(id) {
+            if (!id || String(id) === String(this.config.productId)) {
+                if (this.sourceDropdown) this.setSelectValue(this.sourceDropdown, String(this.config.productId), this.sourceLabel(this.config.productId));
+                return;
+            }
+            var source = this.config.sources.find(function (item) {
+                return String(item.id) === String(id);
+            });
+            this.config.productId = source.id;
+            this.config.aggregates = source.aggregates || null;
+            this.setSelectValue(this.sourceDropdown, String(source.id), source.label);
+
+            this.filters.forEach(function (filter) {
+                filter.root.remove();
+            });
+            this.filters = [];
+            this.filtersReady = false;
+            this.answerCountsPromise = null;
+            this.recommendReady = false;
+            if (this.recommendStat) this.recommendStat.hidden = true;
+            var questions = this.form && this.form.querySelector('[data-reviews-form-questions]');
+            if (questions) clearNode(questions);
+            this.formQuestionsReady = false;
+
+            if (this.unsubscribe) this.unsubscribe();
+            this.core.destroy();
+            this.core = window.ReviewsCore.create({ adapter: this.adapter, config: this.config });
             this.unsubscribe = this.core.subscribe(this.onSnapshot.bind(this));
             this.core.load();
         }
@@ -152,6 +211,7 @@
             if (snapshot.status !== 'ready' || !snapshot.data) return;
             this.renderSummary(snapshot);
             this.ensureFilters(snapshot.data.questions || []);
+            this.ensureRecommend();
             this.mountFormQuestions(snapshot.data.questions || []);
             this.updateControls(snapshot);
             if (!snapshot.append) {
@@ -273,12 +333,72 @@
             this.sortEl.appendChild(this.sortDropdown.root);
         }
 
+        // Filters are built from the answers in the reviews (Hendrik, 24 Nov): a question gets a filter only when at
+        // least FILTER_MIN_OPTIONS of its options were picked in at least one review, and the filter lists only those
+        // options. The counts come from the aggregates metafield when it has them, else from adapter.countAnswers
+        // (every review of the product). Without counts no filters are built.
         ensureFilters(questions) {
             if (this.filtersReady || !this.filtersEl) return;
             this.filtersReady = true;
+            var candidates = questions.filter(function (question) {
+                return question && !isRecommend(question.key) && (question.options || []).length >= FILTER_MIN_OPTIONS;
+            });
+            if (!candidates.length) return;
+            this.answerCounts().then(function (counts) {
+                if (!counts) return;
+                this.buildFilters(candidates, counts);
+                this.updateControls(this.core.getSnapshot());
+            }.bind(this));
+        }
+
+        // Answer counts per question over every review of the current product: { [questionKey]: { [value]: count } }.
+        // From the aggregates metafield when it has them, else adapter.countAnswers. One request per product, shared by
+        // the filters and the recommend share. Resolves null when there are no counts.
+        answerCounts() {
+            if (this.answerCountsPromise) return this.answerCountsPromise;
+            var aggregates = this.config.aggregates && this.config.aggregates.questions;
+            if (aggregates) {
+                var fromMetafield = {};
+                Object.keys(aggregates).forEach(function (key) {
+                    fromMetafield[key] = (aggregates[key] && aggregates[key].options) || {};
+                });
+                this.answerCountsPromise = Promise.resolve(fromMetafield);
+            } else if (this.adapter && typeof this.adapter.countAnswers === 'function') {
+                this.answerCountsPromise = this.adapter.countAnswers(this.config).catch(function () { return null; });
+            } else {
+                this.answerCountsPromise = Promise.resolve(null);
+            }
+            return this.answerCountsPromise;
+        }
+
+        // Recommend share next to the average (Hendrik, 24 Nov): the share of "Yes" among the answers to the recommend
+        // question, over every review of the product. Hidden while there are no answers (no question, or no one answered).
+        ensureRecommend() {
+            if (this.recommendReady || !this.recommendStat) return;
+            this.recommendReady = true;
+            var productId = this.config.productId;
+            this.answerCounts().then(function (counts) {
+                if (String(productId) !== String(this.config.productId)) return;
+                var key = Object.keys(counts || {}).find(isRecommend);
+                var options = key ? counts[key] : {};
+                var total = 0;
+                var yes = 0;
+                Object.keys(options).forEach(function (value) {
+                    var count = Number(options[value]) || 0;
+                    total += count;
+                    if (String(value).trim().toLowerCase() === 'yes') yes += count;
+                });
+                if (!total) return;
+                this.recommendStat.querySelector('[data-reviews-recommend-percent]').textContent = String(Math.round((yes / total) * 100));
+                this.recommendStat.hidden = false;
+            }.bind(this));
+        }
+
+        buildFilters(questions, counts) {
             questions.forEach(function (question) {
-                if (!question || question.key === RECOMMEND_KEY) return;
-                var dropdown = this.createDropdown(question.label, this.questionOptions(question), function (value) {
+                var options = this.questionOptions(question, counts[question.key] || {});
+                if (options.length < FILTER_MIN_OPTIONS) return;
+                var dropdown = this.createDropdown(question.label, options, function (value) {
                     var current = this.core.getSnapshot().state.answers[String(question.id)];
                     this.core.setAnswer(question.id, String(current || '') === String(value) ? null : value);
                 }.bind(this));
@@ -288,16 +408,15 @@
             }, this);
         }
 
-        questionOptions(question) {
-            var aggregates = this.config.aggregates && this.config.aggregates.questions;
-            var entry = aggregates && aggregates[question.key];
-            return (question.options || []).map(function (value) {
-                var count = entry && entry.options ? entry.options[value] : undefined;
-                return {
-                    value: String(value),
-                    label: count === undefined || count === null ? String(value) : String(value) + ' (' + count + ')',
-                };
-            });
+        // the question's options that at least one review picked, in the question's order, with their count
+        questionOptions(question, counts) {
+            return (question.options || [])
+                .filter(function (value) {
+                    return (counts[value] || 0) > 0;
+                })
+                .map(function (value) {
+                    return { value: String(value), label: String(value) + ' (' + counts[value] + ')' };
+                });
         }
 
         updateControls(snapshot) {
@@ -472,9 +591,6 @@
             if (!root.querySelector('form')) root.appendChild(this.formTemplate.content.cloneNode(true));
             this.form = root.querySelector('form');
             if (!this.form) return;
-            var format = this.config.nameFormat || 'customer';
-            var nameFormat = this.form.querySelector('[data-reviews-form-name-format]');
-            if (nameFormat) nameFormat.hidden = format !== 'customer';
             this.formPhotos = [];
             this.formPhotoTemplate = this.querySelector('template[data-reviews-form-photo]');
             var photoInput = this.form.querySelector('[data-reviews-form-photos]');
@@ -490,17 +606,10 @@
             var container = this.form.querySelector('[data-reviews-form-questions]');
             if (!container) return;
             this.formQuestionsReady = true;
-            var required = this.requiredQuestionKeys();
             questions.forEach(function (question) {
                 if (!question || !question.options || !question.options.length) return;
-                container.appendChild(this.renderFormQuestion(question, required.indexOf(question.key) !== -1));
+                container.appendChild(this.renderFormQuestion(question, false)); // Judge.me's widget data does not say which questions are required
             }, this);
-        }
-
-        requiredQuestionKeys() {
-            return String(this.config.requiredQuestions || '').split(',').map(function (key) {
-                return key.trim();
-            }).filter(Boolean);
         }
 
         renderFormQuestion(question, required) {
@@ -593,13 +702,8 @@
                 if (!checked) return;
                 answers[fieldset.getAttribute('data-question-id')] = checked.value;
             });
-            var nameFormat = this.config.nameFormat && this.config.nameFormat !== 'customer'
-                ? this.config.nameFormat
-                : 'full';
-            if (!this.config.nameFormat || this.config.nameFormat === 'customer') {
-                var picked = this.form.querySelector('[name="name-format"]:checked');
-                nameFormat = picked ? picked.value : 'full';
-            }
+            var picked = this.form.querySelector('[name="name-format"]:checked');
+            var nameFormat = picked ? picked.value : 'full';
             var rating = this.form.querySelector('[data-reviews-form-rating] input:checked');
             return {
                 rating: rating ? Number(rating.value) : 0,
@@ -898,9 +1002,9 @@
         renderCard(review) {
             var node = this.cardTemplate.content.cloneNode(true);
             var answers = review.answers || [];
-            var recommend = answers.find(function (answer) { return answer.key === RECOMMEND_KEY; });
+            var recommend = answers.find(function (answer) { return isRecommend(answer.key); });
             var attributes = answers.filter(function (answer) {
-                return answer.key !== RECOMMEND_KEY && answer.value;
+                return !isRecommend(answer.key) && answer.value;
             });
 
             node.querySelector('[data-reviews-author]').textContent = review.isAnonymous

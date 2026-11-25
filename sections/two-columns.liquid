@@ -1,0 +1,134 @@
+{%- comment -%}
+  Figma: Sections / Two columns equal, named Two columns in code and the editor (Hendrik, 25 Nov) (2171:39005; Templates FEEDBACK Landing / Desktop 2701:25988 to 2701:25991)
+  Two Landing columns (static blocks left and right, blocks/_landing-column), each half the page width from lg with a
+  12px gutter (674px at 1440). Mobile: stacked, left first, 40px apart. A column is a photo, a before/after or a
+  stack of landing blocks; its bracket, padding, sticky and spacing are its own settings.
+  Shopify wraps each block in a div; *:contents makes the column itself the grid item, so a sticky column can move.
+  Markup inline in this section.
+  right_first_mobile   on mobile the right column comes first (stacked above the left one); desktop is unchanged
+                       (Hendrik, 25 Nov). The shopify-block wrappers are display: contents, so the column is the flex item.
+{%- endcomment -%}
+<section class="two-columns-equal section-shell bg-background text-text" data-padding-top="{{ section.settings.padding_top }}" data-padding-bottom="{{ section.settings.padding_bottom }}">
+  <div class="mx-auto flex w-full max-w-page flex-col gap-10 px-page-margin *:contents lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-gutter lg:gap-y-0{% if section.settings.right_first_mobile %} max-lg:[&>*:last-child>*]:order-first{% endif %}">
+    {% content_for 'block', type: '_landing-column', id: 'left' %}
+    {% content_for 'block', type: '_landing-column', id: 'right' %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Two columns",
+  "tag": "section",
+  "class": "section-two-columns",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "right_first_mobile",
+      "label": "Show the right column first on mobile",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "label": "Top",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "sm",
+          "label": "Small"
+        },
+        {
+          "value": "md",
+          "label": "Medium"
+        },
+        {
+          "value": "lg",
+          "label": "Large"
+        }
+      ],
+      "default": "md"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "label": "Bottom",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "sm",
+          "label": "Small"
+        },
+        {
+          "value": "md",
+          "label": "Medium"
+        },
+        {
+          "value": "lg",
+          "label": "Large"
+        }
+      ],
+      "default": "md"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Two columns",
+      "blocks": {
+        "left": {
+          "type": "_landing-column",
+          "static": true,
+          "settings": {
+            "show_bracket": false,
+            "padding_top": "10",
+            "padding_bottom": "0",
+            "padding_top_mobile": "0",
+            "padding_bottom_mobile": "0"
+          },
+          "blocks": {
+            "media": {
+              "type": "_landing-media"
+            }
+          },
+          "block_order": [
+            "media"
+          ]
+        },
+        "right": {
+          "type": "_landing-column",
+          "static": true,
+          "blocks": {
+            "heading": {
+              "type": "_landing-heading"
+            },
+            "text": {
+              "type": "_landing-paragraph"
+            },
+            "button": {
+              "type": "_landing-button"
+            }
+          },
+          "block_order": [
+            "heading",
+            "text",
+            "button"
+          ]
+        }
+      }
+    }
+  ]
+}
+{% endschema %}

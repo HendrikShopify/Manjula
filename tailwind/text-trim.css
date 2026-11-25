@@ -5,7 +5,9 @@
   1. Browsers with text-box (Chrome, Edge, Safari 18.2+): the native property on every element.
      It reads the cap height and baseline from the font itself, so Nimbus Sans and Sabon are both right.
 
-  2. Browsers without it (Firefox for now): the ::before / ::after fallback on block text elements.
+  2. Browsers without it (Safari before 18.2, Firefox for now): the ::before / ::after fallback on block text elements,
+     plus assets/text-trim-fallback.js, which marks every other text box ([data-text-trim]: labels in flex rows,
+     buttons, list items) for the margin method.
      Values come from the font metrics:
        Nimbus Sans  ascender 667, descender 333, cap height 667  ->  top 0.5em,   bottom 0.167em
        Sabon        ascender 976, descender 228, cap height 698  ->  top 0.324em, bottom 0.374em
@@ -19,6 +21,9 @@
      sizes on the letters, as in Figma. Inputs must stay bare: border and padding live on the wrapper.
      The native text-box is switched off on inputs and their placeholder: Chrome would trim the value a second
      time, which pushed it down, cut off descenders (g, j, p, y) and put it lower than the placeholder.
+
+  Clamped text is matched with [class*=...], so responsive classes (lg:truncate, the product card subtitle) count too;
+  with .truncate alone, lg:truncate was trimmed to the baseline and clipped the descenders (Hendrik, 24 Nov).
 
   The font files in assets/ are normalised so every browser and OS reads the same metrics: hhea, typo and win
   ascent/descent are equal, line gaps are 0 and USE_TYPO_METRICS is set. Sabon's OS/2 cap height is corrected
@@ -40,30 +45,39 @@
        Switch the native trim off there (the box keeps its full line boxes, so the clip area covers the full letters)
        and trim the layout with negative margins only. Native trim plus padding was not reliable: Chrome skips the
        bottom trim on a line-clamp box whose text fits, so a 3-line text was 8px taller than a clamped one. */
-    :is(.truncate, [class*="line-clamp-"], .text-ellipsis) {
+    :is([class*="truncate"], [class*="line-clamp-"], [class*="text-ellipsis"]) {
       text-box: none;
       margin-block: calc(var(--trim-top) - 0.5lh) calc(var(--trim-bottom) - 0.5lh);
     }
     /* Paragraphs inside clamped text (review bodies) keep full line boxes too, or the last visible line is cut. */
-    :is(.truncate, [class*="line-clamp-"], .text-ellipsis) * {
+    :is([class*="truncate"], [class*="line-clamp-"], [class*="text-ellipsis"]) * {
       text-box: none;
     }
   }
 
   @supports not (text-box: trim-both cap alphabetic) {
-    :is(h1, h2, h3, h4, h5, h6, p, blockquote, figcaption, dt, dd):not([class*="flex"], [class*="grid"]) {
+    :is(h1, h2, h3, h4, h5, h6, p, blockquote, figcaption, dt, dd):not([class*="flex"], [class*="grid"], [class*="truncate"], [class*="line-clamp-"], [class*="text-ellipsis"]) {
       display: flow-root;
     }
-    :is(h1, h2, h3, h4, h5, h6, p, blockquote, figcaption, dt, dd):not([class*="flex"], [class*="grid"])::before {
+    :is(h1, h2, h3, h4, h5, h6, p, blockquote, figcaption, dt, dd):not([class*="flex"], [class*="grid"], [class*="truncate"], [class*="line-clamp-"], [class*="text-ellipsis"])::before {
       content: "";
       display: table;
       margin-bottom: calc(-0.5lh + var(--trim-top));
     }
-    :is(h1, h2, h3, h4, h5, h6, p, blockquote, figcaption, dt, dd):not([class*="flex"], [class*="grid"])::after {
+    :is(h1, h2, h3, h4, h5, h6, p, blockquote, figcaption, dt, dd):not([class*="flex"], [class*="grid"], [class*="truncate"], [class*="line-clamp-"], [class*="text-ellipsis"])::after {
       content: "";
       display: table;
       margin-bottom: calc(-0.5lh + var(--trim-bottom));
     }
+    /* Other text boxes (labels in flex rows, buttons, list items) are marked by assets/text-trim-fallback.js
+       and trimmed with margins, as clamped text above. */
+    /* Clamped text (truncate, line-clamp: Select labels, excerpts) uses the margin method here too, as in the native
+       branch above; the ::before / ::after rules skip it so it is never trimmed twice. */
+    [data-text-trim=""],
+    :is([class*="truncate"], [class*="line-clamp-"], [class*="text-ellipsis"]) {
+      margin-block: calc(var(--trim-top) - 0.5lh) calc(var(--trim-bottom) - 0.5lh);
+    }
+    /* Boxes with padding (menu links, chips) get their padding shrunk inline by text-trim-fallback.js. */
   }
 
   input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="hidden"], [type="submit"], [type="button"], [type="reset"], [type="color"], [type="image"]) {

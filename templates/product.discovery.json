@@ -17,8 +17,7 @@
           "settings": {
             "product": "face-oil",
             "name": "Face oil",
-            "size": "10ml",
-            "benefits": "Brightens, Calms, Hydrates"
+            "size": "10ml"
           }
         },
         "item-hair": {
@@ -26,8 +25,7 @@
           "settings": {
             "product": "hair-oil",
             "name": "Hair oil",
-            "size": "30ml",
-            "benefits": "Brightens, Calms, Hydrates"
+            "size": "30ml"
           }
         },
         "item-body": {
@@ -35,8 +33,7 @@
           "settings": {
             "product": "body-oil",
             "name": "Body oil",
-            "size": "30ml",
-            "benefits": "Brightens, Calms, Hydrates"
+            "size": "30ml"
           }
         }
       },
@@ -55,7 +52,12 @@
       "type": "reviews",
       "settings": {
         "heading": "Customer reviews",
-        "recommend_label": "Would recommend this set."
+        "recommend_label": "Would recommend this set.",
+        "review_products": [
+          "hair-oil",
+          "body-oil",
+          "face-oil"
+        ]
       }
     },
     "use_guide": {
