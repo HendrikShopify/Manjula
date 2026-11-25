@@ -1,0 +1,30 @@
+{%- comment -%}
+  Figma: Accordion item (Icon=Plus). One item of a Landing accordion. Private: only the Landing accordion lists it.
+{%- endcomment -%}
+{%- capture content -%}<div class="flex flex-col gap-4 [&_a]:underline [&_a]:underline-offset-2">{{ block.settings.content }}</div>{%- endcapture -%}
+{% render 'accordion-item', title: block.settings.title, content: content, icon: 'plus', attributes: block.shopify_attributes %}
+
+{% schema %}
+{
+  "name": "Accordion item",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Accordion"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam et elit bibendum dui dignissim cursus.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accordion item"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,122 @@
+{%- comment -%}
+  Figma: Sections / Two columns narrow, named Tabs in code and the editor (Hendrik, 25 Nov) (2741:4793; Templates FEEDBACK Landing / Desktop 2701:25987, Mobile 2701:25997)
+  Topics as tabs (Hendrik, 24 Nov): a list of topics (List row lg, 4 of 12 columns from lg) and, beside it, the
+  selected topic's content column (6 columns, from column 5). Each topic is a block (blocks/_landing-tab) that renders
+  both its row and its content: a section cannot read the settings of its theme blocks, so it cannot build the list.
+  From lg the rows fill the first rows of the grid (min-content each) and every panel spans all rows; the last row
+  (1fr) takes the extra height of a long panel, so the rows stay together. Mobile: the rows first (order), then the
+  content, 40px apart. Shopify wraps each block in a div; *:contents lets its row and panel be the grid items.
+  Pressing a row shows its topic (landing-tabs.js); the first shows on load.
+  Markup inline in this section.
+{%- endcomment -%}
+<script src="{{ 'landing-tabs.js' | asset_url }}" defer="defer"></script>
+<section class="two-columns-narrow section-shell bg-background text-text" data-padding-top="{{ section.settings.padding_top }}" data-padding-bottom="{{ section.settings.padding_bottom }}">
+  <landing-tabs
+    class="mx-auto flex w-full max-w-page flex-col px-page-margin *:contents lg:grid lg:grid-cols-12 lg:grid-rows-[repeat(var(--tabs),min-content)_1fr] lg:items-start lg:gap-x-gutter"
+    style="--tabs: {{ section.blocks.size }};"
+  >
+    {% content_for 'blocks' %}
+  </landing-tabs>
+</section>
+
+{% schema %}
+{
+  "name": "Tabs",
+  "tag": "section",
+  "class": "section-tabs",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "label": "Top",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "sm",
+          "label": "Small"
+        },
+        {
+          "value": "md",
+          "label": "Medium"
+        },
+        {
+          "value": "lg",
+          "label": "Large"
+        }
+      ],
+      "default": "md"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "label": "Bottom",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "sm",
+          "label": "Small"
+        },
+        {
+          "value": "md",
+          "label": "Medium"
+        },
+        {
+          "value": "lg",
+          "label": "Large"
+        }
+      ],
+      "default": "md"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "_landing-tab"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tabs",
+      "blocks": [
+        {
+          "type": "_landing-tab",
+          "settings": {
+            "title": "Topic one"
+          },
+          "blocks": [
+            {
+              "type": "_landing-heading"
+            },
+            {
+              "type": "_landing-paragraph"
+            }
+          ]
+        },
+        {
+          "type": "_landing-tab",
+          "settings": {
+            "title": "Topic two"
+          },
+          "blocks": [
+            {
+              "type": "_landing-heading"
+            },
+            {
+              "type": "_landing-paragraph"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

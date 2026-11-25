@@ -1,0 +1,348 @@
+{%- comment -%}
+  Figma: Two columns narrow (2741:4793): one topic. It renders its row in the topic list (List row lg, the title) and
+  its content column, shown while the topic is selected (landing-tabs.js). The section places them (see its comment).
+  Same column settings as the Landing column, without sticky. The first tab shows before the script runs.
+  Private: only Two columns narrow uses it.
+{%- endcomment -%}
+{%- liquid
+  assign first_tab = section.blocks | first
+  assign panel_id = 'LandingTab-' | append: block.id
+  assign is_first = false
+  if first_tab.id == block.id
+    assign is_first = true
+  endif
+  capture panel_attributes
+    echo 'id="' | append: panel_id | append: '" data-landing-tab-panel="' | append: block.id | append: '" '
+    echo block.shopify_attributes
+    unless is_first
+      echo ' hidden'
+    endunless
+  endcapture
+-%}
+{%- capture content -%}{% content_for 'blocks' %}{%- endcapture -%}
+{%- capture tab_attributes -%}data-landing-tab="{{ block.id }}" aria-controls="{{ panel_id }}"{%- endcapture -%}
+  {% render 'list-row', label: block.settings.title, size: 'lg', active: is_first, attributes: tab_attributes, class: 'lg:col-span-4 lg:col-start-1' %}
+  {% render 'landing-column', content: content, settings: block.settings, attributes: panel_attributes, class: 'order-1 max-lg:mt-10 lg:col-span-6 lg:col-start-5 lg:row-[1/-1]' %}
+
+{% schema %}
+{
+  "name": "Topic",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Topic"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bracket",
+      "label": "Show bracket",
+      "default": true,
+      "info": "A thin line on the left. It comes with 24px padding on all sides, so the content sits inside the bracket. Turn off for a photo that fills the column."
+    },
+    {
+      "type": "select",
+      "id": "gap",
+      "label": "Space between blocks",
+      "options": [
+        {
+          "value": "0",
+          "label": "0px"
+        },
+        {
+          "value": "1",
+          "label": "4px"
+        },
+        {
+          "value": "2",
+          "label": "8px"
+        },
+        {
+          "value": "3",
+          "label": "12px"
+        },
+        {
+          "value": "4",
+          "label": "16px"
+        },
+        {
+          "value": "5",
+          "label": "20px"
+        },
+        {
+          "value": "6",
+          "label": "24px"
+        },
+        {
+          "value": "8",
+          "label": "32px"
+        },
+        {
+          "value": "10",
+          "label": "40px"
+        },
+        {
+          "value": "12",
+          "label": "48px"
+        }
+      ],
+      "default": "10"
+    },
+    {
+      "type": "header",
+      "content": "Padding on desktop"
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "label": "Top",
+      "options": [
+        {
+          "value": "0",
+          "label": "0px"
+        },
+        {
+          "value": "1",
+          "label": "4px"
+        },
+        {
+          "value": "2",
+          "label": "8px"
+        },
+        {
+          "value": "3",
+          "label": "12px"
+        },
+        {
+          "value": "4",
+          "label": "16px"
+        },
+        {
+          "value": "5",
+          "label": "20px"
+        },
+        {
+          "value": "6",
+          "label": "24px"
+        },
+        {
+          "value": "8",
+          "label": "32px"
+        },
+        {
+          "value": "10",
+          "label": "40px"
+        },
+        {
+          "value": "12",
+          "label": "48px"
+        }
+      ],
+      "default": "0"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "label": "Bottom",
+      "options": [
+        {
+          "value": "0",
+          "label": "0px"
+        },
+        {
+          "value": "1",
+          "label": "4px"
+        },
+        {
+          "value": "2",
+          "label": "8px"
+        },
+        {
+          "value": "3",
+          "label": "12px"
+        },
+        {
+          "value": "4",
+          "label": "16px"
+        },
+        {
+          "value": "5",
+          "label": "20px"
+        },
+        {
+          "value": "6",
+          "label": "24px"
+        },
+        {
+          "value": "8",
+          "label": "32px"
+        },
+        {
+          "value": "10",
+          "label": "40px"
+        },
+        {
+          "value": "12",
+          "label": "48px"
+        }
+      ],
+      "default": "0"
+    },
+    {
+      "type": "header",
+      "content": "Padding on mobile"
+    },
+    {
+      "type": "select",
+      "id": "padding_top_mobile",
+      "label": "Top",
+      "options": [
+        {
+          "value": "0",
+          "label": "0px"
+        },
+        {
+          "value": "1",
+          "label": "4px"
+        },
+        {
+          "value": "2",
+          "label": "8px"
+        },
+        {
+          "value": "3",
+          "label": "12px"
+        },
+        {
+          "value": "4",
+          "label": "16px"
+        },
+        {
+          "value": "5",
+          "label": "20px"
+        },
+        {
+          "value": "6",
+          "label": "24px"
+        },
+        {
+          "value": "8",
+          "label": "32px"
+        },
+        {
+          "value": "10",
+          "label": "40px"
+        },
+        {
+          "value": "12",
+          "label": "48px"
+        }
+      ],
+      "default": "0"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom",
+      "options": [
+        {
+          "value": "0",
+          "label": "0px"
+        },
+        {
+          "value": "1",
+          "label": "4px"
+        },
+        {
+          "value": "2",
+          "label": "8px"
+        },
+        {
+          "value": "3",
+          "label": "12px"
+        },
+        {
+          "value": "4",
+          "label": "16px"
+        },
+        {
+          "value": "5",
+          "label": "20px"
+        },
+        {
+          "value": "6",
+          "label": "24px"
+        },
+        {
+          "value": "8",
+          "label": "32px"
+        },
+        {
+          "value": "10",
+          "label": "40px"
+        },
+        {
+          "value": "12",
+          "label": "48px"
+        }
+      ],
+      "default": "0"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "_landing-eyebrow"
+    },
+    {
+      "type": "_landing-heading"
+    },
+    {
+      "type": "_landing-paragraph"
+    },
+    {
+      "type": "_landing-image"
+    },
+    {
+      "type": "_landing-quote"
+    },
+    {
+      "type": "_landing-testimonial"
+    },
+    {
+      "type": "_landing-spec-table"
+    },
+    {
+      "type": "_landing-button"
+    },
+    {
+      "type": "_landing-accordion"
+    },
+    {
+      "type": "_landing-rating"
+    },
+    {
+      "type": "_landing-products"
+    },
+    {
+      "type": "_landing-media"
+    },
+    {
+      "type": "_landing-before-after"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Topic",
+      "blocks": [
+        {
+          "type": "_landing-heading"
+        },
+        {
+          "type": "_landing-paragraph"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

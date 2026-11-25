@@ -1,0 +1,254 @@
+{%- comment -%}
+  Figma: Components Atoms / Block / Heading (2170:25569): heading/2
+  Landing block (private: the underscore keeps it out of every other section; only the Landing columns and tabs list it).
+  Top and bottom padding are settings on the Figma Spacing scale (spacing/N = N x 4px), as pt-N / pb-N (Hendrik, 24 Nov).
+  size          the text style from lg: any Heading or Serif heading style (Hero headline: heading-1; no Display sizes, Hendrik 24 Nov)
+  size_mobile   the text style below lg (Hero headline: heading-1)
+  tag           h1 to h6, or p for a heading look without a heading in the page outline
+  The classes are text-{size}; tailwind.input.css generates them with @source inline.
+  Colour comes from the section (Text, or Text inverse on the Hero photo).
+{%- endcomment -%}
+<div class="landing-block min-w-0 pt-{{ block.settings.padding_top }} pb-{{ block.settings.padding_bottom }}" {{ block.shopify_attributes }}>
+  {%- liquid
+    assign tag = block.settings.tag | default: 'h2'
+    assign size = block.settings.size | default: 'heading-2'
+    assign size_mobile = block.settings.size_mobile | default: size
+  -%}
+  <{{ tag }} class="text-{{ size_mobile }} lg:text-{{ size }}">{{ block.settings.heading }}</{{ tag }}>
+</div>
+
+{% schema %}
+{
+  "name": "Heading",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Size on desktop",
+      "default": "heading-2",
+      "options": [
+        {
+          "value": "heading-1",
+          "label": "Heading 1 (48px)"
+        },
+        {
+          "value": "heading-2",
+          "label": "Heading 2 (32px)"
+        },
+        {
+          "value": "heading-3",
+          "label": "Heading 3 (24px)"
+        },
+        {
+          "value": "heading-4",
+          "label": "Heading 4 (20px)"
+        },
+        {
+          "value": "heading-5",
+          "label": "Heading 5 (16px)"
+        },
+        {
+          "value": "heading-6",
+          "label": "Heading 6 (14px)"
+        },
+        {
+          "value": "serif-display",
+          "label": "Serif display (48px)"
+        },
+        {
+          "value": "serif-lg",
+          "label": "Serif large (32px)"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "size_mobile",
+      "label": "Size on mobile",
+      "default": "heading-2",
+      "options": [
+        {
+          "value": "heading-1",
+          "label": "Heading 1 (48px)"
+        },
+        {
+          "value": "heading-2",
+          "label": "Heading 2 (32px)"
+        },
+        {
+          "value": "heading-3",
+          "label": "Heading 3 (24px)"
+        },
+        {
+          "value": "heading-4",
+          "label": "Heading 4 (20px)"
+        },
+        {
+          "value": "heading-5",
+          "label": "Heading 5 (16px)"
+        },
+        {
+          "value": "heading-6",
+          "label": "Heading 6 (14px)"
+        },
+        {
+          "value": "serif-display",
+          "label": "Serif display (48px)"
+        },
+        {
+          "value": "serif-lg",
+          "label": "Serif large (32px)"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "tag",
+      "label": "Heading level",
+      "default": "h2",
+      "options": [
+        {
+          "value": "h1",
+          "label": "H1"
+        },
+        {
+          "value": "h2",
+          "label": "H2"
+        },
+        {
+          "value": "h3",
+          "label": "H3"
+        },
+        {
+          "value": "h4",
+          "label": "H4"
+        },
+        {
+          "value": "h5",
+          "label": "H5"
+        },
+        {
+          "value": "h6",
+          "label": "H6"
+        },
+        {
+          "value": "p",
+          "label": "Paragraph (no heading)"
+        }
+      ],
+      "info": "Use H1 once per page, for the main headline. The level changes the page outline, not the look."
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "label": "Top",
+      "options": [
+        {
+          "value": "0",
+          "label": "0px"
+        },
+        {
+          "value": "1",
+          "label": "4px"
+        },
+        {
+          "value": "2",
+          "label": "8px"
+        },
+        {
+          "value": "3",
+          "label": "12px"
+        },
+        {
+          "value": "4",
+          "label": "16px"
+        },
+        {
+          "value": "5",
+          "label": "20px"
+        },
+        {
+          "value": "6",
+          "label": "24px"
+        },
+        {
+          "value": "8",
+          "label": "32px"
+        },
+        {
+          "value": "10",
+          "label": "40px"
+        },
+        {
+          "value": "12",
+          "label": "48px"
+        }
+      ],
+      "default": "0"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "label": "Bottom",
+      "options": [
+        {
+          "value": "0",
+          "label": "0px"
+        },
+        {
+          "value": "1",
+          "label": "4px"
+        },
+        {
+          "value": "2",
+          "label": "8px"
+        },
+        {
+          "value": "3",
+          "label": "12px"
+        },
+        {
+          "value": "4",
+          "label": "16px"
+        },
+        {
+          "value": "5",
+          "label": "20px"
+        },
+        {
+          "value": "6",
+          "label": "24px"
+        },
+        {
+          "value": "8",
+          "label": "32px"
+        },
+        {
+          "value": "10",
+          "label": "40px"
+        },
+        {
+          "value": "12",
+          "label": "48px"
+        }
+      ],
+      "default": "0"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Heading"
+    }
+  ]
+}
+{% endschema %}

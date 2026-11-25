@@ -1,0 +1,35 @@
+{%- comment -%}
+  Figma: Block / Spec table, Row. One row of a Landing spec table.
+  Mobile: label (60%) over the value, 12px apart (Figma 8px; more room on request, Hendrik 25 Nov). From lg: label in the
+  240px label column beside the value (320px at most).
+  Private: only the Landing spec table lists it.
+{%- endcomment -%}
+<div class="flex flex-col gap-3 lg:flex-row lg:gap-0" {{ block.shopify_attributes }}>
+  <p class="opacity-60 lg:w-label-column lg:shrink-0">{{ block.settings.label | escape }}</p>
+  <p class="lg:max-w-80">{{ block.settings.value | escape | newline_to_br }}</p>
+</div>
+
+{% schema %}
+{
+  "name": "Spec row",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "This is a list heading"
+    },
+    {
+      "type": "textarea",
+      "id": "value",
+      "label": "Value",
+      "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam et elit bibendum dui dignissim cursus"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Spec row"
+    }
+  ]
+}
+{% endschema %}

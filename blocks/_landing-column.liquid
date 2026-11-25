@@ -1,0 +1,319 @@
+{%- comment -%}
+  Figma: Components Atoms / Landing column (2171:25782): one column of Two columns equal
+  A stack of landing blocks. Settings: bracket (with its own 24px padding), sticky (desktop), the space between blocks, and padding
+  for desktop and mobile, all on the Figma Spacing scale. See snippets/landing-column.liquid.
+  Private: only Two columns equal uses it (as its static left and right column).
+{%- endcomment -%}
+{%- capture content -%}{% content_for 'blocks' %}{%- endcapture -%}
+{% render 'landing-column', content: content, settings: block.settings, attributes: block.shopify_attributes %}
+
+{% schema %}
+{
+  "name": "Column",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_bracket",
+      "label": "Show bracket",
+      "default": true,
+      "info": "A thin line on the left. It comes with 24px padding on all sides, so the content sits inside the bracket. Turn off for a photo that fills the column."
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky",
+      "label": "Stay in view while scrolling",
+      "default": false,
+      "info": "Desktop only."
+    },
+    {
+      "type": "select",
+      "id": "gap",
+      "label": "Space between blocks",
+      "options": [
+        {
+          "value": "0",
+          "label": "0px"
+        },
+        {
+          "value": "1",
+          "label": "4px"
+        },
+        {
+          "value": "2",
+          "label": "8px"
+        },
+        {
+          "value": "3",
+          "label": "12px"
+        },
+        {
+          "value": "4",
+          "label": "16px"
+        },
+        {
+          "value": "5",
+          "label": "20px"
+        },
+        {
+          "value": "6",
+          "label": "24px"
+        },
+        {
+          "value": "8",
+          "label": "32px"
+        },
+        {
+          "value": "10",
+          "label": "40px"
+        },
+        {
+          "value": "12",
+          "label": "48px"
+        }
+      ],
+      "default": "10"
+    },
+    {
+      "type": "header",
+      "content": "Padding on desktop"
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "label": "Top",
+      "options": [
+        {
+          "value": "0",
+          "label": "0px"
+        },
+        {
+          "value": "1",
+          "label": "4px"
+        },
+        {
+          "value": "2",
+          "label": "8px"
+        },
+        {
+          "value": "3",
+          "label": "12px"
+        },
+        {
+          "value": "4",
+          "label": "16px"
+        },
+        {
+          "value": "5",
+          "label": "20px"
+        },
+        {
+          "value": "6",
+          "label": "24px"
+        },
+        {
+          "value": "8",
+          "label": "32px"
+        },
+        {
+          "value": "10",
+          "label": "40px"
+        },
+        {
+          "value": "12",
+          "label": "48px"
+        }
+      ],
+      "default": "0"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "label": "Bottom",
+      "options": [
+        {
+          "value": "0",
+          "label": "0px"
+        },
+        {
+          "value": "1",
+          "label": "4px"
+        },
+        {
+          "value": "2",
+          "label": "8px"
+        },
+        {
+          "value": "3",
+          "label": "12px"
+        },
+        {
+          "value": "4",
+          "label": "16px"
+        },
+        {
+          "value": "5",
+          "label": "20px"
+        },
+        {
+          "value": "6",
+          "label": "24px"
+        },
+        {
+          "value": "8",
+          "label": "32px"
+        },
+        {
+          "value": "10",
+          "label": "40px"
+        },
+        {
+          "value": "12",
+          "label": "48px"
+        }
+      ],
+      "default": "0"
+    },
+    {
+      "type": "header",
+      "content": "Padding on mobile"
+    },
+    {
+      "type": "select",
+      "id": "padding_top_mobile",
+      "label": "Top",
+      "options": [
+        {
+          "value": "0",
+          "label": "0px"
+        },
+        {
+          "value": "1",
+          "label": "4px"
+        },
+        {
+          "value": "2",
+          "label": "8px"
+        },
+        {
+          "value": "3",
+          "label": "12px"
+        },
+        {
+          "value": "4",
+          "label": "16px"
+        },
+        {
+          "value": "5",
+          "label": "20px"
+        },
+        {
+          "value": "6",
+          "label": "24px"
+        },
+        {
+          "value": "8",
+          "label": "32px"
+        },
+        {
+          "value": "10",
+          "label": "40px"
+        },
+        {
+          "value": "12",
+          "label": "48px"
+        }
+      ],
+      "default": "0"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom",
+      "options": [
+        {
+          "value": "0",
+          "label": "0px"
+        },
+        {
+          "value": "1",
+          "label": "4px"
+        },
+        {
+          "value": "2",
+          "label": "8px"
+        },
+        {
+          "value": "3",
+          "label": "12px"
+        },
+        {
+          "value": "4",
+          "label": "16px"
+        },
+        {
+          "value": "5",
+          "label": "20px"
+        },
+        {
+          "value": "6",
+          "label": "24px"
+        },
+        {
+          "value": "8",
+          "label": "32px"
+        },
+        {
+          "value": "10",
+          "label": "40px"
+        },
+        {
+          "value": "12",
+          "label": "48px"
+        }
+      ],
+      "default": "0"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "_landing-eyebrow"
+    },
+    {
+      "type": "_landing-heading"
+    },
+    {
+      "type": "_landing-paragraph"
+    },
+    {
+      "type": "_landing-image"
+    },
+    {
+      "type": "_landing-quote"
+    },
+    {
+      "type": "_landing-testimonial"
+    },
+    {
+      "type": "_landing-spec-table"
+    },
+    {
+      "type": "_landing-button"
+    },
+    {
+      "type": "_landing-accordion"
+    },
+    {
+      "type": "_landing-rating"
+    },
+    {
+      "type": "_landing-products"
+    },
+    {
+      "type": "_landing-media"
+    },
+    {
+      "type": "_landing-before-after"
+    }
+  ]
+}
+{% endschema %}

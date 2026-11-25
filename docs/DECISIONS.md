@@ -636,3 +636,60 @@ The FAQ metaobject has only Question and Answer (Hendrik, 23 Nov). The Category 
 - The recommend share next to the average is no longer a typed number. reviews__ui.js works it out: the share of "Yes" among the answers to the recommend question, over every review of the product (aggregates metafield first, else Judge.me's reviews read page by page; one request shared with the filters). The recommend question is any custom question with "recommend" in its title. Without answers the share is hidden. On 24 Nov no product had custom questions in Judge.me yet, so it is hidden everywhere until the question exists and people answer it.
 - The form has no settings any more: customers always choose how their name is shown, the thank-you message is the locale string, and questions are optional (Judge.me's widget data does not say which are required).
 
+## 2026-11-24: Landing page system
+
+- Four sections, one per Figma section: `hero` (Figma Hero centered; renamed Hero, Hendrik 24 Nov), `logo-strip`, `two-columns-equal`, `two-columns-narrow`. The narrow one is only for topics as tabs (Hendrik, 24 Nov): a topic list on 4 columns, the selected topic's content on 6.
+- The columns and their content are theme blocks in `blocks/` (the first in this theme). Every one is private (`_landing-*`): the underscore keeps them out of every other section; only the landing sections and columns list them (Hendrik: restrict the blocks to these sections).
+- Content blocks: eyebrow, heading, paragraph, image (sm, lg), quote (sm, lg), testimonial, spec table (rows), button (hug, full), accordion (items), rating, products (mini product cards), photo or video, before and after.
+- Every block has top and bottom padding settings on the Figma Spacing scale (spacing/N = N x 4px, the same steps as Tailwind pt-N), and every column a space between blocks (default 40px, as Figma) and padding for desktop and mobile. The classes are built from the setting, so `tailwind.input.css` generates them with `@source inline`.
+- The bracket is a column checkbox; with it the column always has 24px side padding (Hendrik). Without it, Side padding gives 24px from lg and a 560px content width; off, a photo or before/after fills the column.
+- Shopify wraps every theme block in a div. The sections set `*:contents` on their grid so the columns (and the topic rows and panels) are the grid items; otherwise a sticky column cannot move and the topic list cannot form one column.
+- A section cannot read the settings of its theme blocks (`section.blocks` gives type and id only), so each topic renders its own list row and its own panel; the grid puts them in place (rows in the first rows, every panel across all rows, a last 1fr row takes the extra height).
+- New snippets: `landing-column` (shared by the column and topic blocks) and `mini-product-card` (adds the first available variant with product-form.js, which opens the cart drawer). `rating` got `tone: 'inverse'` for the compact rating on the hero photo.
+- Hero options (Hendrik, 24 Nov): Background photo or video (the matching picker shows with visible_if), content alignment centered (Figma) or left, and section height custom (300 to 1000px, default 700) or full screen (the screen below the header). Alignment is a setting here at Hendrik's request, an exception to one layout per section.
+- Logo strip: Press logos is a metaobject list of Press items, picked and ordered in the section (the template has the 6 Figma logos). Logos are balanced as in the Press grid (about 60x60px each, at most 40px tall), so they match Figma's sizes.
+
+
+### 2026-11-24: Hero content is blocks, the same as the other landing sections
+
+The Hero's heading, text and rating were section settings; now the content is blocks (Hendrik: "Just like the other sections"). The Hero lists the same private landing blocks as a Landing column: Eyebrow, Heading, Paragraph, Rating and Button, each with top and bottom padding on the Spacing scale. No separate hero blocks (one name, one file). The hero look is a block option: Heading Size Large (heading/1, display/2 from lg) with level H1, Paragraph Size Large (body/lg), Button style Light (inverse) on the photo. The blocks no longer set text colour: they take Text from the page and Text inverse from the Hero (the Rating block renders `rating` with `tone: 'current'`). Space between blocks is a Hero setting (default 40px, Figma).
+
+### 2026-11-24: Landing Heading and Paragraph sizes are full text-style lists, per breakpoint
+
+Heading has "Size on desktop" and "Size on mobile" with every heading text style except Display (Heading 1 to 6, Serif display, Serif large; Hendrik: remove the three Display sizes), and "Heading level" H1 to H6 or Paragraph (the level changes the outline, not the look). Paragraph has the same two size settings with body/lg, base, sm and xs. Classes are `text-{mobile} lg:text-{desktop}`, generated with `@source inline` in tailwind.input.css. The Hero headline is now Heading 1 (48px) on desktop and mobile, no longer Display 2 (64px) as in Figma.
+Note: when a template sets a block setting that is new in the same change, save the template again after the block has synced; the store drops settings its schema does not know yet.
+
+### 2026-11-24: Every addable landing block has a preset
+
+A theme block shows in the editor's Add block list only when its own schema has `presets`. The landing blocks were built without them, so Hero and the two-column sections showed "No blocks available" (Hendrik, 24 Nov). All landing blocks now have a preset (Topic comes with a Heading and a Paragraph), except Landing column, which is static. Check the Add block list in the editor after building blocks.
+
+### 2026-11-25: Landing spacing options stop at 48px
+
+Block top and bottom padding, column and topic padding (desktop and mobile) and Space between blocks offer 0px to 48px only (spacing 0 to 12; Hendrik, 25 Nov). The larger steps (64 to 128px) are gone from the settings and from the `@source inline` list. Section padding (None, Small, Medium, Large through the section shell) is a separate setting and is unchanged.
+
+### 2026-11-25: Hero overlay opacity and mobile height; Two columns narrow is now Tabs
+
+Hero: "Overlay opacity" (0 to 100%, default 30% as Figma) sets the dark layer over the photo or video (`bg-overlay` with `opacity-(--hero-overlay)`). With Section height Custom there are two heights, "Height on desktop" and "Height on mobile" (both 700px as Figma), as `h-(--hero-height-mobile) lg:h-(--hero-height)`.
+The Two columns narrow section is renamed Tabs (`sections/tabs.liquid`, Hendrik 25 Nov): it only holds topics as tabs. The Figma component keeps its name.
+
+### 2026-11-25: Two columns, bracket padding, photo and video size, button height
+
+- Two columns equal is renamed Two columns (`sections/two-columns.liquid`).
+- Bracket: in Figma the Landing column's bracket is the xs instance stretched to 32px, with 24px padding on all four sides, so the content sits 8px inside the arms (desktop and mobile). Code: `bracket` has a `depth` parameter (`depth: '8'`); the column's bracket box is `relative p-6` and holds its own padding. The separate Side padding checkbox is gone: bracket on is padding on. Column Top and Bottom padding now sit outside the bracket and default to 0.
+- Photo, Photo or video and Before and after blocks: Aspect ratio (list or Custom width and height) and Width on desktop and on mobile in %. The Image block's Small/Large size became widths (default 40% desktop, 75% mobile, about the old 230px). Media sits `absolute! inset-0` in a `relative aspect-(--media-ratio)` box: WebKit did not resolve `height: 100%` in an aspect-ratio box and grew 674:602 to 608px.
+- Button block: the block is `flex`, so its height is the full button. As a block box around an inline button, native text trim cut it to the label (11px for 32px) in Chrome and Safari. Width (Fit the label or Full width) is set for desktop and mobile.
+- Spec table on mobile: label above value, 12px apart (Figma 8px; Hendrik asked for more room, 25 Nov), rows 24px apart.
+
+### 2026-11-25: Landing page starts empty; no 674:602 ratio; right column first on mobile
+
+- The landing template (`templates/page.landing.json`) holds no content: one hidden Hero without blocks, because Shopify does not accept a template with zero sections. Sections and blocks are added in the editor. The full demo version is not kept in the repo.
+- Aspect ratio lists start at Square 1:1 (default); the 674:602 option is gone (Hendrik, 25 Nov).
+- Two columns: "Show the right column first on mobile" (section setting, `max-lg:[&>*:last-child>*]:order-first`).
+
+### 2026-11-25: Section library cleanup
+
+- Deleted from code: `main-index` (the starter atom showcase), `ugc-grid`, `ugc-carousel`, and the `ugc` snippet that only those two rendered. `ugc-slider` (Experience) stays.
+- Not in the editor's Add section list any more (no preset), files kept: Newsletter, Blog posts, Comparison table.
+- Use guide: product templates only (`enabled_on`).
+- Horizontal scroll: no preset, so it can't be added anywhere; it stays on the subscription page template. Shopify's `enabled_on` takes template types (page), not one page template, so this is the only way to keep it to the subscription page.
+- Atoms only the showcase rendered are deleted too (Hendrik, 25 Nov): `divider`, `tabs`, `tab-item`, `variant-option-group`.

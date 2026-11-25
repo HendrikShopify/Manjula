@@ -1,0 +1,122 @@
+{%- comment -%}
+  Figma: Sections / Logo strip (2171:39296; Templates FEEDBACK Landing / Desktop 2701:25986, Mobile 2701:25996)
+  items   Press item metaobjects (press_item: name, logo), picked and ordered in the Press logos setting (Hendrik,
+          24 Nov); with none picked, every Press item shows, in admin order (as the Press section)
+  One row of outlet logos between dashed rules (2px dash, 2px gap, Ink 10%) that fade
+  in over the first 20% and out over the last 20%. Desktop: spread over the page width, the rules 76px in from each end.
+  Mobile: 48px apart; the row scrolls sideways past the screen edge.
+  Balanced logos (as the Press grid): every logo gets about the same area (60x60px) from its own aspect ratio
+  (--logo-ratio, from the file), at most 40px tall and 160px wide: height = min(40px, 60px / sqrt(ratio), 160px / ratio).
+  FASHION (4.5:1) lands near 128x28 and the square S near 40x40, as in Figma.
+  An item without a logo shows its name in caps instead. Markup inline in this section.
+{%- endcomment -%}
+{%- liquid
+  assign items = section.settings.items
+  if items == blank
+    assign items = shop.metaobjects.press_item.values
+  endif
+-%}
+{%- if items.size > 0 -%}
+  <section class="logo-strip section-shell bg-background text-text" data-padding-top="{{ section.settings.padding_top }}" data-padding-bottom="{{ section.settings.padding_bottom }}">
+    <div class="relative mx-auto w-full max-w-page lg:px-page-margin">
+      <div class="relative">
+        <div class="pointer-events-none absolute inset-0 text-text/10 [mask-image:linear-gradient(90deg,transparent_0%,black_20%,black_80%,transparent_100%)] lg:inset-x-19" aria-hidden="true">
+          <span class="absolute inset-x-0 top-0 h-px bg-[repeating-linear-gradient(90deg,currentColor_0_2px,transparent_2px_4px)]"></span>
+          <span class="absolute inset-x-0 bottom-0 h-px bg-[repeating-linear-gradient(90deg,currentColor_0_2px,transparent_2px_4px)]"></span>
+        </div>
+        <ul class="relative flex items-center gap-12 overflow-x-auto px-page-margin [scrollbar-width:none] lg:justify-between lg:gap-6 lg:overflow-visible lg:px-0" role="list">
+          {%- for item in items -%}
+            {%- liquid
+              assign name = item.name.value | escape
+              assign logo = item.logo.value
+              assign logo_ratio = logo.aspect_ratio | default: logo.preview_image.aspect_ratio | default: 4
+              assign logo_style = '--logo-ratio: ' | append: logo_ratio
+            -%}
+            <li class="flex h-10 shrink-0 items-center">
+              {%- if logo != blank -%}
+                {{ logo | image_url: width: 320 | image_tag: alt: name, sizes: '160px', loading: 'lazy', style: logo_style, class: 'block h-[min(--spacing(10),calc(--spacing(15)/sqrt(var(--logo-ratio))),calc(--spacing(40)/var(--logo-ratio)))] w-auto' }}
+              {%- else -%}
+                <span class="text-label-caps-lg">{{ name }}</span>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Logo strip",
+  "tag": "section",
+  "class": "section-logo-strip",
+  "settings": [
+    {
+      "type": "metaobject_list",
+      "metaobject_type": "press_item",
+      "id": "items",
+      "label": "Press logos",
+      "limit": 12,
+      "info": "Pick the press items to show, in this order. Leave empty to show every press item."
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "label": "Top",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "sm",
+          "label": "Small"
+        },
+        {
+          "value": "md",
+          "label": "Medium"
+        },
+        {
+          "value": "lg",
+          "label": "Large"
+        }
+      ],
+      "default": "md"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "label": "Bottom",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "sm",
+          "label": "Small"
+        },
+        {
+          "value": "md",
+          "label": "Medium"
+        },
+        {
+          "value": "lg",
+          "label": "Large"
+        }
+      ],
+      "default": "md"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Logo strip"
+    }
+  ]
+}
+{% endschema %}

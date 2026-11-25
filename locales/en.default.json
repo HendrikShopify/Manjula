@@ -470,6 +470,10 @@
         // }
     },
     "sections": {
+        "landing": {
+            "topics": "Topics",
+            "add_to_cart": "Add {{ name }} to cart"
+        },
         "trial_results": {
             "case_study": "The case study",
             "before": "Before",

@@ -114,7 +114,7 @@ Image with text is one section per layout, no layout select (Hendrik, 15 Nov): `
 |---|---|---|
 | Page | Main page | Done 3 Nov: one layout (title left, text right), no layout setting; `templates/page.json`, policy pages follow |
 | Contact | FAQ {Categories}, Contact | Done 21 Nov: new `faq-categories` (FAQ metaobjects per category block), `main-contact` restyled (Underline form, Contact blocks). Store page Help center (`/pages/contact`) is unpublished. |
-| Landing system | Hero centered, Logo strip, Two columns narrow, Two columns equal | New `logo-strip`, `two-columns`. Not needed for launch unless ads go live with it. |
+| Landing system | Hero centered, Logo strip, Two columns narrow, Two columns equal | Done 24 Nov: `hero` (alignment, photo or video, height; content as the shared landing blocks), `logo-strip` (pick press logos), `two-columns` (was two-columns-equal, renamed 25 Nov), `tabs` (topics as tabs; was two-columns-narrow, renamed 25 Nov), 13 private landing blocks in `blocks/`, `templates/page.landing.json` (empty since 25 Nov: one hidden Hero). No store page uses it yet (preview: any page with `?view=landing`). |
 
 ## Phase 6. QA and launch (23 to 26 Nov)
 
@@ -140,7 +140,7 @@ Follow `docs/CLIENT-START.md` step 5: theme check, mobile overflow on every temp
 ## Mismatches to check in Figma
 
 - Science: section order differs (Desktop: How we formulate before Approach; Mobile: Approach first). Template follows desktop (one order per template). Store page: Ingredients (`/pages/ingredients`, template suffix `science`).
-- Landing: Mobile has no "Two columns 3".
+- Landing: Mobile has no "Two columns 3". Code keeps it on mobile, stacked like the others.
 - Product main uses Thumbnails right on desktop; Blanc code only has left, bottom and grid.
 
 ## Open questions for the client or store
@@ -149,3 +149,5 @@ Follow `docs/CLIENT-START.md` step 5: theme check, mobile overflow on every temp
 - Which subscription app (selling plans) and who sets it up.
 - How the free minis for 2 different oils are applied (automatic discount, Shopify Function or app).
 - Store access for the development theme.
+
+Test run 25 Nov: `templates/page.landing-bhringraj.json` rebuilds the live Bhringraj article (Rituals blog) with the landing system: Hero, Logo strip, Two columns (At a glance, What is Bhringraj Oil?), Tabs (how to use), Two columns (Common Questions, Hair Oil). Live copy word for word; extras only from store data (Bhringraj ingredient, Hair Oil FAQs, rating, a Judge.me review). Preview: any page with `?view=landing-bhringraj`.
