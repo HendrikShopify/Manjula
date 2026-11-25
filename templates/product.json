@@ -211,6 +211,20 @@
         "image": "shopify://shop_images/26-10-09_MANJULAESSENTIALS_198.png",
         "heading": "Frequently Asked Questions"
       }
+    },
+    "comparison_price_m8mQAj": {
+      "type": "comparison-price",
+      "name": "Comparison price",
+      "settings": {
+        "heading": "Four steps.\nOne bottle.",
+        "text": "Most hair routines split scalp care, growth support, conditioning and styling across four products. This one was formulated to move through all of it.",
+        "left_label": "Buy them separately",
+        "right_label": "Or one bottle",
+        "product_title": "",
+        "product_sub": "100 ml, four to six months",
+        "checks": "Scalp\nPre-wash\nPost-wash\nStyling",
+        "right_total": "One bottle"
+      }
     }
   },
   "order": [
@@ -218,6 +232,7 @@
     "trial_results",
     "differentiator",
     "use_guide",
+    "comparison_price_m8mQAj",
     "ingredients",
     "reviews",
     "founder_note",
