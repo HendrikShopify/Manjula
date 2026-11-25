@@ -14,16 +14,10 @@
       "settings": {
         "popular_frequency": "Deliver every 3 months",
         "community_title": "",
-        "expert_quote": "“High quality Ayurvedic oils, like those from Manjula, are a powerful way to support healthy skin and hair using time-tested botanical ingredients.”",
-        "expert_name": "Dr. Anika Sharma",
-        "expert_role": "Ayurvedic Practitioner"
-      }
-    },
-    "reviews": {
-      "type": "reviews",
-      "settings": {
-        "heading": "Customer reviews",
-        "recommend_label": "Would recommend this body oil."
+        "expert_image": "shopify://shop_images/IMG_2177_1.jpg",
+        "expert_quote": "“With over 25 years in practice, I've used countless oils and these are simply the best I've ever used. My clients all notice a difference. They consistently comment on how good their hair, face, and body feel afterwards.\"",
+        "expert_name": "Mark Whitley",
+        "expert_role": "Registered Massage Therapist"
       }
     },
     "trial_results": {
@@ -122,10 +116,21 @@
         "functions": "Brightens, Nourishes, Smoothes, Protects, Barrier support"
       }
     },
+    "reviews": {
+      "type": "reviews",
+      "settings": {
+        "heading": "Customer reviews",
+        "review_products": [],
+        "recommend_label": "Would recommend this body oil."
+      }
+    },
     "founder_note": {
       "type": "image-with-text-founder-note",
       "settings": {
-        "image": "shopify://shop_images/subscription-founder.jpg"
+        "image": "shopify://shop_images/subscription-founder.jpg",
+        "label": "Founders note",
+        "text": "<p>I've had eczema since infancy, so I've always been careful about what goes on my skin. I wanted Kumkumadi, the classical Ayurvedic brightening oil, but the traditional recipe was too rich for skin like mine.</p><p>So we rebuilt it. My mother, an Ayurvedic practitioner, and a team of Canadian chemists kept what made it work and removed what my skin couldn't take.</p><p>I made it for myself. Now it belongs to whoever needs it.</p>",
+        "name": "Founder MANJULA"
       }
     },
     "faq": {
