@@ -50,7 +50,6 @@
         "result-2",
         "result-3"
       ],
-      "disabled": true,
       "settings": {
         "heading": "Effects after 4 week consistent use trial",
         "text": "Participants used the face oil every day for four weeks. Photos were taken at the start and at the end, in the same light.",
@@ -165,14 +164,9 @@
     "reviews": {
       "type": "reviews",
       "settings": {
-        "dev_shop_domain": "",
-        "dev_product_id": "",
         "heading": "Customer reviews",
-        "recommend_label": "Would recommend this face oil.",
-        "recommend_percent": "",
-        "name_format": "customer",
-        "required_questions": "",
-        "form_success_message": "Thanks for your review. It will appear once it's approved."
+        "review_products": [],
+        "recommend_label": "Would recommend this face oil."
       }
     },
     "founder_note": {
