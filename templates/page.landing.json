@@ -11,8 +11,15 @@
   "sections": {
     "hero": {
       "type": "hero",
-      "disabled": true,
-      "settings": {}
+      "settings": {
+        "background": "image",
+        "overlay_opacity": 30,
+        "alignment": "center",
+        "height": "custom",
+        "custom_height": 700,
+        "custom_height_mobile": 700,
+        "gap": "10"
+      }
     }
   },
   "order": [
