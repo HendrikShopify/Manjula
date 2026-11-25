@@ -67,8 +67,8 @@
         "step-1": {
           "type": "step",
           "settings": {
-            "label": "Immediately",
-            "image": "shopify://shop_images/origin-story-portrait.jpg",
+            "label": "Week 1",
+            "image": "shopify://shop_images/tayma-before.png",
             "text": "Tone looks more uniform. Dry patches appear less often, and skin holds moisture longer between applications."
           }
         },
@@ -76,7 +76,7 @@
           "type": "step",
           "settings": {
             "label": "After 1-2 weeks",
-            "image": "shopify://shop_images/science-ritual-hair-detail.jpg",
+            "image": "shopify://shop_images/tayma-week-4a.png",
             "text": "Texture starts to even out. Tightness after cleansing eases, and makeup sits more smoothly across the face."
           }
         },
