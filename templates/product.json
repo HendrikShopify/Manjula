@@ -26,22 +26,22 @@
         "result-1": {
           "type": "result",
           "settings": {
-            "title": "New growth",
-            "text": "Fine baby hairs along the hairline and part"
+            "title": "Improved skin texture",
+            "text": "A reduction in the appearance of closed comedones and uneven surface texture."
           }
         },
         "result-2": {
           "type": "result",
           "settings": {
-            "title": "Visible density",
-            "text": "Less scalp showing through when you tie it back"
+            "title": "Clearer complexion",
+            "text": "Visible improvement in existing breakouts following adjustments to the skincare routine."
           }
         },
         "result-3": {
           "type": "result",
           "settings": {
-            "title": "Calmer scalp",
-            "text": "Less itch, less tightness, less flaking after washing"
+            "title": "Calmer-looking skin",
+            "text": "A less inflamed appearance, with fewer visible active blemishes."
           }
         }
       },
@@ -51,14 +51,14 @@
         "result-3"
       ],
       "settings": {
-        "heading": "Effects after 4 week consistent use trial",
-        "text": "Participants used the face oil every day for four weeks. Photos were taken at the start and at the end, in the same light.",
-        "case_label": "",
-        "case_text": "Aged 34, combination skin with redness on the cheeks. Three drops every evening after cleansing, with no other changes to the routine.",
+        "heading": "Five weeks on acne-prone skin.",
+        "text": "Documenting changes in skin texture, clarity and the appearance of breakouts over five weeks of consistent use.",
+        "case_label": "Case Study 002",
+        "case_text": "Our participant was experiencing persistent hormonal-related breakouts, closed comedones and post-inflammatory hyperpigmentation. The Face Oil was incorporated into an adapted skincare routine, alongside salicylic acid, gentle exfoliation and a moisturizer.",
         "before_image": "shopify://shop_images/face-oil-trial-before-aligned.jpg",
         "after_image": "shopify://shop_images/face-oil-trial-after-crop.jpg",
         "show_labels": true,
-        "disclaimer": "*Individual results shown, from participants using Manjula Hair Oil twice weekly for four weeks. Results vary from person to person and depend on factors including diet, stress, sleep and underlying health. Not intended to treat or prevent any condition."
+        "disclaimer": "*Individual results documented over five weeks as part of a customer-use study. The MANJULA Face Oil was used alongside other skincare products."
       }
     },
     "differentiator": {
@@ -113,8 +113,8 @@
         "row-5"
       ],
       "settings": {
-        "media": "shopify://shop_images/DSC06847-copy-5.jpg",
-        "heading": "Most oils sit.\nOurs sinks in.",
+        "media": "shopify://shop_images/face-oil-hyperpigmentation_59a29a23-e720-4f4f-9fdc-535416c86581.png",
+        "heading": "Most oils sit on your skin.\nOurs sinks in.",
         "text": "Oil doesn't have to mean greasy. What an oil feels like on skin comes down to its fatty acids, its wax esters, and the ratio it's blended in. Most face oils lean on one heavy carrier. Ours is five lipid structures, blended so they spread instead of pool.",
         "left_title": "Most face oils",
         "left_sub": "Sits on top, leaves a film",
