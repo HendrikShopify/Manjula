@@ -229,7 +229,7 @@
             "show_bracket": false,
             "sticky": true,
             "gap": "10",
-            "padding_top": "10",
+            "padding_top": "1",
             "padding_bottom": "0",
             "padding_top_mobile": "0",
             "padding_bottom_mobile": "0"
@@ -322,17 +322,6 @@
                 "padding_bottom": "0"
               },
               "blocks": {}
-            },
-            "paragraph_21": {
-              "type": "_landing-paragraph",
-              "settings": {
-                "text": "<p>Related reading: <a href=\"/blogs/rituals/how-to-give-ayurvedic-head-massage-to-stimulate-hair-growth-and-repair-hair\">Ayurvedic Head Massage</a></p>",
-                "size": "body-sm",
-                "size_mobile": "body-sm",
-                "padding_top": "0",
-                "padding_bottom": "0"
-              },
-              "blocks": {}
             }
           },
           "block_order": [
@@ -340,8 +329,7 @@
             "heading_17",
             "paragraph_18",
             "quote_19",
-            "image_20",
-            "paragraph_21"
+            "image_20"
           ]
         }
       },
@@ -380,15 +368,6 @@
               },
               "blocks": {}
             },
-            "eyebrow_23": {
-              "type": "_landing-eyebrow",
-              "settings": {
-                "label": "How to use it",
-                "padding_top": "0",
-                "padding_bottom": "0"
-              },
-              "blocks": {}
-            },
             "heading_24": {
               "type": "_landing-heading",
               "settings": {
@@ -415,7 +394,6 @@
           },
           "block_order": [
             "image_22",
-            "eyebrow_23",
             "heading_24",
             "paragraph_25"
           ]
@@ -441,15 +419,6 @@
                 "ratio_height": 1,
                 "width": 40,
                 "width_mobile": 75,
-                "padding_top": "0",
-                "padding_bottom": "0"
-              },
-              "blocks": {}
-            },
-            "eyebrow_27": {
-              "type": "_landing-eyebrow",
-              "settings": {
-                "label": "How to use it",
                 "padding_top": "0",
                 "padding_bottom": "0"
               },
@@ -481,7 +450,6 @@
           },
           "block_order": [
             "image_26",
-            "eyebrow_27",
             "heading_28",
             "paragraph_29"
           ]
@@ -512,15 +480,6 @@
               },
               "blocks": {}
             },
-            "eyebrow_31": {
-              "type": "_landing-eyebrow",
-              "settings": {
-                "label": "How to use it",
-                "padding_top": "0",
-                "padding_bottom": "0"
-              },
-              "blocks": {}
-            },
             "heading_32": {
               "type": "_landing-heading",
               "settings": {
@@ -543,25 +502,12 @@
                 "padding_bottom": "0"
               },
               "blocks": {}
-            },
-            "paragraph_34": {
-              "type": "_landing-paragraph",
-              "settings": {
-                "text": "<p>Related reading: <a href=\"/products/hair-oil\">view Hair Oil product</a></p>",
-                "size": "body-sm",
-                "size_mobile": "body-sm",
-                "padding_top": "0",
-                "padding_bottom": "0"
-              },
-              "blocks": {}
             }
           },
           "block_order": [
             "image_30",
-            "eyebrow_31",
             "heading_32",
-            "paragraph_33",
-            "paragraph_34"
+            "paragraph_33"
           ]
         },
         "tab_42": {
@@ -585,15 +531,6 @@
                 "ratio_height": 1,
                 "width": 40,
                 "width_mobile": 75,
-                "padding_top": "0",
-                "padding_bottom": "0"
-              },
-              "blocks": {}
-            },
-            "eyebrow_36": {
-              "type": "_landing-eyebrow",
-              "settings": {
-                "label": "How to use it",
                 "padding_top": "0",
                 "padding_bottom": "0"
               },
@@ -625,7 +562,6 @@
           },
           "block_order": [
             "image_35",
-            "eyebrow_36",
             "heading_37",
             "paragraph_38"
           ]
@@ -662,18 +598,6 @@
               "type": "_landing-eyebrow",
               "settings": {
                 "label": "Common questions",
-                "padding_top": "0",
-                "padding_bottom": "0"
-              },
-              "blocks": {}
-            },
-            "heading_48": {
-              "type": "_landing-heading",
-              "settings": {
-                "heading": "Common Questions",
-                "size": "heading-2",
-                "size_mobile": "heading-2",
-                "tag": "h2",
                 "padding_top": "0",
                 "padding_bottom": "0"
               },
@@ -729,7 +653,6 @@
           },
           "block_order": [
             "eyebrow_47",
-            "heading_48",
             "accordion_49"
           ]
         },
@@ -782,7 +705,7 @@
             "show_bracket": false,
             "sticky": true,
             "gap": "10",
-            "padding_top": "10",
+            "padding_top": "0",
             "padding_bottom": "0",
             "padding_top_mobile": "0",
             "padding_bottom_mobile": "0"
@@ -813,7 +736,7 @@
           "settings": {
             "show_bracket": true,
             "sticky": false,
-            "gap": "10",
+            "gap": "6",
             "padding_top": "0",
             "padding_bottom": "0",
             "padding_top_mobile": "0",
@@ -861,31 +784,6 @@
               },
               "blocks": {}
             },
-            "testimonial_56": {
-              "type": "_landing-testimonial",
-              "settings": {
-                "rating": 5,
-                "quote": "“After struggling with hair fall my entire life - it only took one bottle to start seeing results. My hair has never been thicker, shinier, longer and strong.”",
-                "name": "Rachel Mills",
-                "role": "Hair Oil review",
-                "padding_top": "3",
-                "padding_bottom": "3"
-              },
-              "blocks": {}
-            },
-            "products_57": {
-              "type": "_landing-products",
-              "settings": {
-                "products": [
-                  "hair-oil",
-                  "discovery-set",
-                  "essentials-set"
-                ],
-                "padding_top": "0",
-                "padding_bottom": "0"
-              },
-              "blocks": {}
-            },
             "button_58": {
               "type": "_landing-button",
               "settings": {
@@ -905,8 +803,6 @@
             "heading_53",
             "rating_54",
             "paragraph_55",
-            "testimonial_56",
-            "products_57",
             "button_58"
           ]
         }
