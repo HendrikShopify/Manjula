@@ -75,7 +75,7 @@
         "step-2": {
           "type": "step",
           "settings": {
-            "label": "After 1-2 weeks",
+            "label": "Week 4",
             "image": "shopify://shop_images/tayma-week-4a.png",
             "text": "Texture starts to even out. Tightness after cleansing eases, and makeup sits more smoothly across the face."
           }
@@ -83,16 +83,16 @@
         "step-3": {
           "type": "step",
           "settings": {
-            "label": "After 3 weeks",
-            "image": "shopify://shop_images/origin-story-hair-ritual.jpg",
+            "label": "Week 8",
+            "image": "shopify://shop_images/tayma-week-6.png",
             "text": "The improvements hold. Skin looks consistently balanced and recovers faster from weather, travel, and late nights."
           }
         },
         "step-4": {
           "type": "step",
           "settings": {
-            "label": "After 4 weeks",
-            "image": "shopify://shop_images/subscription-step3.jpg",
+            "label": "Week 12",
+            "image": "shopify://shop_images/tayma-after.png",
             "text": "The improvements hold. Skin looks consistently balanced and recovers faster from weather, travel, and late nights."
           }
         }
@@ -104,7 +104,7 @@
         "step-4"
       ],
       "settings": {
-        "heading": "Results timeline"
+        "heading": "Results Timeline"
       }
     },
     "use_guide": {
