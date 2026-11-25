@@ -14,16 +14,10 @@
       "settings": {
         "popular_frequency": "Deliver every 3 months",
         "community_title": "",
+        "expert_image": "shopify://shop_images/IMG_2177_1.jpg",
         "expert_quote": "“High quality Ayurvedic oils, like those from Manjula, are a powerful way to support healthy skin and hair using time-tested botanical ingredients.”",
         "expert_name": "Dr. Anika Sharma",
         "expert_role": "Ayurvedic Practitioner"
-      }
-    },
-    "reviews": {
-      "type": "reviews",
-      "settings": {
-        "heading": "Customer reviews",
-        "recommend_label": "Would recommend this hair oil."
       }
     },
     "trial_results": {
@@ -63,57 +57,6 @@
         "case_text": "Aged 29, fine hair with thinning at the temples. A scalp massage with the oil twice a week, left on overnight, with no other changes to the routine.",
         "show_labels": true,
         "disclaimer": "*Individual results shown, from participants using Manjula Hair Oil twice weekly for four weeks. Results vary from person to person and depend on factors including diet, stress, sleep and underlying health. Not intended to treat or prevent any condition."
-      }
-    },
-    "use_guide": {
-      "type": "use-guide",
-      "blocks": {
-        "note-1": {
-          "type": "note",
-          "settings": {
-            "label": "When to use",
-            "text": "Morning: Apply after water-based serums and before SPF. Evening: Use as the final step in your skincare routine."
-          }
-        },
-        "note-2": {
-          "type": "note",
-          "settings": {
-            "label": "For best results",
-            "text": "Use consistently and start with a small amount. If your skin feels oily, reduce the number of drops."
-          }
-        }
-      },
-      "block_order": [
-        "note-1",
-        "note-2"
-      ],
-      "settings": {
-        "heading": "How to use guide"
-      }
-    },
-    "ingredients": {
-      "type": "ingredient-explorer",
-      "settings": {
-        "heading": "Explore all ingredients",
-        "products": [
-          "face-oil",
-          "hair-oil",
-          "body-oil"
-        ],
-        "functions": "Brightens, Nourishes, Smoothes, Protects, Barrier support"
-      }
-    },
-    "founder_note": {
-      "type": "image-with-text-founder-note",
-      "settings": {
-        "image": "shopify://shop_images/subscription-founder.jpg"
-      }
-    },
-    "faq": {
-      "type": "faq-image",
-      "settings": {
-        "image": "shopify://shop_images/contact-faq-smile.jpg",
-        "heading": "Questions\nand answers"
       }
     },
     "results_timeline": {
@@ -160,6 +103,44 @@
       ],
       "settings": {
         "heading": "Results timeline"
+      }
+    },
+    "use_guide": {
+      "type": "use-guide",
+      "blocks": {
+        "note-1": {
+          "type": "note",
+          "settings": {
+            "label": "When to use",
+            "text": "Morning: Apply after water-based serums and before SPF. Evening: Use as the final step in your skincare routine."
+          }
+        },
+        "note-2": {
+          "type": "note",
+          "settings": {
+            "label": "For best results",
+            "text": "Use consistently and start with a small amount. If your skin feels oily, reduce the number of drops."
+          }
+        }
+      },
+      "block_order": [
+        "note-1",
+        "note-2"
+      ],
+      "settings": {
+        "heading": "How to use guide"
+      }
+    },
+    "ingredients": {
+      "type": "ingredient-explorer",
+      "settings": {
+        "heading": "Explore all ingredients",
+        "products": [
+          "face-oil",
+          "hair-oil",
+          "body-oil"
+        ],
+        "functions": "Brightens, Nourishes, Smoothes, Protects, Barrier support"
       }
     },
     "comparison": {
@@ -215,6 +196,30 @@
         "product_sub": "100 ml, four to six months",
         "checks": "Scalp\nPre-wash\nPost-wash\nStyling",
         "right_total": "One bottle"
+      }
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {
+        "heading": "Customer reviews",
+        "review_products": [],
+        "recommend_label": "Would recommend this hair oil."
+      }
+    },
+    "founder_note": {
+      "type": "image-with-text-founder-note",
+      "settings": {
+        "image": "shopify://shop_images/subscription-founder.jpg",
+        "label": "Founders note",
+        "text": "<p>I've had eczema since infancy, so I've always been careful about what goes on my skin. I wanted Kumkumadi, the classical Ayurvedic brightening oil, but the traditional recipe was too rich for skin like mine.</p><p>So we rebuilt it. My mother, an Ayurvedic practitioner, and a team of Canadian chemists kept what made it work and removed what my skin couldn't take.</p><p>I made it for myself. Now it belongs to whoever needs it.</p>",
+        "name": "Founder MANJULA"
+      }
+    },
+    "faq": {
+      "type": "faq-image",
+      "settings": {
+        "image": "shopify://shop_images/contact-faq-smile.jpg",
+        "heading": "Questions\nand answers"
       }
     }
   },
