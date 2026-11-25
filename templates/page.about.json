@@ -35,32 +35,39 @@
         "entry-2020": {
           "type": "entry",
           "settings": {
-            "year": "2020",
-            "event": "First formula experiments",
+            "year": "2019",
+            "event": "A family recipe rediscovered",
             "image": "shopify://shop_images/formula-philosophy-bottle-detail.jpg"
           }
         },
         "entry-2021": {
           "type": "entry",
           "settings": {
-            "year": "2021",
-            "event": "Cosmetics collaboration",
+            "year": "2020",
+            "event": "First formula and packaging experiments",
             "image": "shopify://shop_images/offer-body-oil-hands.jpg"
           }
         },
         "entry-2022": {
           "type": "entry",
           "settings": {
-            "year": "2022",
-            "event": "MANJULA Essentials launches",
+            "year": "2021",
+            "event": "Products tested and perfected",
             "image": "shopify://shop_images/MANJULA_Product-Shot_5_68511327-e1d2-490b-a252-5101929600c5.jpg"
+          }
+        },
+        "entry_PYYRff": {
+          "type": "entry",
+          "settings": {
+            "year": "2022",
+            "event": "MANJULA Essentials launches"
           }
         },
         "entry-2024a": {
           "type": "entry",
           "settings": {
-            "year": "2024",
-            "event": "Featured by media",
+            "year": "2023",
+            "event": "MANJULA goes global",
             "image": "shopify://shop_images/formula-philosophy-body-oil.jpg"
           }
         },
@@ -68,8 +75,22 @@
           "type": "entry",
           "settings": {
             "year": "2024",
-            "event": "Featured on CP24 Breakfast",
+            "event": "Our first founders campaign",
             "image": "shopify://shop_images/R1-06147-0008-Edit.jpg"
+          }
+        },
+        "entry_G7JdhX": {
+          "type": "entry",
+          "settings": {
+            "year": "2025",
+            "event": "Loved by media"
+          }
+        },
+        "entry_PRhXEw": {
+          "type": "entry",
+          "settings": {
+            "year": "2026",
+            "event": "Our first product study"
           }
         }
       },
@@ -77,12 +98,15 @@
         "entry-2020",
         "entry-2021",
         "entry-2022",
+        "entry_PYYRff",
         "entry-2024a",
-        "entry-2024b"
+        "entry-2024b",
+        "entry_G7JdhX",
+        "entry_PRhXEw"
       ],
       "settings": {
         "label": "MANJULA’s timeline",
-        "heading": "From tradition to modern routine"
+        "heading": "A Practice in Progress"
       }
     },
     "heritage": {
