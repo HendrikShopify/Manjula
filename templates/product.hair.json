@@ -27,21 +27,21 @@
           "type": "result",
           "settings": {
             "title": "A Calmer Scalp",
-            "text": "By week four, our participant experienced noticeable improvement in scalp comfort and a reduction in irritation."
+            "text": "Her scalp felt noticeably calmer and more comfortable, with less irritation around areas prone to psoriasis flare-ups."
           }
         },
         "result-2": {
           "type": "result",
           "settings": {
             "title": "Visible New Growth",
-            "text": "From week six, new growth became more visible, especially around the hairline."
+            "text": "New hairs became visible along her hairline, particularly in areas where she had experienced thinning."
           }
         },
         "result-3": {
           "type": "result",
           "settings": {
             "title": "Improved Hair Density",
-            "text": "By week twelve, our participant observed fuller-looking hair and continued improvements in scalp psoriasis."
+            "text": "Her hair began to look fuller, with less visible scalp in areas of previous thinning."
           }
         }
       },
@@ -67,9 +67,9 @@
         "step-1": {
           "type": "step",
           "settings": {
-            "label": "Week 0",
+            "label": "Week 1",
             "image": "shopify://shop_images/tayma-before.png",
-            "text": "Tone looks more uniform. Dry patches appear less often, and skin holds moisture longer between applications."
+            "text": "She noticed softer curls without the weight or heaviness she had experienced with other oils. Her inflamed scalp felt comfortable after some initial applications."
           }
         },
         "step-2": {
@@ -77,7 +77,7 @@
           "settings": {
             "label": "Week 4",
             "image": "shopify://shop_images/tayma-week-4a.png",
-            "text": "Texture starts to even out. Tightness after cleansing eases, and makeup sits more smoothly across the face."
+            "text": "Her scalp irritation and psoriasis subsides more. With less irritation and more comfort between washes, she became more consistent with her oiling routine."
           }
         },
         "step-3": {
@@ -85,7 +85,7 @@
           "settings": {
             "label": "Week 8",
             "image": "shopify://shop_images/tayma-week-6.png",
-            "text": "The improvements hold. Skin looks consistently balanced and recovers faster from weather, travel, and late nights."
+            "text": "New growth, first noticed around week six, became more apparent along her hairline. Her scalp continued to feel calmer and her patches began to heal."
           }
         },
         "step-4": {
@@ -93,7 +93,7 @@
           "settings": {
             "label": "Week 12",
             "image": "shopify://shop_images/tayma-after.png",
-            "text": "The improvements hold. Skin looks consistently balanced and recovers faster from weather, travel, and late nights."
+            "text": "Her hair became noticeably fuller and her scalp felt significantly calmer. Noting that she also experienced fewer psoriasis flare-ups."
           }
         }
       },
