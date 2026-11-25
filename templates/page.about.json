@@ -1,23 +1,32 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "video-statement",
       "settings": {
-        "heading": "Ayurveda wrote the formula.\nWe adjusted it for your skin.",
-        "text": "We keep things simple on purpose. Three oils, each doing one job, with an ingredient list you can read in full.",
         "media_type": "video",
-        "video": "shopify://files/videos/D48F1185-6396-48FA-A98D-14EC3EB65F05 2.mov"
+        "video": "shopify://files/videos/D48F1185-6396-48FA-A98D-14EC3EB65F05 2.mov",
+        "heading": "Ayurveda shaped the formula,\nwe adjusted it for your skin.",
+        "text": "We bottled over 5,000 years of tradition into a simple three-oil system. Each formula is a distillation of culture, inheritance, and lived experience. Every use carries that knowledge forward."
       }
     },
     "origin_story": {
       "type": "origin-story",
       "settings": {
-        "label": "MANJULA’s origin story",
-        "heading": "It started with eczema, and a recipe from my grandmother",
-        "text": "<p>I've had eczema since I was a baby: steroid creams, ingredient lists that made things worse, and a constant awareness of my skin. The answer had been in my family all along. My mother, Mamta, is an Ayurvedic practitioner, and her mother, Manjula, made her own hair oil at home.</p><p>Together with Canadian cosmetic chemists, my mother and I turned that recipe into three oils for hair, body and face, made for skin like mine. The brand carries my grandmother's name: it's a love letter to my maternal lineage.</p>",
         "image_1": "shopify://shop_images/origin-story-manjula.jpg",
         "image_2": "shopify://shop_images/origin-story-hair-ritual.jpg",
-        "portrait": "shopify://shop_images/origin-story-portrait.jpg"
+        "portrait": "shopify://shop_images/origin-story-portrait.jpg",
+        "label": "MANJULA’s origin story",
+        "heading": "It started with eczema, and a recipe from my grandmother",
+        "text": "<p>I've had eczema for as long as I can remember. I always treated my skin like something that needed to be fixed, rather than understood and honoured. After over 20 years of prescription ointments and trying every natural product I could find, I was still struggling to manage my skin long term. Around the same time, an autoimmune response triggered almost two years of persistent hair loss that brought me back to our family’s hair oil recipe and the Ayurvedic remedies my grandmother had always used.&nbsp;</p><p>Watching my hair and skin recover completely changed my relationship with my body. MANJULA was born out of that change, becoming everything that I’ve inherited and learned for myself.</p><p>Karishma Pranjivan<br/>Founder & Creative Director</p>"
       }
     },
     "timeline": {
