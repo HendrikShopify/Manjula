@@ -67,8 +67,8 @@
         "row-1": {
           "type": "row",
           "settings": {
-            "label": "Skin Feels",
-            "left_value": "Heavy and coated",
+            "label": "Texture",
+            "left_value": "Heavy, greasy",
             "right_value": "Lightweight, serum-like"
           }
         },
@@ -76,24 +76,24 @@
           "type": "row",
           "settings": {
             "label": "Oil Base",
-            "left_value": "Rely on a single carrier oil",
+            "left_value": "Relies on a single carrier oil",
             "right_value": "Complementary plant oils"
           }
         },
         "row-3": {
           "type": "row",
           "settings": {
-            "label": "Structure",
-            "left_value": "Triglycerides",
-            "right_value": "Triglycerides + wax esters"
+            "label": "Fatty Acid Profile",
+            "left_value": "May be oleic-dominant",
+            "right_value": "Linoleic-rich"
           }
         },
         "row-4": {
           "type": "row",
           "settings": {
-            "label": "Spread",
-            "left_value": "Stays where applied",
-            "right_value": "Spreads thin"
+            "label": "Lipid Composition",
+            "left_value": "Predominantly triglycerides",
+            "right_value": "Triglycerides + wax esters"
           }
         },
         "row-5": {
@@ -101,7 +101,7 @@
           "settings": {
             "label": "Finish",
             "left_value": "Glossy, occlusive",
-            "right_value": "Velvety, no residue"
+            "right_value": "Soft, velvety"
           }
         }
       },
