@@ -113,18 +113,6 @@
               },
               "blocks": {}
             },
-            "heading_11": {
-              "type": "_landing-heading",
-              "settings": {
-                "heading": "At a glance",
-                "size": "heading-2",
-                "size_mobile": "heading-2",
-                "tag": "h2",
-                "padding_top": "0",
-                "padding_bottom": "0"
-              },
-              "blocks": {}
-            },
             "spec-table_12": {
               "type": "_landing-spec-table",
               "settings": {
@@ -163,22 +151,13 @@
                     "value": "There are many ways to use Bhringraj Oil. For deep conditioning, we recommend applying a generous amount, massaging from root to ends and leaving overnight. For lighter condition, apply a few drops daily to hair for shine and softness."
                   },
                   "blocks": {}
-                },
-                "spec-row_9": {
-                  "type": "_landing-spec-row",
-                  "settings": {
-                    "label": "Where to buy it",
-                    "value": "Try our Hair Oil - Bhringraj is a key ingredient."
-                  },
-                  "blocks": {}
                 }
               },
               "block_order": [
                 "spec-row_5",
                 "spec-row_6",
                 "spec-row_7",
-                "spec-row_8",
-                "spec-row_9"
+                "spec-row_8"
               ]
             },
             "button_13": {
@@ -197,7 +176,6 @@
           },
           "block_order": [
             "eyebrow_10",
-            "heading_11",
             "spec-table_12",
             "button_13"
           ]
@@ -209,7 +187,7 @@
             "show_bracket": false,
             "sticky": true,
             "gap": "10",
-            "padding_top": "10",
+            "padding_top": "1",
             "padding_bottom": "0",
             "padding_top_mobile": "0",
             "padding_bottom_mobile": "0"
