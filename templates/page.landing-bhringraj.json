@@ -18,30 +18,44 @@
             "heading": "Bhringraj: The Powerful Ayurvedic Hair Oil and How to Use It",
             "size": "heading-1",
             "size_mobile": "heading-2",
-            "tag": "h1"
-          }
+            "tag": "h1",
+            "padding_top": "0",
+            "padding_bottom": "0"
+          },
+          "blocks": {}
         },
         "paragraph_2": {
           "type": "_landing-paragraph",
           "settings": {
             "text": "<p>Bhringraj is a plant-based, antioxidant rich oil commonly used in Ayurveda. Bhringraj Oil supports softer, stronger, shiner hair and helps prevent hair-fall, graying and dandruff.</p>",
             "size": "body-lg",
-            "size_mobile": "body-base"
-          }
+            "size_mobile": "body-base",
+            "padding_top": "0",
+            "padding_bottom": "0"
+          },
+          "blocks": {}
         },
         "rating_3": {
           "type": "_landing-rating",
           "settings": {
-            "product": "hair-oil"
-          }
+            "product": "hair-oil",
+            "padding_top": "0",
+            "padding_bottom": "0"
+          },
+          "blocks": {}
         },
         "button_4": {
           "type": "_landing-button",
           "settings": {
             "label": "Shop Hair Oil",
             "link": "shopify://products/hair-oil",
-            "style": "inverse"
-          }
+            "style": "inverse",
+            "width": "hug",
+            "width_mobile": "hug",
+            "padding_top": "0",
+            "padding_bottom": "0"
+          },
+          "blocks": {}
         }
       },
       "block_order": [
@@ -63,7 +77,16 @@
     },
     "press": {
       "type": "logo-strip",
-      "settings": {}
+      "settings": {
+        "items": [
+          "vogue-business",
+          "s-magazine",
+          "cp24",
+          "coveteur"
+        ],
+        "padding_top": "md",
+        "padding_bottom": "md"
+      }
     },
     "glance": {
       "type": "two-columns",
@@ -72,59 +95,82 @@
           "type": "_landing-column",
           "static": true,
           "settings": {
-            "show_bracket": true
+            "show_bracket": true,
+            "sticky": false,
+            "gap": "10",
+            "padding_top": "0",
+            "padding_bottom": "0",
+            "padding_top_mobile": "0",
+            "padding_bottom_mobile": "0"
           },
           "blocks": {
             "eyebrow_10": {
               "type": "_landing-eyebrow",
               "settings": {
-                "label": "Bhringraj"
-              }
+                "label": "Bhringraj",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "heading_11": {
               "type": "_landing-heading",
               "settings": {
-                "heading": "At a glance"
-              }
+                "heading": "At a glance",
+                "size": "heading-2",
+                "size_mobile": "heading-2",
+                "tag": "h2",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "spec-table_12": {
               "type": "_landing-spec-table",
-              "settings": {},
+              "settings": {
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
               "blocks": {
                 "spec-row_5": {
                   "type": "_landing-spec-row",
                   "settings": {
                     "label": "What is it?",
                     "value": "Bhringraj is a plant-based, antioxidant rich oil commonly used in Ayurveda."
-                  }
+                  },
+                  "blocks": {}
                 },
                 "spec-row_6": {
                   "type": "_landing-spec-row",
                   "settings": {
                     "label": "Main benefits",
                     "value": "Bhringraj Oil supports softer, stronger, shiner hair and helps prevent hair-fall, graying and dandruff."
-                  }
+                  },
+                  "blocks": {}
                 },
                 "spec-row_7": {
                   "type": "_landing-spec-row",
                   "settings": {
                     "label": "Who should use it?",
                     "value": "Bhringraj Oil is suitable for all genders as it benefits the hair, beard and scalp. This Ayurvedic Hair Oil is suitable for all skin and hair types including those who have sensitive skin, psoriasis and eczema."
-                  }
+                  },
+                  "blocks": {}
                 },
                 "spec-row_8": {
                   "type": "_landing-spec-row",
                   "settings": {
                     "label": "How to use it",
                     "value": "There are many ways to use Bhringraj Oil. For deep conditioning, we recommend applying a generous amount, massaging from root to ends and leaving overnight. For lighter condition, apply a few drops daily to hair for shine and softness."
-                  }
+                  },
+                  "blocks": {}
                 },
                 "spec-row_9": {
                   "type": "_landing-spec-row",
                   "settings": {
                     "label": "Where to buy it",
                     "value": "Try our Hair Oil - Bhringraj is a key ingredient."
-                  }
+                  },
+                  "blocks": {}
                 }
               },
               "block_order": [
@@ -139,8 +185,14 @@
               "type": "_landing-button",
               "settings": {
                 "label": "Try our Hair Oil",
-                "link": "shopify://products/hair-oil"
-              }
+                "link": "shopify://products/hair-oil",
+                "style": "primary",
+                "width": "hug",
+                "width_mobile": "hug",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             }
           },
           "block_order": [
@@ -156,15 +208,26 @@
           "settings": {
             "show_bracket": false,
             "sticky": true,
-            "padding_top": "10"
+            "gap": "10",
+            "padding_top": "10",
+            "padding_bottom": "0",
+            "padding_top_mobile": "0",
+            "padding_bottom_mobile": "0"
           },
           "blocks": {
             "media_14": {
               "type": "_landing-media",
               "settings": {
                 "image": "shopify://shop_images/6.jpg",
-                "ratio": "3/4"
-              }
+                "ratio": "3/4",
+                "ratio_width": 1,
+                "ratio_height": 1,
+                "width": 100,
+                "width_mobile": 100,
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             }
           },
           "block_order": [
@@ -172,7 +235,11 @@
           ]
         }
       },
-      "settings": {}
+      "settings": {
+        "right_first_mobile": false,
+        "padding_top": "md",
+        "padding_bottom": "md"
+      }
     },
     "what": {
       "type": "two-columns",
@@ -183,15 +250,26 @@
           "settings": {
             "show_bracket": false,
             "sticky": true,
-            "padding_top": "10"
+            "gap": "10",
+            "padding_top": "10",
+            "padding_bottom": "0",
+            "padding_top_mobile": "0",
+            "padding_bottom_mobile": "0"
           },
           "blocks": {
             "media_15": {
               "type": "_landing-media",
               "settings": {
                 "image": "shopify://shop_images/New_Project_14.jpg",
-                "ratio": "1/1"
-              }
+                "ratio": "1/1",
+                "ratio_width": 1,
+                "ratio_height": 1,
+                "width": 100,
+                "width_mobile": 100,
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             }
           },
           "block_order": [
@@ -202,46 +280,81 @@
           "type": "_landing-column",
           "static": true,
           "settings": {
-            "show_bracket": true
+            "show_bracket": true,
+            "sticky": false,
+            "gap": "10",
+            "padding_top": "0",
+            "padding_bottom": "0",
+            "padding_top_mobile": "0",
+            "padding_bottom_mobile": "0"
           },
           "blocks": {
             "eyebrow_16": {
               "type": "_landing-eyebrow",
               "settings": {
-                "label": "The herb"
-              }
+                "label": "The herb",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "heading_17": {
               "type": "_landing-heading",
               "settings": {
-                "heading": "What is Bhringraj Oil?"
-              }
+                "heading": "What is Bhringraj Oil?",
+                "size": "heading-2",
+                "size_mobile": "heading-2",
+                "tag": "h2",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "paragraph_18": {
               "type": "_landing-paragraph",
               "settings": {
-                "text": "<p>Bhringraj is an herb cultivated in various tropical regions around the world including India, Thailand and Brazil. Full of antioxidants, Bhringraj Oil is a common ingredient in Ayurvedic wellness due to its highly beneficial treatment of hair-fall, graying and dandruff. Bhringraj can also improve circulation of the scalp when used as part of a head or scalp massage.</p>"
-              }
+                "text": "<p>Bhringraj is an herb cultivated in various tropical regions around the world including India, Thailand and Brazil. Full of antioxidants, Bhringraj Oil is a common ingredient in Ayurvedic wellness due to its highly beneficial treatment of hair-fall, graying and dandruff. Bhringraj can also improve circulation of the scalp when used as part of a head or scalp massage.</p>",
+                "size": "body-sm",
+                "size_mobile": "body-sm",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "quote_19": {
               "type": "_landing-quote",
               "settings": {
                 "quote": "“Bhringraj, or false daisy, is called the king of hair in Ayurveda.”",
-                "size": "lg"
-              }
+                "size": "lg",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "image_20": {
               "type": "_landing-image",
               "settings": {
                 "image": "shopify://shop_images/ingredient-bhringraj.png",
-                "ratio": "4/5"
-              }
+                "ratio": "4/5",
+                "ratio_width": 1,
+                "ratio_height": 1,
+                "width": 40,
+                "width_mobile": 75,
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "paragraph_21": {
               "type": "_landing-paragraph",
               "settings": {
-                "text": "<p>Related reading: <a href=\"/blogs/rituals/how-to-give-ayurvedic-head-massage-to-stimulate-hair-growth-and-repair-hair\">Ayurvedic Head Massage</a></p>"
-              }
+                "text": "<p>Related reading: <a href=\"/blogs/rituals/how-to-give-ayurvedic-head-massage-to-stimulate-hair-growth-and-repair-hair\">Ayurvedic Head Massage</a></p>",
+                "size": "body-sm",
+                "size_mobile": "body-sm",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             }
           },
           "block_order": [
@@ -255,7 +368,9 @@
         }
       },
       "settings": {
-        "right_first_mobile": true
+        "right_first_mobile": true,
+        "padding_top": "md",
+        "padding_bottom": "md"
       }
     },
     "how": {
@@ -265,33 +380,59 @@
           "type": "_landing-tab",
           "settings": {
             "title": "Deep conditioning",
-            "show_bracket": true
+            "show_bracket": true,
+            "gap": "10",
+            "padding_top": "0",
+            "padding_bottom": "0",
+            "padding_top_mobile": "0",
+            "padding_bottom_mobile": "0"
           },
           "blocks": {
             "image_22": {
               "type": "_landing-image",
               "settings": {
                 "image": "shopify://shop_images/subscription-hero.jpg",
-                "ratio": "4/5"
-              }
+                "ratio": "4/5",
+                "ratio_width": 1,
+                "ratio_height": 1,
+                "width": 40,
+                "width_mobile": 75,
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "eyebrow_23": {
               "type": "_landing-eyebrow",
               "settings": {
-                "label": "How to use it"
-              }
+                "label": "How to use it",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "heading_24": {
               "type": "_landing-heading",
               "settings": {
-                "heading": "Deep conditioning"
-              }
+                "heading": "Deep conditioning",
+                "size": "heading-2",
+                "size_mobile": "heading-2",
+                "tag": "h2",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "paragraph_25": {
               "type": "_landing-paragraph",
               "settings": {
-                "text": "<p>For deep conditioning, we recommend applying a generous amount, massaging from root to ends and leaving overnight.</p>"
-              }
+                "text": "<p>For deep conditioning, we recommend applying a generous amount, massaging from root to ends and leaving overnight.</p>",
+                "size": "body-sm",
+                "size_mobile": "body-sm",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             }
           },
           "block_order": [
@@ -305,33 +446,59 @@
           "type": "_landing-tab",
           "settings": {
             "title": "Daily shine",
-            "show_bracket": true
+            "show_bracket": true,
+            "gap": "10",
+            "padding_top": "0",
+            "padding_bottom": "0",
+            "padding_top_mobile": "0",
+            "padding_bottom_mobile": "0"
           },
           "blocks": {
             "image_26": {
               "type": "_landing-image",
               "settings": {
                 "image": "shopify://shop_images/science-ritual-hair-detail.jpg",
-                "ratio": "4/5"
-              }
+                "ratio": "4/5",
+                "ratio_width": 1,
+                "ratio_height": 1,
+                "width": 40,
+                "width_mobile": 75,
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "eyebrow_27": {
               "type": "_landing-eyebrow",
               "settings": {
-                "label": "How to use it"
-              }
+                "label": "How to use it",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "heading_28": {
               "type": "_landing-heading",
               "settings": {
-                "heading": "Daily shine and softness"
-              }
+                "heading": "Daily shine and softness",
+                "size": "heading-2",
+                "size_mobile": "heading-2",
+                "tag": "h2",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "paragraph_29": {
               "type": "_landing-paragraph",
               "settings": {
-                "text": "<p>For lighter condition, apply a few drops daily to hair for shine and softness.</p>"
-              }
+                "text": "<p>For lighter condition, apply a few drops daily to hair for shine and softness.</p>",
+                "size": "body-sm",
+                "size_mobile": "body-sm",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             }
           },
           "block_order": [
@@ -345,39 +512,70 @@
           "type": "_landing-tab",
           "settings": {
             "title": "Hair growth",
-            "show_bracket": true
+            "show_bracket": true,
+            "gap": "10",
+            "padding_top": "0",
+            "padding_bottom": "0",
+            "padding_top_mobile": "0",
+            "padding_bottom_mobile": "0"
           },
           "blocks": {
             "image_30": {
               "type": "_landing-image",
               "settings": {
                 "image": "shopify://shop_images/2.jpg",
-                "ratio": "4/5"
-              }
+                "ratio": "4/5",
+                "ratio_width": 1,
+                "ratio_height": 1,
+                "width": 40,
+                "width_mobile": 75,
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "eyebrow_31": {
               "type": "_landing-eyebrow",
               "settings": {
-                "label": "How to use it"
-              }
+                "label": "How to use it",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "heading_32": {
               "type": "_landing-heading",
               "settings": {
-                "heading": "How can I stimulate hair growth with Ayurvedic Bhringraj Oil?"
-              }
+                "heading": "How can I stimulate hair growth with Ayurvedic Bhringraj Oil?",
+                "size": "heading-2",
+                "size_mobile": "heading-2",
+                "tag": "h2",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "paragraph_33": {
               "type": "_landing-paragraph",
               "settings": {
-                "text": "<p>Bhringraj Oil helps hair grow stronger, softer and shinier. To discover healthier hair growth, apply a generous amount of Hair Oil into the scalp. Massage in a circular motion from root to tip. Leave the oil for 2 hours overnight, and rinse well with warm water before shampooing.</p>"
-              }
+                "text": "<p>Bhringraj Oil helps hair grow stronger, softer and shinier. To discover healthier hair growth, apply a generous amount of Hair Oil into the scalp. Massage in a circular motion from root to tip. Leave the oil for 2 hours overnight, and rinse well with warm water before shampooing.</p>",
+                "size": "body-sm",
+                "size_mobile": "body-sm",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "paragraph_34": {
               "type": "_landing-paragraph",
               "settings": {
-                "text": "<p>Related reading: <a href=\"/products/hair-oil\">view Hair Oil product</a></p>"
-              }
+                "text": "<p>Related reading: <a href=\"/products/hair-oil\">view Hair Oil product</a></p>",
+                "size": "body-sm",
+                "size_mobile": "body-sm",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             }
           },
           "block_order": [
@@ -392,33 +590,59 @@
           "type": "_landing-tab",
           "settings": {
             "title": "Beard and facial hair",
-            "show_bracket": true
+            "show_bracket": true,
+            "gap": "10",
+            "padding_top": "0",
+            "padding_bottom": "0",
+            "padding_top_mobile": "0",
+            "padding_bottom_mobile": "0"
           },
           "blocks": {
             "image_35": {
               "type": "_landing-image",
               "settings": {
                 "image": "shopify://shop_images/mens-haircare.png",
-                "ratio": "4/5"
-              }
+                "ratio": "4/5",
+                "ratio_width": 1,
+                "ratio_height": 1,
+                "width": 40,
+                "width_mobile": 75,
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "eyebrow_36": {
               "type": "_landing-eyebrow",
               "settings": {
-                "label": "How to use it"
-              }
+                "label": "How to use it",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "heading_37": {
               "type": "_landing-heading",
               "settings": {
-                "heading": "Is Bhringraj Oil good for facial hair and beards?"
-              }
+                "heading": "Is Bhringraj Oil good for facial hair and beards?",
+                "size": "heading-2",
+                "size_mobile": "heading-2",
+                "tag": "h2",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "paragraph_38": {
               "type": "_landing-paragraph",
               "settings": {
-                "text": "<p>Yes, Bhringraj Oil supports the growth of thicker, fuller, shinier beards and facial hair. Our Hair Oil is a genderless product which can be used on facial hair and beards.</p>"
-              }
+                "text": "<p>Yes, Bhringraj Oil supports the growth of thicker, fuller, shinier beards and facial hair. Our Hair Oil is a genderless product which can be used on facial hair and beards.</p>",
+                "size": "body-sm",
+                "size_mobile": "body-sm",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             }
           },
           "block_order": [
@@ -435,7 +659,10 @@
         "tab_41",
         "tab_42"
       ],
-      "settings": {}
+      "settings": {
+        "padding_top": "md",
+        "padding_bottom": "md"
+      }
     },
     "faq": {
       "type": "two-columns",
@@ -444,52 +671,74 @@
           "type": "_landing-column",
           "static": true,
           "settings": {
-            "show_bracket": true
+            "show_bracket": true,
+            "sticky": false,
+            "gap": "10",
+            "padding_top": "0",
+            "padding_bottom": "0",
+            "padding_top_mobile": "0",
+            "padding_bottom_mobile": "0"
           },
           "blocks": {
             "eyebrow_47": {
               "type": "_landing-eyebrow",
               "settings": {
-                "label": "Common questions"
-              }
+                "label": "Common questions",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "heading_48": {
               "type": "_landing-heading",
               "settings": {
-                "heading": "Common Questions"
-              }
+                "heading": "Common Questions",
+                "size": "heading-2",
+                "size_mobile": "heading-2",
+                "tag": "h2",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "accordion_49": {
               "type": "_landing-accordion",
-              "settings": {},
+              "settings": {
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
               "blocks": {
                 "accordion-item_43": {
                   "type": "_landing-accordion-item",
                   "settings": {
                     "title": "I have a sensitive scalp. Can I use Bhringraj Oil?",
                     "content": "<p>Yes, Bhringraj Oil is an all natural, plant-based ingredient that is ideal for sensitive scalps. Bhringraj is gentle enough for those with psoriasis, eczema and other serious skin conditions.</p>"
-                  }
+                  },
+                  "blocks": {}
                 },
                 "accordion-item_44": {
                   "type": "_landing-accordion-item",
                   "settings": {
                     "title": "Is Bhringraj Oil good for facial hair and beards?",
                     "content": "<p>Yes, Bhringraj Oil supports the growth of thicker, fuller, shinier beards and facial hair. Our Hair Oil is a genderless product which can be used on facial hair and beards.</p>"
-                  }
+                  },
+                  "blocks": {}
                 },
                 "accordion-item_45": {
                   "type": "_landing-accordion-item",
                   "settings": {
                     "title": "How often should I use the Hair Oil?",
                     "content": "<p>Use it as a scalp treatment one to three times a week. Massage it into your scalp, leave it on for at least an hour or overnight, then wash it out.</p>"
-                  }
+                  },
+                  "blocks": {}
                 },
                 "accordion-item_46": {
                   "type": "_landing-accordion-item",
                   "settings": {
                     "title": "How do I wash it out?",
                     "content": "<p>Apply shampoo to dry hair first, work it in, then add water and rinse. Shampoo a second time if your hair still feels oily.</p>"
-                  }
+                  },
+                  "blocks": {}
                 }
               },
               "block_order": [
@@ -512,15 +761,26 @@
           "settings": {
             "show_bracket": false,
             "sticky": true,
-            "padding_top": "10"
+            "gap": "10",
+            "padding_top": "10",
+            "padding_bottom": "0",
+            "padding_top_mobile": "0",
+            "padding_bottom_mobile": "0"
           },
           "blocks": {
             "media_50": {
               "type": "_landing-media",
               "settings": {
                 "image": "shopify://shop_images/New_Project_11.jpg",
-                "ratio": "1/1"
-              }
+                "ratio": "1/1",
+                "ratio_width": 1,
+                "ratio_height": 1,
+                "width": 100,
+                "width_mobile": 100,
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             }
           },
           "block_order": [
@@ -528,7 +788,11 @@
           ]
         }
       },
-      "settings": {}
+      "settings": {
+        "right_first_mobile": false,
+        "padding_top": "md",
+        "padding_bottom": "md"
+      }
     },
     "product": {
       "type": "two-columns",
@@ -539,15 +803,26 @@
           "settings": {
             "show_bracket": false,
             "sticky": true,
-            "padding_top": "10"
+            "gap": "10",
+            "padding_top": "10",
+            "padding_bottom": "0",
+            "padding_top_mobile": "0",
+            "padding_bottom_mobile": "0"
           },
           "blocks": {
             "media_51": {
               "type": "_landing-media",
               "settings": {
                 "image": "shopify://shop_images/hair-oil-packshot.jpg",
-                "ratio": "1/1"
-              }
+                "ratio": "1/1",
+                "ratio_width": 1,
+                "ratio_height": 1,
+                "width": 100,
+                "width_mobile": 100,
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             }
           },
           "block_order": [
@@ -558,32 +833,55 @@
           "type": "_landing-column",
           "static": true,
           "settings": {
-            "show_bracket": true
+            "show_bracket": true,
+            "sticky": false,
+            "gap": "10",
+            "padding_top": "0",
+            "padding_bottom": "0",
+            "padding_top_mobile": "0",
+            "padding_bottom_mobile": "0"
           },
           "blocks": {
             "eyebrow_52": {
               "type": "_landing-eyebrow",
               "settings": {
-                "label": "Where to buy it"
-              }
+                "label": "Where to buy it",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "heading_53": {
               "type": "_landing-heading",
               "settings": {
-                "heading": "Hair Oil"
-              }
+                "heading": "Hair Oil",
+                "size": "heading-2",
+                "size_mobile": "heading-2",
+                "tag": "h2",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "rating_54": {
               "type": "_landing-rating",
               "settings": {
-                "product": "hair-oil"
-              }
+                "product": "hair-oil",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "paragraph_55": {
               "type": "_landing-paragraph",
               "settings": {
-                "text": "<p>Blended with Bhringraj Oil and five nourishing Ayurvedic ingredients, our Hair Oil is designed to repair and deeply strengthen your hair from root to tip. This concentrated repairing oil stimulates hair growth, reduces greying, and prevents breakage to ensure your locks stay lustrous and healthy.</p>"
-              }
+                "text": "<p>Blended with Bhringraj Oil and five nourishing Ayurvedic ingredients, our Hair Oil is designed to repair and deeply strengthen your hair from root to tip. This concentrated repairing oil stimulates hair growth, reduces greying, and prevents breakage to ensure your locks stay lustrous and healthy.</p>",
+                "size": "body-sm",
+                "size_mobile": "body-sm",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "testimonial_56": {
               "type": "_landing-testimonial",
@@ -591,8 +889,11 @@
                 "rating": 5,
                 "quote": "“After struggling with hair fall my entire life - it only took one bottle to start seeing results. My hair has never been thicker, shinier, longer and strong.”",
                 "name": "Rachel Mills",
-                "role": "Hair Oil review"
-              }
+                "role": "Hair Oil review",
+                "padding_top": "3",
+                "padding_bottom": "3"
+              },
+              "blocks": {}
             },
             "products_57": {
               "type": "_landing-products",
@@ -601,17 +902,24 @@
                   "hair-oil",
                   "discovery-set",
                   "essentials-set"
-                ]
-              }
+                ],
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             },
             "button_58": {
               "type": "_landing-button",
               "settings": {
                 "label": "View the full product details",
                 "link": "shopify://products/hair-oil",
+                "style": "primary",
                 "width": "full",
-                "width_mobile": "full"
-              }
+                "width_mobile": "full",
+                "padding_top": "0",
+                "padding_bottom": "0"
+              },
+              "blocks": {}
             }
           },
           "block_order": [
@@ -625,7 +933,11 @@
           ]
         }
       },
-      "settings": {}
+      "settings": {
+        "right_first_mobile": false,
+        "padding_top": "md",
+        "padding_bottom": "md"
+      }
     }
   },
   "order": [
