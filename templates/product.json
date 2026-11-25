@@ -67,17 +67,17 @@
         "row-1": {
           "type": "row",
           "settings": {
-            "label": "Build on",
-            "left_value": "One heavy carrier",
-            "right_value": "Five plant oils"
+            "label": "Skin Feels",
+            "left_value": "Heavy and coated",
+            "right_value": "Lightweight, serum-like"
           }
         },
         "row-2": {
           "type": "row",
           "settings": {
-            "label": "Fatty acid profile",
-            "left_value": "Oleic-dominant",
-            "right_value": "Linoleic-rich"
+            "label": "Oil Base",
+            "left_value": "Rely on a single carrier oil",
+            "right_value": "Complementary plant oils"
           }
         },
         "row-3": {
