@@ -172,7 +172,7 @@
     "founder_note": {
       "type": "image-with-text-founder-note",
       "settings": {
-        "image": "shopify://shop_images/subscription-founder.jpg",
+        "image": "shopify://shop_images/founders-note-2.png",
         "label": "Founders note",
         "text": "<p>I've had eczema since infancy, so I've always been careful about what goes on my skin. I wanted Kumkumadi, the classical Ayurvedic brightening oil, but the traditional recipe was too rich for skin like mine.</p><p>So we rebuilt it. My mother, an Ayurvedic practitioner, and a team of Canadian chemists kept what made it work and removed what my skin couldn't take.</p><p>I made it for myself. Now it belongs to whoever needs it.</p>",
         "name": "Founder MANJULA"
