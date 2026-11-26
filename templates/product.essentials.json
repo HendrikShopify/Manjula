@@ -46,16 +46,11 @@
         "item-body"
       ],
       "settings": {
+        "popular_frequency": "",
+        "community_title": "",
         "expert_quote": "“High quality Ayurvedic oils, like those from Manjula, are a powerful way to support healthy skin and hair using time-tested botanical ingredients.”",
         "expert_name": "Dr. Anika Sharma",
         "expert_role": "Ayurvedic Practitioner"
-      }
-    },
-    "reviews": {
-      "type": "reviews",
-      "settings": {
-        "heading": "Customer reviews",
-        "recommend_label": "Would recommend this set."
       }
     },
     "use_guide": {
@@ -65,14 +60,14 @@
           "type": "note",
           "settings": {
             "label": "When to use",
-            "text": "Morning: Apply after water-based serums and before SPF. Evening: Use as the final step in your skincare routine."
+            "text": "Use the Face and Body Oils daily, morning or evening. Incorporate the Hair Oil into your wash days as a scalp treatment, or use a few drops between washes to condition and style."
           }
         },
         "note-2": {
           "type": "note",
           "settings": {
             "label": "For best results",
-            "text": "Use consistently and start with a small amount. If your skin feels oily, reduce the number of drops."
+            "text": "Adjust the amount and frequency of application to your skin, scalp and hair's changing needs. Make the oils part of your existing routine, prioritizing consistency over complexity."
           }
         }
       },
@@ -88,27 +83,36 @@
       "type": "ingredient-explorer",
       "settings": {
         "heading": "Explore all ingredients",
-        "functions": "Brightens, Nourishes, Smoothes, Protects, Barrier support",
         "products": [
           "face-oil",
           "hair-oil",
           "body-oil"
-        ]
+        ],
+        "functions": "Brightens, Nourishes, Smoothes, Protects, Barrier support"
+      }
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {
+        "heading": "Customer reviews",
+        "review_products": [],
+        "recommend_label": "Would recommend this set."
       }
     },
     "founder_note": {
       "type": "image-with-text-founder-note",
       "settings": {
-        "image": "shopify://shop_images/subscription-founder.jpg"
+        "image": "shopify://shop_images/subscription-founder.jpg",
+        "label": "Founders note",
+        "text": "<p>I've had eczema since infancy, so I've always been careful about what goes on my skin. I wanted Kumkumadi, the classical Ayurvedic brightening oil, but the traditional recipe was too rich for skin like mine.</p><p>So we rebuilt it. My mother, an Ayurvedic practitioner, and a team of Canadian chemists kept what made it work and removed what my skin couldn't take.</p><p>I made it for myself. Now it belongs to whoever needs it.</p>",
+        "name": "Founder MANJULA"
       }
     },
     "faq": {
       "type": "faq-image",
-      "blocks": {},
-      "block_order": [],
       "settings": {
-        "heading": "Questions\nand answers",
-        "image": "shopify://shop_images/contact-faq-smile.jpg"
+        "image": "shopify://shop_images/contact-faq-smile.jpg",
+        "heading": "Questions\nand answers"
       }
     }
   },
