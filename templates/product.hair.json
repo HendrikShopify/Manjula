@@ -211,9 +211,9 @@
     "founder_note": {
       "type": "image-with-text-founder-note",
       "settings": {
-        "image": "shopify://shop_images/subscription-founder.jpg",
-        "label": "Founders note",
-        "text": "<p>I've had eczema since infancy, so I've always been careful about what goes on my skin. I wanted Kumkumadi, the classical Ayurvedic brightening oil, but the traditional recipe was too rich for skin like mine.</p><p>So we rebuilt it. My mother, an Ayurvedic practitioner, and a team of Canadian chemists kept what made it work and removed what my skin couldn't take.</p><p>I made it for myself. Now it belongs to whoever needs it.</p>",
+        "image": "shopify://shop_images/founders-note.png",
+        "label": "Founders Note",
+        "text": "<p>Our Hair Oil is inspired by my grandmother Manjula’s personal blend to grow stronger, healthier hair.&nbsp;<br/><br/>She inherited this recipe from her mother and made her own version when she moved from India to Fiji in 1960. When I was born, my mother continued this practice, massaging my hair with the same recipe.&nbsp;<br/><br/>Keeping this tradition alive, I've added my own touches to the family blend. Including ingredients that helped regrow my hair during a period of excessive shedding.</p>",
         "name": "Founder MANJULA"
       }
     },
