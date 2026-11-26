@@ -130,13 +130,13 @@
         "note-2"
       ],
       "settings": {
-        "heading": "How to use guide"
+        "heading": "How to Use"
       }
     },
     "ingredients": {
       "type": "ingredient-explorer",
       "settings": {
-        "heading": "Explore all ingredients",
+        "heading": "Explore All Ingredients",
         "products": [
           "face-oil",
           "hair-oil",
