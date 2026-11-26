@@ -17,7 +17,8 @@
           "settings": {
             "product": "face-oil",
             "name": "Face oil",
-            "size": "10ml"
+            "size": "10ml",
+            "benefits": ""
           }
         },
         "item-hair": {
@@ -25,7 +26,8 @@
           "settings": {
             "product": "hair-oil",
             "name": "Hair oil",
-            "size": "30ml"
+            "size": "30ml",
+            "benefits": ""
           }
         },
         "item-body": {
@@ -33,7 +35,8 @@
           "settings": {
             "product": "body-oil",
             "name": "Body oil",
-            "size": "30ml"
+            "size": "30ml",
+            "benefits": ""
           }
         }
       },
@@ -43,21 +46,11 @@
         "item-body"
       ],
       "settings": {
+        "popular_frequency": "",
+        "community_title": "",
         "expert_quote": "“High quality Ayurvedic oils, like those from Manjula, are a powerful way to support healthy skin and hair using time-tested botanical ingredients.”",
         "expert_name": "Dr. Anika Sharma",
         "expert_role": "Ayurvedic Practitioner"
-      }
-    },
-    "reviews": {
-      "type": "reviews",
-      "settings": {
-        "heading": "Customer reviews",
-        "review_products": [
-          "hair-oil",
-          "body-oil",
-          "face-oil"
-        ],
-        "recommend_label": "Would recommend this set."
       }
     },
     "use_guide": {
@@ -98,10 +91,25 @@
         "functions": "Brightens, Nourishes, Smoothes, Protects, Barrier support"
       }
     },
+    "reviews": {
+      "type": "reviews",
+      "settings": {
+        "heading": "Customer reviews",
+        "review_products": [
+          "hair-oil",
+          "body-oil",
+          "face-oil"
+        ],
+        "recommend_label": "Would recommend this set."
+      }
+    },
     "founder_note": {
       "type": "image-with-text-founder-note",
       "settings": {
-        "image": "shopify://shop_images/subscription-founder.jpg"
+        "image": "shopify://shop_images/subscription-founder.jpg",
+        "label": "Founders Note",
+        "text": "<p>So much of my self-care happens outside of a dedicated morning or evening routine. I'll oil my cuticles while I'm working, smooth a little oil in my hair when I'm throwing it up in a slick back, or dabbing a little oil on my lips throughout the day. I never leave home without at least one of our mini oils in my bag.</p><p>This set was as much about creating something convenient as it was about giving people a way to get to know our products. I love that no two people use our oils in the same way. This set gives you the freedom to experiment with all three and find what routine feels most intuitive to you.</p><p></p>",
+        "name": "Founder MANJULA"
       }
     },
     "faq": {
