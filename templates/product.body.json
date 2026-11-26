@@ -138,7 +138,7 @@
     "faq": {
       "type": "faq-image",
       "settings": {
-        "image": "shopify://shop_images/contact-faq-smile.jpg",
+        "image": "shopify://shop_images/mens-body-oil.png",
         "heading": "Questions\nand answers"
       }
     }
