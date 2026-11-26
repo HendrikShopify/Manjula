@@ -48,9 +48,10 @@
       "settings": {
         "popular_frequency": "",
         "community_title": "",
-        "expert_quote": "“High quality Ayurvedic oils, like those from Manjula, are a powerful way to support healthy skin and hair using time-tested botanical ingredients.”",
-        "expert_name": "Dr. Anika Sharma",
-        "expert_role": "Ayurvedic Practitioner"
+        "expert_image": "shopify://shop_images/unnamed_736fffdb-27a7-4946-ab9c-72fc1d3b25d5.jpg",
+        "expert_quote": "\"They truly care about creating top-tier products. I use the Face Oil in all of my Gua Sha treatments, and I recommend the Hair Oil to all of my clients suffering from hair loss, dryness and flaking.\"",
+        "expert_name": "Jessica Waddell",
+        "expert_role": "Registered Acupuncturist"
       }
     },
     "use_guide": {
@@ -76,7 +77,7 @@
         "note-2"
       ],
       "settings": {
-        "heading": "How to use the complete set"
+        "heading": "How to use the complete ritual"
       }
     },
     "ingredients": {
