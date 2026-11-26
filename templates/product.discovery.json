@@ -91,6 +91,15 @@
         "functions": "Brightens, Nourishes, Smoothes, Protects, Barrier support"
       }
     },
+    "founder_note": {
+      "type": "image-with-text-founder-note",
+      "settings": {
+        "image": "shopify://shop_images/subscription-founder.jpg",
+        "label": "Founders Note",
+        "text": "<p>So much of my self-care happens outside of a dedicated morning or evening routine. I'll oil my cuticles while I'm working, smooth a little oil in my hair when I'm throwing it up in a slick back, or dabbing a little oil on my lips throughout the day. I never leave home without at least one of our mini oils in my bag.</p><p>This set was as much about creating something convenient as it was about giving people a way to get to know our products. I think there's something special about taking your time to understand each one and discover exactly where it belongs in your life.&nbsp;</p>",
+        "name": "Founder MANJULA"
+      }
+    },
     "reviews": {
       "type": "reviews",
       "settings": {
@@ -101,15 +110,6 @@
           "face-oil"
         ],
         "recommend_label": "Would recommend this set."
-      }
-    },
-    "founder_note": {
-      "type": "image-with-text-founder-note",
-      "settings": {
-        "image": "shopify://shop_images/subscription-founder.jpg",
-        "label": "Founders Note",
-        "text": "<p>So much of my self-care happens outside of a dedicated morning or evening routine. I'll oil my cuticles while I'm working, smooth a little oil in my hair when I'm throwing it up in a slick back, or dabbing a little oil on my lips throughout the day. I never leave home without at least one of our mini oils in my bag.</p><p>This set was as much about creating something convenient as it was about giving people a way to get to know our products. I think there's something special about taking your time getting to know each one and discovering where it belongs in your life.&nbsp;</p><p></p>",
-        "name": "Founder MANJULA"
       }
     },
     "faq": {
@@ -125,8 +125,8 @@
     "main",
     "use_guide",
     "ingredients",
-    "reviews",
     "founder_note",
+    "reviews",
     "faq"
   ]
 }
