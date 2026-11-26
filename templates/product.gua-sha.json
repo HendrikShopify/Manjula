@@ -11,20 +11,12 @@
   "sections": {
     "main": {
       "type": "main-product",
-      "blocks": {},
-      "block_order": [],
       "settings": {
+        "popular_frequency": "",
         "community_title": "",
         "expert_quote": "“High quality Ayurvedic oils, like those from Manjula, are a powerful way to support healthy skin and hair using time-tested botanical ingredients.”",
         "expert_name": "Dr. Anika Sharma",
         "expert_role": "Ayurvedic Practitioner"
-      }
-    },
-    "reviews": {
-      "type": "reviews",
-      "settings": {
-        "heading": "Customer reviews",
-        "recommend_label": "Would recommend this gua sha."
       }
     },
     "use_guide": {
@@ -56,24 +48,34 @@
     "founder_note": {
       "type": "image-with-text-founder-note",
       "settings": {
-        "image": "shopify://shop_images/subscription-founder.jpg"
+        "image": "shopify://shop_images/subscription-founder.jpg",
+        "label": "Founders Note",
+        "text": "<p>I've had eczema since infancy, so I've always been careful about what goes on my skin. I wanted Kumkumadi, the classical Ayurvedic brightening oil, but the traditional recipe was too rich for skin like mine.</p><p>So we rebuilt it. My mother, an Ayurvedic practitioner, and a team of Canadian chemists kept what made it work and removed what my skin couldn't take.</p><p>I made it for myself. Now it belongs to whoever needs it.</p>",
+        "name": "Founder MANJULA"
+      }
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {
+        "heading": "Customer reviews",
+        "review_products": [],
+        "recommend_label": "Would recommend this gua sha."
       }
     },
     "faq": {
       "type": "faq-image",
-      "blocks": {},
-      "block_order": [],
+      "disabled": true,
       "settings": {
-        "heading": "Questions\nand answers",
-        "image": "shopify://shop_images/contact-faq-smile.jpg"
+        "image": "shopify://shop_images/contact-faq-smile.jpg",
+        "heading": "Questions\nand answers"
       }
     }
   },
   "order": [
     "main",
     "use_guide",
-    "reviews",
     "founder_note",
+    "reviews",
     "faq"
   ]
 }
