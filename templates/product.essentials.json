@@ -110,6 +110,7 @@
     },
     "faq": {
       "type": "faq-image",
+      "disabled": true,
       "settings": {
         "image": "shopify://shop_images/contact-faq-smile.jpg",
         "heading": "Questions\nand answers"
