@@ -26,22 +26,22 @@
         "result-1": {
           "type": "result",
           "settings": {
-            "title": "New growth",
-            "text": "Fine baby hairs along the hairline and part"
+            "title": "Reduced Redness",
+            "text": "A visible reduction in redness across the upper arms, leaving skin looking calmer"
           }
         },
         "result-2": {
           "type": "result",
           "settings": {
-            "title": "Visible density",
-            "text": "Less scalp showing through when you tie it back"
+            "title": "Smoother Texture",
+            "text": "A noticeable improvement in the appearance of rough, bumpy skin associated with KP"
           }
         },
         "result-3": {
           "type": "result",
           "settings": {
-            "title": "Calmer scalp",
-            "text": "Less itch, less tightness, less flaking after washing"
+            "title": "Softer Skin",
+            "text": "Her skin felt noticeably softer, smoother and more nourished with consistent application"
           }
         }
       },
@@ -51,14 +51,14 @@
         "result-3"
       ],
       "settings": {
-        "heading": "Effects after 4 week consistent use trial",
-        "text": "Participants used the body oil every day for four weeks. Photos were taken at the start and at the end, in the same light.",
-        "case_label": "",
-        "case_text": "Aged 41, dry skin with rough patches on the arms and legs. The oil on damp skin after every shower, with no other changes to the routine.",
+        "heading": "Four weeks of use on sensitive, KP-prone skin.",
+        "text": "Documenting changes in skin texture, redness and softness over four weeks of consistent use.",
+        "case_label": "Case Study 004",
+        "case_text": "Our participant had experienced keratosis pilaris (KP) on her upper arms for years. Having used our Body Oil intermittently, she simplified her routine for four weeks, replacing her usual moisturizing products with daily application of the Body Oil alongside regular exfoliation.",
         "before_image": "shopify://shop_images/Jen_Before_Body_Oil__jpg.webp",
         "after_image": "shopify://shop_images/Jen_After_Body_Oil__jpg.webp",
         "show_labels": true,
-        "disclaimer": "*Individual results shown, from participants using Manjula Hair Oil twice weekly for four weeks. Results vary from person to person and depend on factors including diet, stress, sleep and underlying health. Not intended to treat or prevent any condition."
+        "disclaimer": "*Individual results documented over four weeks as part of a customer-use study. The Body Oil was used alongside regular exfoliation. Individual results may vary depending on baseline severity and underlying conditions."
       }
     },
     "differentiator": {
