@@ -108,12 +108,13 @@
       "settings": {
         "image": "shopify://shop_images/subscription-founder.jpg",
         "label": "Founders Note",
-        "text": "<p>So much of my self-care happens outside of a dedicated morning or evening routine. I'll oil my cuticles while I'm working, smooth a little oil in my hair when I'm throwing it up in a slick back, or dabbing a little oil on my lips throughout the day. I never leave home without at least one of our mini oils in my bag.</p><p>This set was as much about creating something convenient as it was about giving people a way to get to know our products. I love that no two people use our oils in the same way. This set gives you the freedom to experiment with all three and find what routine feels most intuitive to you.</p><p></p>",
+        "text": "<p>So much of my self-care happens outside of a dedicated morning or evening routine. I'll oil my cuticles while I'm working, smooth a little oil in my hair when I'm throwing it up in a slick back, or dabbing a little oil on my lips throughout the day. I never leave home without at least one of our mini oils in my bag.</p><p>This set was as much about creating something convenient as it was about giving people a way to get to know our products. I think there's something special about taking your time getting to know each one and discovering where it belongs in your life.&nbsp;</p><p></p>",
         "name": "Founder MANJULA"
       }
     },
     "faq": {
       "type": "faq-image",
+      "disabled": true,
       "settings": {
         "image": "shopify://shop_images/contact-faq-smile.jpg",
         "heading": "Questions\nand answers"
