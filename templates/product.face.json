@@ -67,16 +67,16 @@
         "row-1": {
           "type": "row",
           "settings": {
-            "label": "Build on",
-            "left_value": "One heavy carrier",
-            "right_value": "Five plant oils"
+            "label": "Texture",
+            "left_value": "Heavy, greasy",
+            "right_value": "Lightweight, serum-like"
           }
         },
         "row-2": {
           "type": "row",
           "settings": {
-            "label": "Fatty acid profile",
-            "left_value": "Oleic-dominant",
+            "label": "Oil Base",
+            "left_value": "Relies on a single carrier oil",
             "right_value": "Linoleic-rich"
           }
         },
@@ -113,11 +113,12 @@
         "row-5"
       ],
       "settings": {
-        "media": "shopify://shop_images/DSC06847-copy-5.jpg",
-        "heading": "Most oils sit.\nOurs sinks in.",
-        "text": "Oil doesn't have to mean greasy. What an oil feels like on skin comes down to its fatty acids, its wax esters, and the ratio it's blended in. Most face oils lean on one heavy carrier. Ours is five lipid structures, blended so they spread instead of pool.",
+        "media": "shopify://shop_images/face-oil-hyperpigmentation_59a29a23-e720-4f4f-9fdc-535416c86581.png",
+        "heading": "Most oils sit on your skin.\nOurs sinks in.",
+        "image": "shopify://shop_images/face-oil-hyperpigmentation_59a29a23-e720-4f4f-9fdc-535416c86581.png",
+        "text": "Your face oil shouldn't feel greasy. What an oil feels like on your skin comes down to its ingredients and the ratio it's blended in. Our linoleic-rich formula combines plant oils with complementary fatty acid profiles and naturally occurring wax esters, creating a lightweight, velvety texture that absorbs quickly without leaving a greasy residue.",
         "left_title": "Most face oils",
-        "left_sub": "Sits on top, leaves a film",
+        "left_sub": "Sits on the skin, leaves a film",
         "right_title": "MANJULA",
         "right_sub": "Sinks in, leaves nothing"
       }
