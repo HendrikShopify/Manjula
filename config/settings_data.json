@@ -1,5 +1,6 @@
 {
     "current": {
-        "delivery_returns_link": "/policies/shipping-policy"
+        "delivery_returns_link": "/policies/shipping-policy",
+        "favicon": "shopify://shop_images/Ayurvedic_Oils_Manjula_Logo_Square.jpg"
     }
 }

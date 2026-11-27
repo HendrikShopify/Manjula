@@ -13,8 +13,8 @@
       {
         "type": "image_picker",
         "id": "favicon",
-        "label": "Pick a logo",
-        "info": "Pick a favicon"
+        "label": "Favicon",
+        "info": "The small icon in the browser tab. Use a square image of at least 180 x 180 px."
       }
     ]
   },

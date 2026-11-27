@@ -413,7 +413,7 @@ Subscribed line below md: the price column is only as wide as its longest price 
 - Most popular: the section setting `popular_frequency` matches part of the plan name ("Deliver every 3 months"), so the "15% off" suffix in the plan name does not break it. Set on Face, Hair and Body oil.
 - The FREE MINI badge in the mini offer keeps its space while hidden (`visibility`, `data-shown`), so the offer does not jump when an oil is picked. On hover, the empty "Add a different oil" slot only scales its plus icon down (Hendrik, 20 Nov).
 - Ritual builder packshots (slots and picker rows) use `custom.solo_image` (bottle without box), `object-contain`, with the featured image as fallback.
-- Community strip shows the store's UGC video entries (`ugc_video`), this product's videos first, instead of section blocks. The `community_video` block type is removed (no template used it).
+- Community strip shows the store's UGC video entries (`ugc_video`) instead of section blocks. Each product picks its videos in the metafield `custom.community_videos` (list of UGC video entries, shown in that order); a product without one has no strip (Hendrik, 27 Nov). The entry's own Product field is for the UGC slider only. The `community_video` block type is removed (no template used it).
 - Loose text in the USP tag marquee is wrapped in a span so text trim centres it on the dot.
 - Ritual builder filled slots: the packshot fills the slot above the name (no top padding, `object-contain`), so the solo bottle reads bigger (Hendrik, 19 Nov). The plus icon in the empty slot scales down a little on hover.
 - PDP gallery (thumbnails-right): the main media stays 1:1 and as big as the column allows, but never taller than the screen (`100svh`, minus the 4px edge on desktop). It always starts at the left edge of the page (Hendrik, 19 Nov); any space left over sits between the media and the form.
@@ -693,3 +693,5 @@ The Two columns narrow section is renamed Tabs (`sections/tabs.liquid`, Hendrik 
 - Use guide: product templates only (`enabled_on`).
 - Horizontal scroll: no preset, so it can't be added anywhere; it stays on the subscription page template. Shopify's `enabled_on` takes template types (page), not one page template, so this is the only way to keep it to the subscription page.
 - Atoms only the showcase rendered are deleted too (Hendrik, 25 Nov): `divider`, `tabs`, `tab-item`, `variant-option-group`.
+- Cart count (Hendrik, 27 Nov): the header Cart (n) and the drawer header both show cart.item_count, the free mini included, so two oils plus the gift show 3. Prices formatted in JS (add to cart button) support every Shopify money format, including amount_with_space_separator (SEK).
+- Favicon (Hendrik, 27 Nov): Theme settings > Favicon uses the live site's square M (Ayurvedic_Oils_Manjula_Logo_Square.jpg in Files), 32px for the tab and 180px as the apple-touch-icon. No type attribute, because Shopify may serve the image as JPEG or WebP.

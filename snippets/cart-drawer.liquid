@@ -1,7 +1,7 @@
 {%- comment -%}
   Figma: Components Molecules / Cart drawer (365:4488; Templates FINAL 2526:25995)
-  side-drawer (640px, full width on mobile) whose content is #cart-drawer-inner: drawer-header ("Your cart" + count
-  without the gift),
+  side-drawer (640px, full width on mobile) whose content is #cart-drawer-inner: drawer-header ("Your cart" + count,
+  the free mini included, like the header Cart (n)),
   scrolling body, footer with cart-summary. Section rendering replaces #cart-drawer-inner after every cart change.
 
   Offer (Manjula, Cart drawer content 2177:26151). An oil is a product with a custom.free_mini_pairs metafield (the other
@@ -67,7 +67,6 @@
   assign oil_count = 0
   assign first_oil = nil
   assign rules_lines = ''
-  assign item_count = cart.item_count
   for item in cart.items
     assign marker = ',' | append: item.product.id | append: ','
     assign is_mini = false
@@ -90,7 +89,6 @@
     assign rules_lines = rules_lines | append: '{"key":' | append: line_key | append: ',"variant":' | append: item.variant.id | append: ',"oil":' | append: line_oil | append: ',"qty":' | append: item.quantity | append: ',"plan":' | append: has_plan | append: ',"gift":' | append: is_mini | append: '},'
 
     if is_mini
-      assign item_count = item_count | minus: item.quantity
       continue
     endif
     unless is_oil
@@ -159,7 +157,7 @@
         {% render 'cart-empty-state' %}
       </div>
     {%- else -%}
-      {% render 'drawer-header', title: title, count: item_count, id: 'cart-drawer' %}
+      {% render 'drawer-header', title: title, count: cart.item_count, id: 'cart-drawer' %}
       <cart-items class="flex min-h-0 flex-1 flex-col overflow-y-auto">
         <form action="{{ routes.cart_url }}" id="cart-drawer-form" method="post" class="flex flex-col">
           {%- if gift_present -%}

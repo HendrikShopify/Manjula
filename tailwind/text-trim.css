@@ -15,8 +15,9 @@
      containers, where the pseudo-elements would become items and pick up the gap.
 
   3. Text inputs (value and placeholder): text-box does not reach inside form controls, so every browser
-     uses the margin method on the input itself. line-height 1 makes its box exactly one em of font
-     content; the negative margins cut it to cap height and baseline, so the wrapper (which carries
+     uses the margin method on the input itself. line-height 2 gives the value half an em of room above and
+     below the font box (an input clips its text, and accents and descenders like Å, É, g and j were cut at
+     line-height 1, Hendrik 27 Nov); the negative margins cut the layout box to cap height and baseline, so the wrapper (which carries
      the border and height in input, search-field, newsletter-input, quantity-selector) centres and
      sizes on the letters, as in Figma. Inputs must stay bare: border and padding live on the wrapper.
      The native text-box is switched off on inputs and their placeholder: Chrome would trim the value a second
@@ -81,9 +82,9 @@
   }
 
   input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="hidden"], [type="submit"], [type="button"], [type="reset"], [type="color"], [type="image"]) {
-    line-height: 1;
-    margin-top: calc(-0.5em + var(--trim-top));
-    margin-bottom: calc(-0.5em + var(--trim-bottom));
+    line-height: 2;
+    margin-top: calc(-1em + var(--trim-top));
+    margin-bottom: calc(-1em + var(--trim-bottom));
     text-box: none;
   }
   input::placeholder {

@@ -38,7 +38,7 @@
     {%- endif -%}
 
     <div class="w-full lg:col-span-5 lg:col-start-4 lg:row-start-2 lg:max-w-124">
-      {%- form 'contact', id: 'ContactForm', class: 'relative flex flex-col gap-8 [&>.h-captcha]:absolute' -%}
+      {%- form 'contact', id: 'ContactForm', class: 'relative flex scroll-mt-20 flex-col gap-8 lg:scroll-mt-19 [&>.h-captcha]:absolute' -%}
         {%- if form.posted_successfully? -%}
           {%- assign success_text = 'templates.contact.form.post_success' | t -%}
           {% render 'helper-text', text: success_text, type: 'success', attributes: 'tabindex="-1" autofocus' %}

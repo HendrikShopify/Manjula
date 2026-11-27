@@ -485,3 +485,15 @@ document.addEventListener('click', (event) => {
     if (other !== details && other.getAttribute('name') === name) closeAccordion(other);
   });
 });
+
+// Anchor links on page load (/pages/contact?contact_posted=true#ContactForm): Chrome jumps to the target before fonts,
+// images and scripts have sized the content above it, so it lands too high. Scroll again once the page has loaded.
+// Drawers that open from the hash (#cart-drawer) are left to side-drawer.js. The target's scroll-mt-* keeps it clear
+// of the sticky header.
+window.addEventListener('load', () => {
+  const id = decodeURIComponent(window.location.hash.slice(1));
+  if (!id) return;
+  const target = document.getElementById(id);
+  if (!target || target.closest('side-drawer, dialog, [role="dialog"]')) return;
+  requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+});
