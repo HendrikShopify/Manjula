@@ -14,6 +14,7 @@
     "delivery_returns_link": "/policies/shipping-policy",
     "delivery_days_1": 5,
     "delivery_days_2": 7,
+    "delivery_days_3": 10,
     "sections": {
       "cookie-consent": {
         "type": "cookie-consent",

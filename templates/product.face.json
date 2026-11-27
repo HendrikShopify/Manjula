@@ -161,7 +161,7 @@
     "ingredients": {
       "type": "ingredient-explorer",
       "settings": {
-        "heading": "Explore all ingredients",
+        "heading": "Explore All Ingredients",
         "products": [
           "face-oil",
           "hair-oil",
