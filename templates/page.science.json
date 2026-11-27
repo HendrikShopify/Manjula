@@ -21,80 +21,94 @@
     "concerns": {
       "type": "concerns",
       "blocks": {
-        "dry": {
-          "type": "concern",
-          "settings": {
-            "title": "Dry skin",
-            "image": "shopify://shop_images/science-concern-sensitive-skin.jpg",
-            "lead": "Dry skin isn't short on water. It's short on the oils that hold water in, so moisture escapes faster than the skin can replace it.",
-            "point_1_label": "The oils run low",
-            "point_1_text": "Your skin makes its own lipids to seal in moisture. Cold air, hot showers and harsh cleansers wash them away faster than they come back.",
-            "point_2_label": "Water slips out",
-            "point_2_text": "Without that seal, water evaporates from the surface. The skin feels tight, looks dull and flakes at the edges.",
-            "point_3_label": "Oil puts the seal back",
-            "point_3_text": "Plant oils are close to the skin's own fats. Pressed into damp skin, they fill the gaps and keep the moisture where it belongs."
-          }
-        },
         "sensitive": {
           "type": "concern",
           "settings": {
-            "title": "Sensitive skin",
+            "title": "Sensitive Skin",
             "image": "shopify://shop_images/science-concern-sensitive-skin.jpg",
-            "lead": "Sensitive skin isn't a skin type you're born with. Most of the time it's a barrier that's been worn thin, so things that should stay outside are getting in.",
-            "point_1_label": "The wall has gaps",
-            "point_1_text": "Same fats, same mortar. When the barrier is damaged, fragrance, pollution and even water can reach the living cells underneath. They weren't built for that.",
-            "point_2_label": "The skin sounds the alarm",
-            "point_2_text": "Those cells release inflammatory signals. That's the redness, the heat, the sting when you put something on. It's a defence, not a flaw.",
-            "point_3_label": "The cycle feeds itself",
-            "point_3_text": "Inflammation slows the skin's ability to rebuild its own fats. Weaker barrier, more reactions, more inflammation. It stops when the barrier is repaired, not when you stop feeling it."
+            "lead": "Sensitive skin can be more reactive to environmental changes, ingredients in products and everyday external stressors. A compromised skin barrier makes skin especially vulnerable to irritation.",
+            "point_1_label": "The Barrier Becomes Vulnerable",
+            "point_1_text": "When the skin's protective barrier is compromised, it becomes harder for it to retain moisture and protect against irritants.",
+            "point_2_label": "Sensitivity Increases",
+            "point_2_text": "Dryness, redness, tightness and discomfort can become more pronounced, especially if you're using harsh or heavily fragranced products.",
+            "point_3_label": "Where Oil Comes In",
+            "point_3_text": "Carefully selected plant oils help replenish lipids and support the skin barrier. Our formulations exclude essential oils and added fragrance to minimize irritation."
+          }
+        },
+        "concern_GVqpGg": {
+          "type": "concern",
+          "settings": {
+            "title": "Dry + Dehydrated Skin",
+            "lead": "Dry skin often struggles to retain moisture. When the skin's protective lipid barrier is compromised, water escapes more easily, leaving the skin feeling tight, rough and uncomfortable.",
+            "point_1_label": "The Lipid Barrier Weakens",
+            "point_1_text": "Environmental changes, hot showers, harsh cleansers and ageing can affect the lipids that help maintain the skin's protective barrier.",
+            "point_2_label": "Moisture Escapes",
+            "point_2_text": "Increased transepidermal water loss (TEWL) can leave the skin feeling dry and tight, with visible flaking and uneven texture.",
+            "point_3_label": "Where Oil Comes In",
+            "point_3_text": "Lipid-rich plant oils help soften the skin and reduce moisture loss. Applying them to slightly damp skin helps maintain hydration and suppleness."
+          }
+        },
+        "dry": {
+          "type": "concern",
+          "settings": {
+            "title": "Eczema + Dermatitis",
+            "image": "shopify://shop_images/science-concern-sensitive-skin.jpg",
+            "lead": "Sensitive skin can be more reactive to environmental changes, certain ingredients and everyday external stressors. A compromised skin barrier can make it especially vulnerable to irritation.",
+            "point_1_label": "The Barrier Becomes Vulnerable",
+            "point_1_text": "When the skin's protective barrier is compromised, it becomes less effective at retaining moisture and protecting against irritants.",
+            "point_2_label": "Sensitivity Increases",
+            "point_2_text": "Dryness, redness, tightness and discomfort can become more pronounced, especially if you're using harsh or heavily fragranced products.",
+            "point_3_label": "Where Oil Comes In",
+            "point_3_text": "Carefully selected plant oils help replenish lipids and support the skin barrier. Our formulations exclude essential oils and added fragrance to minimize potential sources of irritation."
           }
         },
         "breakouts": {
           "type": "concern",
           "settings": {
-            "title": "Skin breakouts",
+            "title": "Breakouts + Congestion",
             "image": "shopify://shop_images/science-concern-sensitive-skin.jpg",
-            "lead": "Breakouts are often a sign of skin that's been stripped too often. When the barrier is irritated, it overreacts, and pores pay the price.",
-            "point_1_label": "Stripped skin fights back",
-            "point_1_text": "Drying cleansers remove the oils that calm the skin. It answers by making more sebum, often thicker than before.",
-            "point_2_label": "Pores get blocked",
-            "point_2_text": "Excess sebum, dead cells and bacteria meet in the pore. Inflammation follows, and a spot appears.",
-            "point_3_label": "Balance calms it down",
-            "point_3_text": "Light, non-clogging oils tell the skin it has enough. Over time it makes less sebum and reacts less."
+            "lead": "Breakout-prone skin isn't necessarily well-moisturized skin. Excess sebum, clogged pores and inflammation can coexist with dryness and a compromised skin barrier.",
+            "point_1_label": "Pores Become Congested",
+            "point_1_text": "Excess sebum and dead skin cells can accumulate within the pores, contributing to congestion and breakouts.",
+            "point_2_label": "The Barrier Becomes Compromised",
+            "point_2_text": "Over-cleansing and excessive use of exfoliating ingredients can contribute to dryness, irritation and increased sensitivity.",
+            "point_3_label": "Where Oil Comes In",
+            "point_3_text": "Not all oils behave the same way on the skin. Our Face Oil is acne-safe, formulated with lightweight plant oils rich in linoleic acid to nourish the skin and support its barrier without a heavy, greasy finish."
           }
         },
         "breakage": {
           "type": "concern",
           "settings": {
-            "title": "Breakage and thinning",
+            "title": "Breakage + Thinning",
             "image": "shopify://shop_images/science-concern-sensitive-skin.jpg",
-            "lead": "Hair breaks when the strand loses its protective outer layer and the scalp underneath doesn't get what it needs to grow strong hair.",
-            "point_1_label": "The cuticle wears down",
-            "point_1_text": "Heat, colour and brushing lift the scales that protect each strand. The inside dries out and snaps.",
-            "point_2_label": "Roots grow weaker",
-            "point_2_text": "A tight, dry scalp has poorer circulation. New hair grows in thinner and sheds sooner.",
-            "point_3_label": "Oil works on both ends",
-            "point_3_text": "Massaged into the scalp, oil supports the roots. Smoothed through the lengths, it flattens the cuticle again."
+            "lead": "Healthy-looking hair depends on both the condition of the scalp and the integrity of the hair strand. Changes in hair density, strength and texture can develop at different points.",
+            "point_1_label": "Growth Begins at the Follicle",
+            "point_1_text": "Hair grows in cycles and is influenced by lifestyle, genetics, hormones, nutrition, stress and scalp health.",
+            "point_2_label": "The Hair Strand Weakens",
+            "point_2_text": "Heat styling, chemical treatments and everyday friction can damage the hair cuticle, making strands more susceptible to dryness and breakage.",
+            "point_3_label": "Where Oil Comes In",
+            "point_3_text": "Our Hair Oil combines traditional Ayurvedic ingredients used in scalp care with conditioning plant oils that help reduce shedding, improve softness and protect against further breakage."
           }
         },
         "scalp": {
           "type": "concern",
           "settings": {
-            "title": "Flaky and itchy scalp",
+            "title": "Flaky + Itchy Scalp",
             "image": "shopify://shop_images/science-concern-sensitive-skin.jpg",
-            "lead": "A flaky, itchy scalp is skin like any other. When its barrier is dry or irritated, it sheds faster and sends out itch signals.",
-            "point_1_label": "The scalp dries out",
-            "point_1_text": "Frequent washing and hot water strip the scalp's natural oils, just as they do on the face.",
-            "point_2_label": "Cells shed too fast",
-            "point_2_text": "Irritated skin renews itself in a hurry. The dead cells clump together and fall as flakes.",
-            "point_3_label": "Oiling slows the cycle",
-            "point_3_text": "A weekly scalp massage with oil softens the flakes, calms the itch and gives the skin time to rebuild."
+            "lead": "Like the skin on your face and body, your scalp has its own protective barrier. Changes in moisture levels, sebum production and scalp health can add to flaking, itching and inflammation.",
+            "point_1_label": "The Scalp Becomes Disrupted",
+            "point_1_text": "Environmental stressors, product buildup, sensitivity and certain scalp conditions can affect the scalp's natural balance.",
+            "point_2_label": "Discomfort Develops",
+            "point_2_text": "Dryness and irritation can manifest as tightness, itching and visible flakes, although not all flaking is caused by dryness. Sometimes it's build-up.",
+            "point_3_label": "Where Oil Comes In",
+            "point_3_text": "For scalps experiencing dryness, nourishing plant oils and gentle massage can help soften dry skin and restore comfort. Our Hair Oil is formulated without added fragrance or essential oils, so even the most sensitive scalps can use it."
           }
         }
       },
       "block_order": [
-        "dry",
         "sensitive",
+        "concern_GVqpGg",
+        "dry",
         "breakouts",
         "breakage",
         "scalp"
@@ -170,7 +184,7 @@
         "label": "MANJULA’s approach",
         "text": "Your body has its own rhythm. Rather than asking it to conform to a complicated routine, we formulate with its natural functions. Our approach to self-care is adaptive, multifunctional and rooted in an understanding that intention and consistency is essential meaningful results.",
         "image": "shopify://shop_images/manjula-science-nature.png",
-        "mobile_image": "shopify://shop_images/science-formulate-bathroom.jpg"
+        "mobile_image": "shopify://shop_images/glow-body-oil.png"
       }
     },
     "ritual": {
@@ -178,8 +192,8 @@
       "settings": {
         "image": "shopify://shop_images/origin-story-hair-ritual.jpg",
         "image_small": "shopify://shop_images/science-ritual-hair-detail.jpg",
-        "heading": "The power of ritual",
-        "text": "<p>Real change is quiet. Skin renews itself over weeks, and hair grows in cycles that span months. That's why consistency matters more than intensity.</p><p>A few drops. A few minutes. Repeated. In our family, oiling was never a one-time treatment. It was a moment we came back to, day after day. The results arrive the same way: first softness, then calm, then a glow that stays.</p><p>Consider each application an invitation to slow down, reconnect, and give your skin and hair the time they deserve.</p>",
+        "heading": "The Power of Ritual",
+        "text": "<p>In Ayurveda, the way an oil is applied is as much a part of the practice as the oil itself. From traditional head massage to Abhyanga, the application of oil encourages us to become more attentive to our bodies and their changing needs.</p><p>Skin renews itself over weeks, while hair grows in cycles that span months. Meaningful changes require time and consistency.</p><p>In our family, oiling was never reserved for moments when something needed correcting. It was an ongoing practice, something we returned to instinctively. It's an understanding that continues to inform the way we formulate today.</p>",
         "button_label": "About Manjula",
         "button_link": "/pages/about"
       }
