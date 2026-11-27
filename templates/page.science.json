@@ -25,7 +25,7 @@
           "type": "concern",
           "settings": {
             "title": "Sensitive Skin",
-            "image": "shopify://shop_images/science-concern-sensitive-skin.jpg",
+            "image": "shopify://shop_images/body-oil-for-eczema.png",
             "lead": "Sensitive skin can be more reactive to environmental changes, ingredients in products and everyday external stressors. A compromised skin barrier makes skin especially vulnerable to irritation.",
             "point_1_label": "The Barrier Becomes Vulnerable",
             "point_1_text": "When the skin's protective barrier is compromised, it becomes harder for it to retain moisture and protect against irritants.",
@@ -39,6 +39,7 @@
           "type": "concern",
           "settings": {
             "title": "Dry + Dehydrated Skin",
+            "image": "shopify://shop_images/face-oil-4.png",
             "lead": "Dry skin often struggles to retain moisture. When the skin's protective lipid barrier is compromised, water escapes more easily, leaving the skin feeling tight, rough and uncomfortable.",
             "point_1_label": "The Lipid Barrier Weakens",
             "point_1_text": "Environmental changes, hot showers, harsh cleansers and ageing can affect the lipids that help maintain the skin's protective barrier.",
@@ -52,7 +53,7 @@
           "type": "concern",
           "settings": {
             "title": "Eczema + Dermatitis",
-            "image": "shopify://shop_images/science-concern-sensitive-skin.jpg",
+            "image": "shopify://shop_images/eczema-ayurvedic-oil.png",
             "lead": "Sensitive skin can be more reactive to environmental changes, certain ingredients and everyday external stressors. A compromised skin barrier can make it especially vulnerable to irritation.",
             "point_1_label": "The Barrier Becomes Vulnerable",
             "point_1_text": "When the skin's protective barrier is compromised, it becomes less effective at retaining moisture and protecting against irritants.",
@@ -66,7 +67,7 @@
           "type": "concern",
           "settings": {
             "title": "Breakouts + Congestion",
-            "image": "shopify://shop_images/science-concern-sensitive-skin.jpg",
+            "image": "shopify://shop_images/sensitive-skincare.png",
             "lead": "Breakout-prone skin isn't necessarily well-moisturized skin. Excess sebum, clogged pores and inflammation can coexist with dryness and a compromised skin barrier.",
             "point_1_label": "Pores Become Congested",
             "point_1_text": "Excess sebum and dead skin cells can accumulate within the pores, contributing to congestion and breakouts.",
@@ -79,22 +80,36 @@
         "breakage": {
           "type": "concern",
           "settings": {
-            "title": "Breakage + Thinning",
-            "image": "shopify://shop_images/science-concern-sensitive-skin.jpg",
-            "lead": "Healthy-looking hair depends on both the condition of the scalp and the integrity of the hair strand. Changes in hair density, strength and texture can develop at different points.",
-            "point_1_label": "Growth Begins at the Follicle",
-            "point_1_text": "Hair grows in cycles and is influenced by lifestyle, genetics, hormones, nutrition, stress and scalp health.",
-            "point_2_label": "The Hair Strand Weakens",
-            "point_2_text": "Heat styling, chemical treatments and everyday friction can damage the hair cuticle, making strands more susceptible to dryness and breakage.",
+            "title": "Thinning + Shedding",
+            "image": "shopify://shop_images/senstiive-skincare.png",
+            "lead": "Hair grows in cycles, moving through phases of growth, transition, rest and shedding. Genetics, hormonal fluctuations, stress and nutritional changes can influence these cycles, affecting hair density and the rate at which we shed.",
+            "point_1_label": "The Growth Cycle Changes",
+            "point_1_text": "Physical and emotional stress, hormonal changes and nutritional deficiencies can cause more hair follicles to enter the resting and shedding phases prematurely.",
+            "point_2_label": "Hormones Influence the Follicle",
+            "point_2_text": "For those with a genetic predisposition, dihydrotestosterone (DHT) can gradually shrink hair follicles and shorten the growth phase, resulting in finer, thinner hair over time.",
             "point_3_label": "Where Oil Comes In",
-            "point_3_text": "Our Hair Oil combines traditional Ayurvedic ingredients used in scalp care with conditioning plant oils that help reduce shedding, improve softness and protect against further breakage."
+            "point_3_text": "Our Hair Oil incorporates Amla, Bhringraj, Rosemary and Fenugreek, botanicals traditionally used in Ayurvedic hair and scalp care. Combined with consistent scalp massage, the formulation helps nourish the scalp and support an environment conducive to healthy hair growth."
+          }
+        },
+        "concern_rAHBpf": {
+          "type": "concern",
+          "settings": {
+            "title": "Dryness + Breakage",
+            "image": "shopify://shop_images/hair-growth-oil-ayurvedic.png",
+            "lead": "The outer layer of your hair (the cuticle), protects the internal structure of each strand. When this layer is damaged, hair becomes more susceptible to moisture loss, friction and breakage.",
+            "point_1_label": "The Cuticle Becomes Damaged",
+            "point_1_text": "Heat styling, chemical treatments, environmental exposure and daily friction can gradually compromise the hair's protective outer layer.",
+            "point_2_label": "Hair Loses Resilience",
+            "point_2_text": "Damage to the cuticle can leave hair feeling rough, dry, brittle, and change your hair texture, making it more prone to tangling, split ends and breakage.",
+            "point_3_label": "Where Oil Comes In",
+            "point_3_text": "Our Hair Oil combines nutrient-rich plant oils that help lubricate and condition the strands, reducing friction and improving softness, flexibility and shine. It can be used both before and after washing to help protect against everyday damage."
           }
         },
         "scalp": {
           "type": "concern",
           "settings": {
             "title": "Flaky + Itchy Scalp",
-            "image": "shopify://shop_images/science-concern-sensitive-skin.jpg",
+            "image": "shopify://shop_images/hair-shedding-oil.png",
             "lead": "Like the skin on your face and body, your scalp has its own protective barrier. Changes in moisture levels, sebum production and scalp health can add to flaking, itching and inflammation.",
             "point_1_label": "The Scalp Becomes Disrupted",
             "point_1_text": "Environmental stressors, product buildup, sensitivity and certain scalp conditions can affect the scalp's natural balance.",
@@ -102,6 +117,20 @@
             "point_2_text": "Dryness and irritation can manifest as tightness, itching and visible flakes, although not all flaking is caused by dryness. Sometimes it's build-up.",
             "point_3_label": "Where Oil Comes In",
             "point_3_text": "For scalps experiencing dryness, nourishing plant oils and gentle massage can help soften dry skin and restore comfort. Our Hair Oil is formulated without added fragrance or essential oils, so even the most sensitive scalps can use it."
+          }
+        },
+        "concern_kyGBxc": {
+          "type": "concern",
+          "settings": {
+            "title": "Scalp Psoriasis + Dermatitis",
+            "image": "shopify://shop_images/hair-oiling-for-hair-growth.png",
+            "lead": "The scalp is an extension of our skin and requires the same consideration. Conditions such as psoriasis and seborrheic dermatitis can affect scalp comfort, resulting in persistent flaking, itching and irritation.",
+            "point_1_label": "Inflammation and Scalp Health",
+            "point_1_text": "While these conditions have different underlying causes, both can involve inflammation and changes in the way the scalp sheds skin cells.",
+            "point_2_label": "The Scalp Becomes Sensitive",
+            "point_2_text": "Persistent irritation and scratching can contribute to discomfort and damage to the surrounding hair strands.",
+            "point_3_label": "Where Oil Comes In",
+            "point_3_text": "For scalps that tolerate regular oiling, carefully selected plant oils can help soften dry scales and nourish the skin. Our Hair Oil is formulated specifically for sensitive scalp."
           }
         }
       },
@@ -111,7 +140,9 @@
         "dry",
         "breakouts",
         "breakage",
-        "scalp"
+        "concern_rAHBpf",
+        "scalp",
+        "concern_kyGBxc"
       ],
       "settings": {
         "heading": "Most skin and hair problems start in the same place."
