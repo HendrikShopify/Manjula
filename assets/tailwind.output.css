@@ -550,9 +550,6 @@
   .row-start-1 {
     grid-row-start: 1;
   }
-  .float-left {
-    float: left;
-  }
   .container {
     width: 100%;
     @media (width >= 40rem) {
@@ -763,9 +760,6 @@
   .aspect-\[390\/410\] {
     aspect-ratio: 390/410;
   }
-  .aspect-\[674\/602\] {
-    aspect-ratio: 674/602;
-  }
   .aspect-square {
     aspect-ratio: 1 / 1;
   }
@@ -895,9 +889,6 @@
   .size-full {
     width: 100%;
     height: 100%;
-  }
-  .h-\(--hero-height\) {
-    height: var(--hero-height);
   }
   .h-\(--hero-height-mobile\) {
     height: var(--hero-height-mobile);
@@ -1214,17 +1205,11 @@
   .w-40 {
     width: calc(var(--spacing) * 40);
   }
-  .w-44 {
-    width: calc(var(--spacing) * 44);
-  }
   .w-48\.5 {
     width: calc(var(--spacing) * 48.5);
   }
   .w-50 {
     width: calc(var(--spacing) * 50);
-  }
-  .w-55 {
-    width: calc(var(--spacing) * 55);
   }
   .w-57\.5 {
     width: calc(var(--spacing) * 57.5);
@@ -1499,6 +1484,9 @@
   .scroll-mt-6 {
     scroll-margin-top: calc(var(--spacing) * 6);
   }
+  .scroll-mt-20 {
+    scroll-margin-top: calc(var(--spacing) * 20);
+  }
   .\[scrollbar-width\:none\] {
     scrollbar-width: none;
   }
@@ -1609,9 +1597,6 @@
   }
   .gap-16 {
     gap: calc(var(--spacing) * 16);
-  }
-  .gap-grid-gap-x {
-    gap: var(--grid-gap-x);
   }
   .gap-gutter {
     gap: var(--gutter);
@@ -1780,10 +1765,6 @@
     border-style: var(--tw-border-style);
     border-width: 1px;
   }
-  .border-0 {
-    border-style: var(--tw-border-style);
-    border-width: 0px;
-  }
   .border-2 {
     border-style: var(--tw-border-style);
     border-width: 2px;
@@ -1823,10 +1804,6 @@
   .border-b {
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 1px;
-  }
-  .border-b-2 {
-    border-bottom-style: var(--tw-border-style);
-    border-bottom-width: 2px;
   }
   .border-b-\[5px\] {
     border-bottom-style: var(--tw-border-style);
@@ -2399,9 +2376,6 @@
   }
   .pb-12 {
     padding-bottom: calc(var(--spacing) * 12);
-  }
-  .pb-48 {
-    padding-bottom: calc(var(--spacing) * 48);
   }
   .pb-\[calc\(0\.75rem_-_\(0\.5lh_-_var\(--trim-bottom\)\)\)\] {
     padding-bottom: calc(0.75rem - (0.5lh - var(--trim-bottom)));
@@ -4033,9 +4007,6 @@
   .aria-selected\:text-accent[aria-selected="true"] {
     color: var(--color-accent);
   }
-  .aria-selected\:text-accent-contrast[aria-selected="true"] {
-    color: var(--color-accent-contrast);
-  }
   .aria-selected\:text-text[aria-selected="true"] {
     color: var(--color-text);
   }
@@ -5073,9 +5044,6 @@
     .lg\:w-\[calc\(\(min\(100\%\,var\(--container-page\)\)_-_2\*var\(--page-margin\)_-_36px\)\/4\)\] {
       width: calc((min(100%, var(--container-page)) - 2 * var(--page-margin) - 36px) / 4);
     }
-    .lg\:w-\[calc\(\(min\(100\%\,var\(--container-page\)\)_-_2\*var\(--page-margin\)_-_48px\)\/5\)\] {
-      width: calc((min(100%, var(--container-page)) - 2 * var(--page-margin) - 48px) / 5);
-    }
     .lg\:w-\[min\(80vw\,calc\(80dvh\*16\/9\)\)\] {
       width: min(80vw, calc(80dvh * 16 / 9));
     }
@@ -5170,6 +5138,9 @@
     .lg\:-translate-y-1\/2 {
       --tw-translate-y: calc(calc(1 / 2 * 100%) * -1);
       translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
+    .lg\:scroll-mt-19 {
+      scroll-margin-top: calc(var(--spacing) * 19);
     }
     .lg\:grid-cols-2 {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -6492,9 +6463,6 @@
   .peer-checked\:\[\&\>span\]\:text-accent-contrast:is(:where(.peer):checked ~ *) > span {
     color: var(--color-accent-contrast);
   }
-  .aria-selected\:\[\&\>span\]\:text-accent-contrast[aria-selected="true"] > span {
-    color: var(--color-accent-contrast);
-  }
   @media (width >= 64rem) {
     .lg\:\[\&\>span\:last-child\]\:hidden > span:last-child {
       display: none;
@@ -6795,9 +6763,9 @@
     }
   }
   input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="hidden"], [type="submit"], [type="button"], [type="reset"], [type="color"], [type="image"]) {
-    line-height: 1;
-    margin-top: calc(-0.5em + var(--trim-top));
-    margin-bottom: calc(-0.5em + var(--trim-bottom));
+    line-height: 2;
+    margin-top: calc(-1em + var(--trim-top));
+    margin-bottom: calc(-1em + var(--trim-bottom));
     text-box: none;
   }
   input::placeholder {

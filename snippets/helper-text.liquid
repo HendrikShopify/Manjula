@@ -21,7 +21,7 @@
       assign color = 'text-text-muted'
   endcase
 -%}
-<p class="helper-text flex items-start gap-1 text-body-sm {{ color }} {{ class }}"{% if id %} id="{{ id }}"{% endif %}{% if type == 'error' %} role="alert"{% endif %} data-type="{{ type }}"{% if attributes %} {{ attributes }}{% endif %}>
-  {%- if icon %}<span class="size-4 shrink-0 mt-0.5 [&>svg]:size-full" aria-hidden="true">{{ icon | inline_asset_content }}</span>{% endif -%}
+<p class="helper-text flex items-center gap-1 text-body-sm {{ color }} {{ class }}"{% if id %} id="{{ id }}"{% endif %}{% if type == 'error' %} role="alert"{% endif %} data-type="{{ type }}"{% if attributes %} {{ attributes }}{% endif %}>
+  {%- if icon %}<span class="size-4 shrink-0 [&>svg]:size-full" aria-hidden="true">{{ icon | inline_asset_content }}</span>{% endif -%}
   <span data-helper-text>{{ text }}</span>
 </p>
