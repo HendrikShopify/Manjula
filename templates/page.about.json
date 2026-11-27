@@ -37,7 +37,7 @@
           "settings": {
             "year": "2019",
             "event": "A family recipe rediscovered",
-            "image": "shopify://shop_images/formula-philosophy-bottle-detail.jpg"
+            "image": "shopify://shop_images/family-recipe.png"
           }
         },
         "entry-2021": {
@@ -45,7 +45,7 @@
           "settings": {
             "year": "2020",
             "event": "First formula and packaging experiments",
-            "image": "shopify://shop_images/offer-body-oil-hands.jpg"
+            "image": "shopify://shop_images/3.png"
           }
         },
         "entry-2022": {
@@ -53,14 +53,15 @@
           "settings": {
             "year": "2021",
             "event": "Products tested and perfected",
-            "image": "shopify://shop_images/MANJULA_Product-Shot_5_68511327-e1d2-490b-a252-5101929600c5.jpg"
+            "image": "shopify://shop_images/tested.png"
           }
         },
         "entry_PYYRff": {
           "type": "entry",
           "settings": {
             "year": "2022",
-            "event": "MANJULA Essentials launches"
+            "event": "MANJULA Essentials launches",
+            "image": "shopify://shop_images/launches.png"
           }
         },
         "entry-2024a": {
@@ -68,7 +69,7 @@
           "settings": {
             "year": "2023",
             "event": "MANJULA goes global",
-            "image": "shopify://shop_images/formula-philosophy-body-oil.jpg"
+            "image": "shopify://shop_images/global.png"
           }
         },
         "entry-2024b": {
@@ -76,21 +77,23 @@
           "settings": {
             "year": "2024",
             "event": "Our first founders campaign",
-            "image": "shopify://shop_images/R1-06147-0008-Edit.jpg"
+            "image": "shopify://shop_images/founders-campaign.png"
           }
         },
         "entry_G7JdhX": {
           "type": "entry",
           "settings": {
             "year": "2025",
-            "event": "Loved by media"
+            "event": "Loved by media",
+            "image": "shopify://shop_images/media.png"
           }
         },
         "entry_PRhXEw": {
           "type": "entry",
           "settings": {
             "year": "2026",
-            "event": "Our first product study"
+            "event": "Our first product study",
+            "image": "shopify://shop_images/product-study.png"
           }
         }
       },
