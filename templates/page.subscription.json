@@ -32,7 +32,7 @@
         "never-run-out": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/subscription-step2.jpg",
+            "image": "shopify://shop_images/face-oil-application.png",
             "title": "Never run out",
             "text": "Your oil arrives before the last bottle is empty. Pick every 2, 3 or 4 months."
           }
@@ -67,7 +67,7 @@
       "settings": {
         "quote": "\"The one habit I've actually kept. The oil arrives, I use it, my skin looks better. That's it.\"",
         "image": "shopify://shop_images/subscription-portrait.png",
-        "author": "Sarah K.",
+        "author": "Ria S.",
         "role": "Face Oil subscriber"
       }
     },
