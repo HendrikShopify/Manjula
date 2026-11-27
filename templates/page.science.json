@@ -232,7 +232,7 @@
     "botanical_farm": {
       "type": "botanical-farm",
       "settings": {
-        "video": "shopify://files/videos/1104.mp4",
+        "video": "shopify://files/videos/1104(1).mp4",
         "label": "Where our ingredients come from.",
         "text": "<p>Understanding where our ingredients come from is as important to us as understanding what they do. We prioritize local sourcing wherever possible and work with our cosmetic laboratory to ensure every ingredient is ethically and sustainably sourced, with full supporting documentation.</p><p><br/>Our formulator's botanical farm in Ontario has given us the opportunity to harvest select ingredients ourselves. As we grow, so does our interest in developing a closer relationship with the botanicals we formulate with, and exploring new possibilities in how they're grown, harvested and used.</p>"
       }
