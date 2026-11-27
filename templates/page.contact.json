@@ -1,33 +1,96 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "faq": {
       "type": "faq-categories",
       "blocks": {
-        "shipping": { "type": "category", "settings": { "title": "Shipping and delivery", "questions": ["shipping-where", "shipping-time", "shipping-cost", "shipping-tracking"] } },
+        "shipping": {
+          "type": "category",
+          "settings": {
+            "title": "Shipping and delivery",
+            "questions": [
+              "shipping-where",
+              "shipping-time",
+              "shipping-cost",
+              "shipping-tracking"
+            ]
+          }
+        },
         "subscription": {
           "type": "category",
           "settings": {
             "title": "Subscription",
-            "questions": ["subscription-how", "subscription-often", "subscription-skip", "subscription-charged", "subscription-save", "subscription-discount", "subscription-notice"]
+            "questions": [
+              "subscription-how",
+              "subscription-often",
+              "subscription-skip",
+              "subscription-charged",
+              "subscription-save",
+              "subscription-discount",
+              "subscription-notice"
+            ]
           }
         },
-        "product": { "type": "category", "settings": { "title": "Product", "questions": ["product-which-oil", "product-sensitive-skin", "product-how-long", "product-storage"] } }
+        "product": {
+          "type": "category",
+          "settings": {
+            "title": "Product",
+            "questions": [
+              "product-which-oil",
+              "product-sensitive-skin",
+              "product-how-long",
+              "product-storage"
+            ]
+          }
+        }
       },
-      "block_order": ["shipping", "subscription", "product"],
+      "block_order": [
+        "shipping",
+        "subscription",
+        "product"
+      ],
       "settings": {
         "heading": "Questions and answers",
-        "image": "shopify://shop_images/contact-faq-smile.jpg"
+        "image": "shopify://shop_images/body-oil-for-eczema.png"
       }
     },
     "main": {
       "type": "main-contact",
       "blocks": {
-        "care": { "type": "contact", "settings": { "label": "Customer service", "email": "Care@manjulaessentials.com" } },
-        "info": { "type": "contact", "settings": { "label": "Business partnerships and press:", "email": "Info@manjulaessentials.com" } }
+        "care": {
+          "type": "contact",
+          "settings": {
+            "label": "Customer service",
+            "email": "Care@manjulaessentials.com"
+          }
+        },
+        "info": {
+          "type": "contact",
+          "settings": {
+            "label": "Business partnerships and press:",
+            "email": "Info@manjulaessentials.com"
+          }
+        }
       },
-      "block_order": ["care", "info"],
-      "settings": { "heading": "Contact us for help" }
+      "block_order": [
+        "care",
+        "info"
+      ],
+      "settings": {
+        "heading": "Contact us for help"
+      }
     }
   },
-  "order": ["faq", "main"]
+  "order": [
+    "faq",
+    "main"
+  ]
 }
