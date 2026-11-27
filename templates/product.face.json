@@ -76,7 +76,15 @@
           "type": "row",
           "settings": {
             "label": "Oil Base",
-            "left_value": "Relies on a single carrier oil",
+            "left_value": "Single carrier oil",
+            "right_value": "Five complementary plant oils"
+          }
+        },
+        "row_rXUiem": {
+          "type": "row",
+          "settings": {
+            "label": "Fatty Acid Profile",
+            "left_value": "Oleic-dominant",
             "right_value": "Linoleic-rich"
           }
         },
@@ -108,6 +116,7 @@
       "block_order": [
         "row-1",
         "row-2",
+        "row_rXUiem",
         "row-3",
         "row-4",
         "row-5"
