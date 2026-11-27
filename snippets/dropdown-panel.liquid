@@ -6,6 +6,11 @@
   The image is the linked product's or page's hover photo (custom.hover_image; on products the same photo as the tile hover), else the linked
   collection or product image (link.object.featured_image); the first link with one shows first,
   and header-nav.js swaps it on hover or focus (data-panel-link ↔ data-panel-image, same index).
+  A hover video (custom.hover_video on the linked product or page, file, video) is used instead of the photo when set.
+  It plays muted and looped while its link is active and the panel is open, and pauses otherwise (header-nav.js); it loads
+  Shopify's 480p mp4 (the slot is 180px) on first play, with its poster frame until then. Liquid only exposes the 1080p mp4,
+  so the 480p url is derived from it; the 1080p source follows as a fallback if that file is missing. With reduced
+  motion it shows the poster only.
   The swap works like the product page gallery (Hendrik, 23 Nov): the new image shows at once and eases from 110% and
   a 1px blur into focus (1.25s, ease-out-quint). With reduced motion it only swaps.
   While one link is hovered or focused, the other links dim to 30%. No link has an image: the image slot is left out.
@@ -14,7 +19,7 @@
   assign first_image_index = 0
   for child in link.links
     assign child_image = child.object.metafields.custom.hover_image.value | default: child.object.featured_image
-    if child_image != blank
+    if child_image != blank or child.object.metafields.custom.hover_video.value.media_type == 'video'
       assign first_image_index = forloop.index
       break
     endif
@@ -38,15 +43,30 @@
   {%- if first_image_index > 0 -%}
     <div class="relative size-45 shrink-0 overflow-clip bg-surface-alt" aria-hidden="true">
       {%- for child in link.links -%}
-        {%- assign child_image = child.object.metafields.custom.hover_image.value | default: child.object.featured_image -%}
-        {%- if child_image != blank -%}
+        {%- liquid
+          assign child_image = child.object.metafields.custom.hover_image.value | default: child.object.featured_image
+          assign child_video = child.object.metafields.custom.hover_video.value
+          if child_video.media_type != 'video'
+            assign child_video = nil
+          endif
+          assign is_active = false
+          if forloop.index == first_image_index
+            assign is_active = true
+          endif
+          assign image_attributes = 'data-panel-image="' | append: forloop.index | append: '" data-active="' | append: is_active | append: '"'
+        -%}
+        {%- if child_video -%}
           {%- liquid
-            assign is_active = false
-            if forloop.index == first_image_index
-              assign is_active = true
-            endif
-            assign image_attributes = 'data-panel-image="' | append: forloop.index | append: '" data-active="' | append: is_active | append: '"'
+            assign video_source = child_video.sources | where: 'format', 'mp4' | first
+            assign video_small = video_source.url | replace: 'HD-1080p-3.3Mbps', 'SD-480p-1.0Mbps'
           -%}
+          <div class="absolute inset-0 size-full opacity-0 data-[active=true]:opacity-100 [&>*]:transition-[scale,filter] [&>*]:duration-1250 [&>*]:ease-out-quint motion-safe:not-data-[active=true]:[&>*]:scale-110 motion-safe:not-data-[active=true]:[&>*]:blur-3xs" {{ image_attributes }}>
+            <video class="block size-full object-cover" poster="{{ child_video.preview_image | image_url: width: 360 }}" muted loop playsinline preload="none" data-panel-video>
+              {%- if video_small != video_source.url %}<source src="{{ video_small }}" type="video/mp4">{% endif -%}
+              <source src="{{ video_source.url }}" type="video/mp4">
+            </video>
+          </div>
+        {%- elsif child_image != blank -%}
           {% render 'media',
             media: child_image,
             ratio: 'fill',
