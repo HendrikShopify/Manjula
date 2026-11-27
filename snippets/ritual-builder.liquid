@@ -11,6 +11,7 @@
   Packshots in the slots and picker rows use each oil's custom.solo_image (bottle without box), else its featured image.
   popular            subscription plan name that gets the Most popular badge
   "Estimated delivery" comes from Theme settings > Delivery estimate (days per visitor country, cut-off hour, business days).
+  Show estimated delivery (same settings group) hides the date; the delivery_note still shows on its own.
   delivery_note      optional text after the delivery line, behind a dot (Bundle: "Free shipping")
   show_price         boolean, default true; false drops the price from the button (Bundle shows it above the items)
   class              placement only
@@ -183,12 +184,19 @@
       {%- endform -%}
       {% render 'helper-text', text: '', type: 'error', id: error_id, attributes: 'hidden data-product-form-error' %}
     </product-form>
-    <p class="flex items-center gap-2.5 text-label-sm text-text">
-      <span>{{ delivery_text }}</span>
-      {%- if delivery_note != blank -%}
-        <span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span><span>{{ delivery_note }}</span>
-      {%- endif -%}
-    </p>
+    {%- if settings.show_delivery_estimate or delivery_note != blank -%}
+      <p class="flex items-center gap-2.5 text-label-sm text-text">
+        {%- if settings.show_delivery_estimate -%}
+          <span>{{ delivery_text }}</span>
+        {%- endif -%}
+        {%- if settings.show_delivery_estimate and delivery_note != blank -%}
+          <span class="size-1 shrink-0 rounded-full bg-current" aria-hidden="true"></span>
+        {%- endif -%}
+        {%- if delivery_note != blank -%}
+          <span>{{ delivery_note }}</span>
+        {%- endif -%}
+      </p>
+    {%- endif -%}
   </div>
   <script type="application/json" data-ritual-prices>{ {{ plan_prices }} }</script>
 </ritual-builder>
