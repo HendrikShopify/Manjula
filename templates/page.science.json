@@ -232,9 +232,9 @@
     "botanical_farm": {
       "type": "botanical-farm",
       "settings": {
-        "image": "shopify://shop_images/science-botanical-farm.jpg",
-        "label": "The botanical farm",
-        "text": "<p>Our herbs are grown and harvested on our formulators’ botanical farm. Each plant is picked in its own season, then dried and prepared by hand before it’s infused into oil, following methods that have been used in Ayurveda for centuries. From the farm, the herbs go to the lab, where the formulas are refined with cosmetic chemists.</p>"
+        "video": "shopify://files/videos/1104.mp4",
+        "label": "Where our ingredients come from.",
+        "text": "<p>Understanding where our ingredients come from is as important to us as understanding what they do. We prioritize local sourcing wherever possible and work with our cosmetic laboratory to ensure every ingredient is ethically and sustainably sourced, with full supporting documentation.</p><p><br/>Our formulator's botanical farm in Ontario has given us the opportunity to harvest select ingredients ourselves. As we grow, so does our interest in developing a closer relationship with the botanicals we formulate with, and exploring new possibilities in how they're grown, harvested and used.</p>"
       }
     },
     "ingredients": {
