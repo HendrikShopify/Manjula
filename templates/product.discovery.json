@@ -16,7 +16,7 @@
           "type": "bundle_item",
           "settings": {
             "product": "face-oil",
-            "name": "Face oil",
+            "name": "Face Oil",
             "size": "10ml",
             "benefits": ""
           }
@@ -25,7 +25,7 @@
           "type": "bundle_item",
           "settings": {
             "product": "hair-oil",
-            "name": "Hair oil",
+            "name": "Hair Oil",
             "size": "30ml",
             "benefits": ""
           }
@@ -34,7 +34,7 @@
           "type": "bundle_item",
           "settings": {
             "product": "body-oil",
-            "name": "Body oil",
+            "name": "Body Oil",
             "size": "30ml",
             "benefits": ""
           }
