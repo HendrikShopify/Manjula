@@ -109,7 +109,7 @@
     "ingredients": {
       "type": "ingredient-explorer",
       "settings": {
-        "heading": "Explore all ingredients",
+        "heading": "Explore All Ingredients",
         "products": [
           "face-oil",
           "hair-oil",
@@ -139,7 +139,7 @@
       "type": "faq-image",
       "settings": {
         "image": "shopify://shop_images/mens-body-oil.png",
-        "heading": "Questions\nand answers"
+        "heading": "Frequently Asked Questions"
       }
     }
   },
