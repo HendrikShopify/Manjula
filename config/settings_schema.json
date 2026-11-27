@@ -43,6 +43,7 @@
         "type": "paragraph",
         "content": "The \"Estimated delivery\" date under Add to cart. It counts from today, using the visitor's country. Countries not listed below use the default."
       },
+      { "type": "checkbox", "id": "show_delivery_estimate", "label": "Show estimated delivery", "info": "On the product page, under Add to cart.", "default": true },
       { "type": "range", "id": "delivery_days", "label": "Days to delivery (default)", "min": 1, "max": 30, "step": 1, "default": 7 },
       { "type": "checkbox", "id": "delivery_business_days", "label": "Count business days only", "info": "Saturdays and Sundays are skipped.", "default": true },
       { "type": "range", "id": "delivery_cutoff_hour", "label": "Order cut-off time", "min": 0, "max": 24, "step": 1, "unit": "h", "default": 14, "info": "Orders after this hour (store time zone) ship a day later. 24 turns it off." },
