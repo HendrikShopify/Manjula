@@ -72,6 +72,20 @@ class HeaderNav extends BaseComponent {
         panel.querySelectorAll('[data-panel-image]').forEach((el) => {
             el.dataset.active = String(el === image);
         });
+        this.syncPanelVideos(panel, Boolean(this.openItem?.contains(panel)));
+    }
+
+    // Hover videos in a dropdown panel: only the active one plays, and only while its panel is open (not with reduced motion).
+    syncPanelVideos(panel, isOpen) {
+        panel?.querySelectorAll('[data-panel-video]').forEach((video) => {
+            const active = video.closest('[data-panel-image]')?.dataset.active === 'true';
+            if (isOpen && active && !this.prefersReducedMotion) {
+                video.muted = true;
+                video.play().catch(() => {});
+            } else {
+                video.pause();
+            }
+        });
     }
 
     get prefersReducedMotion() {
@@ -196,6 +210,7 @@ class HeaderNav extends BaseComponent {
         const panel = item.querySelector('[data-nav-panel]');
         if (panel) panel.inert = false;
         this.playIn(item);
+        this.syncPanelVideos(panel, true);
         this.bindWhileOpen();
     }
 
@@ -207,6 +222,7 @@ class HeaderNav extends BaseComponent {
         this.unbindWhileOpen();
         if (!item) return;
         this.setExpanded(item, false);
+        this.syncPanelVideos(item.querySelector('[data-nav-panel]'), false);
         this.playOut(item);
     }
 
@@ -268,6 +284,7 @@ class HeaderNav extends BaseComponent {
     finishClose(item) {
         item.removeAttribute('data-open');
         const panel = item.querySelector('[data-nav-panel]');
+        this.syncPanelVideos(panel, false);
         if (panel) panel.inert = false;
         const timeline = this.timelines.get(item);
         timeline?.pause(0);

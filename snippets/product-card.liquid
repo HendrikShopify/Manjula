@@ -21,7 +21,8 @@
     metafield custom.hover_image (file, image), else the product's second image; with neither it only tints (accent-subtle).
     A hover video (custom.hover_video, file, video) replaces the photo when set: muted and looped, it plays while the
     card is hovered and pauses on leave (assets/card-hover-video.js). It loads on the first hover (preload none); its
-    poster frame shows until it plays. With reduced motion it shows the poster only. Tile ignores quick_add, badge, wishlist, rating and swatches.
+    poster frame shows until it plays. It loads Shopify's 720p mp4 (a tile is at most ~350px wide): Liquid only exposes
+    the 1080p mp4, so the 720p url is derived from it, with the 1080p source as a fallback if that file is missing. With reduced motion it shows the poster only. Tile ignores quick_add, badge, wishlist, rating and swatches.
   Quick add: variant-picker is a form of submit buttons, one per variant, each adds straight to the cart. Cards never open
   the quick view (Hendrik, 19 Nov); the quick view only shows product details from a bundle item.
 {%- endcomment -%}
@@ -119,7 +120,14 @@
         <div class="absolute inset-0 motion-safe:scale-105 motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out lg:group-hover/tile:scale-100">
           {%- if hover_video -%}
             <div class="absolute inset-0" data-hover-video>
-              {{- hover_video | video_tag: image_size: '1080x', controls: false, loop: true, muted: true, playsinline: true, preload: 'none', class: 'block size-full object-cover' -}}
+              {%- liquid
+                assign video_source = hover_video.sources | where: 'format', 'mp4' | first
+                assign video_medium = video_source.url | replace: 'HD-1080p-3.3Mbps', 'HD-720p-2.1Mbps'
+              -%}
+              <video class="block size-full object-cover" poster="{{ hover_video.preview_image | image_url: width: 720 }}" muted loop playsinline preload="none">
+                {%- if video_medium != video_source.url %}<source src="{{ video_medium }}" type="video/mp4">{% endif -%}
+                <source src="{{ video_source.url }}" type="video/mp4">
+              </video>
             </div>
           {%- else -%}
             {% render 'media', media: lifestyle, ratio: 'fill', sizes: sizes, class: 'absolute! inset-0 size-full' %}
