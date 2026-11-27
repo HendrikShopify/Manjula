@@ -18,7 +18,7 @@
             "product": "face-oil",
             "name": "Face Oil",
             "size": "30ml",
-            "benefits": "Brightens, Calms, Hydrates"
+            "benefits": "Brightens, Calm, Heal"
           }
         },
         "item-hair": {
@@ -27,7 +27,7 @@
             "product": "hair-oil",
             "name": "Hair Oil",
             "size": "100ml",
-            "benefits": "Brightens, Calms, Hydrates"
+            "benefits": "Grow, Condition, Strengthen"
           }
         },
         "item-body": {
@@ -36,7 +36,7 @@
             "product": "body-oil",
             "name": "Body Oil",
             "size": "100ml",
-            "benefits": "Brightens, Calms, Hydrates"
+            "benefits": "Soften, Repair, Glow"
           }
         }
       },
