@@ -26,13 +26,13 @@
           "settings": {
             "image": "shopify://shop_images/subscription-step1.jpg",
             "title": "Save on every order",
-            "text": "15% off every delivery, plus free shipping. Cheaper than buying one bottle at a time."
+            "text": "Keep your routine uninterrupted with 15% off every delivery."
           }
         },
         "never-run-out": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/face-oil-application.png",
+            "image": "shopify://shop_images/glowing-skin-body-oil.png",
             "title": "Never run out",
             "text": "Your oil arrives before the last bottle is empty. Pick every 2, 3 or 4 months."
           }
@@ -40,7 +40,7 @@
         "skip": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/subscription-step3.jpg",
+            "image": "shopify://shop_images/eczema-ayurvedic-oil.png",
             "title": "Skip, swap or pause anytime",
             "text": "Your oil arrives before the last bottle is empty. Pick every 2, 3 or 4 months."
           }
@@ -48,7 +48,7 @@
         "cancel": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/subscription-step4.jpg",
+            "image": "shopify://shop_images/hair-growth-oil.png",
             "title": "Cancel in two clicks",
             "text": "No calls, no emails, no minimum term. If it isn't working for you, stop whenever you want."
           }
@@ -89,8 +89,8 @@
       "type": "image-with-text-founder-note",
       "settings": {
         "image": "shopify://shop_images/subscription-founder.jpg",
-        "label": "Founders note",
-        "text": "<p>I've had eczema since infancy, so I've always been careful about what goes on my skin. I wanted Kumkumadi, the classical Ayurvedic brightening oil, but the traditional recipe was too rich for skin like mine.</p><p>So we rebuilt it. My mother, an Ayurvedic practitioner, and a team of Canadian chemists kept what made it work and removed what my skin couldn't take.</p><p>I made it for myself. Now it belongs to whoever needs it.</p>",
+        "label": "Founders Note",
+        "text": "<p>I wanted to create a comprehensive routine that gave me everything I needed. These three oils have become such an intuitive part of my life and everyone I've been able to share them with.&nbsp;</p><p>I love use them interchangeably, I'm always adapting them to what my body needs and I l never feel confined to a particular routine.&nbsp;</p><p>It has always been my goal and vision create a rituals that feel freeing with fewer products that can do so much more for you.</p>",
         "name": "Founder MANJULA"
       }
     },
