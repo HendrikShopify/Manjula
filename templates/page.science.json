@@ -1,19 +1,25 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "intro": {
       "type": "page-intro",
       "settings": {
-        "heading": "Where Ayurveda meets modern science",
-        "image": "shopify://shop_images/science-intro-sofa.jpg",
-        "detail_image": "shopify://shop_images/science-intro-face-touch.jpg",
-        "text": "<p>Ayurveda sees dryness, irritation and dullness as signs of imbalance. Not flaws to strip away, but signals to listen to.</p><p>Modern science tells a similar story in different words. Your skin has a natural barrier that keeps moisture in and irritants out. Oil-based care works with your skin and scalp instead of against them.</p>"
+        "heading": "Where Ayurveda Meets Science",
+        "image": "shopify://shop_images/science-ingredients.png",
+        "detail_image": "shopify://shop_images/glowing-face-oil.png",
+        "text": "<p>Ayurveda approaches the body as an interconnected system, recognizing that our needs are constantly changing. Dryness, inflammation, sensitivity and changes in our skin and hair are signals and ways your body speaks to you.&nbsp;</p><p>Our approach brings this understanding into conversation with modern cosmetic science. We study the properties of traditional Ayurvedic ingredients and formulations, including how they blend together, how they can balance each other, and the best concentrations to use for the safest, most effective results.</p>"
       }
     },
     "concerns": {
       "type": "concerns",
-      "settings": {
-        "heading": "Most skin and hair problems start in the same place."
-      },
       "blocks": {
         "dry": {
           "type": "concern",
@@ -92,7 +98,10 @@
         "breakouts",
         "breakage",
         "scalp"
-      ]
+      ],
+      "settings": {
+        "heading": "Most skin and hair problems start in the same place."
+      }
     },
     "formulate": {
       "type": "formulate",
@@ -141,9 +150,9 @@
         "point_5"
       ],
       "settings": {
-        "image": "shopify://shop_images/science-formulate-bathroom.jpg",
-        "image_mobile": "shopify://shop_images/formula-philosophy-bottle-detail.jpg",
-        "heading": "How we formulate",
+        "image": "shopify://shop_images/glow-body-oil.png",
+        "image_mobile": "shopify://shop_images/olives-2.png",
+        "heading": "How We Formulate",
         "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam et elit bibendum dui dignissim cursus rutrum congue lorem. Nam rutrum lacinia urna, et rhoncus. Proin mattis dolor vulputate fermentum sollicitudin. Morbi quam ligula, auctor eu eleifend non, laoreet."
       }
     },
@@ -179,12 +188,12 @@
       "type": "ingredient-explorer",
       "settings": {
         "heading": "Explore all ingredients",
-        "functions": "Brightens, Nourishes, Smoothes, Protects, Barrier support",
         "products": [
           "face-oil",
           "hair-oil",
           "body-oil"
-        ]
+        ],
+        "functions": "Brightens, Nourishes, Smoothes, Protects, Barrier support"
       }
     }
   },
