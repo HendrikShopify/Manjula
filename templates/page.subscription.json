@@ -97,7 +97,7 @@
     "faq": {
       "type": "faq-offset",
       "settings": {
-        "heading": "Questions\nand answers",
+        "heading": "Frequently Asked Questions",
         "questions": [
           "subscription-how",
           "subscription-often",
