@@ -8,8 +8,21 @@
  * ------------------------------------------------------------
  */
 {
-    "current": {
-        "delivery_returns_link": "/policies/shipping-policy",
-        "favicon": "shopify://shop_images/Ayurvedic_Oils_Manjula_Logo_Square.jpg"
-    }
+  "current": {
+    "favicon": "shopify://shop_images/Ayurvedic_Oils_Manjula_Logo_Square.jpg",
+    "delivery_returns": "<p>Made in Canada, sustainably packaged and travel-sized. Free standard shipping on orders over the threshold.&nbsp;<br/><br/>Due to the nature of our products, we do not accept returns or exchanges. If you are unhappy with your order for any reason, please contact&nbsp;<a href=\"mailto:care@manjulaessentials.com\"><span style=\"text-decoration:underline\">care@manjulaessentials.com</span></a>.</p>",
+    "delivery_returns_link": "/policies/shipping-policy",
+    "delivery_days_1": 5,
+    "delivery_days_2": 7,
+    "sections": {
+      "cookie-consent": {
+        "type": "cookie-consent",
+        "settings": {
+          "policy_link": "",
+          "preview_preferences": false
+        }
+      }
+    },
+    "content_for_index": []
+  }
 }
