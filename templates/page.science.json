@@ -109,36 +109,43 @@
         "point_1": {
           "type": "point",
           "settings": {
-            "title": "Gentle first",
-            "text": "MANJULA was born from a lifetime of living with sensitive skin."
+            "title": "Sensitive Skin First",
+            "text": "MANJULA was born from a lifetime of living with sensitive skin. We exclude essential oils and synthetic ingredients to avoid unnecessary irritation."
           }
         },
         "point_2": {
           "type": "point",
           "settings": {
-            "title": "Light to the touch",
-            "text": "Absorbs quickly and leaves skin and hair soft, never greasy."
+            "title": "Function From the First Ingredient",
+            "text": "Our base oils are selected for their individual benefits, fatty acid composition and contribution to the overall formula."
           }
         },
         "point_3": {
           "type": "point",
           "settings": {
-            "title": "One oil, many rituals.",
-            "text": "Our Hair Oil conditions your scalp, tames frizz and protects ends."
+            "title": "Traditional Ayurvedic Knowledge",
+            "text": "Our co-founder is an Ayurvedic practitioner with a background in pharmacology. This blend of western and eastern science informs everything we make."
           }
         },
         "point_4": {
           "type": "point",
           "settings": {
-            "title": "Made for everyone",
-            "text": "Genderless by design, because good care has no gender."
+            "title": "Sensory Performance",
+            "text": "We consider absorption, viscosity, spreadability and finish. How a formulation feels is just as important to everyday use as what it does."
           }
         },
         "point_5": {
           "type": "point",
           "settings": {
-            "title": "Only what matters",
-            "text": "Fewer, purposeful ingredients. Nothing added for show."
+            "title": "Multifunctional by Design",
+            "text": "Each formulation is developed with multiple applications in mind, addressing different needs without introducing unnecessary products."
+          }
+        },
+        "point_hRzewm": {
+          "type": "point",
+          "settings": {
+            "title": "Adaptable to Your Nature",
+            "text": "Rooted in the Ayurvedic principle of Tridoshic care, our formulations are designed to accommodate different skin, scalp and hair needs."
           }
         }
       },
@@ -147,13 +154,14 @@
         "point_2",
         "point_3",
         "point_4",
-        "point_5"
+        "point_5",
+        "point_hRzewm"
       ],
       "settings": {
         "image": "shopify://shop_images/glow-body-oil.png",
         "image_mobile": "shopify://shop_images/olives-2.png",
         "heading": "How We Formulate",
-        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam et elit bibendum dui dignissim cursus rutrum congue lorem. Nam rutrum lacinia urna, et rhoncus. Proin mattis dolor vulputate fermentum sollicitudin. Morbi quam ligula, auctor eu eleifend non, laoreet."
+        "text": "Our formulations begin with understanding a specific problem or condition, and finding the elements that help bring them back into balance. We develop everything through the combined knowledge of our in-house Ayurvedic practitioner and our trusted cosmetic chemists. Each formula considers botanical functionality, composition, practical compatibility and sensory experience.\nEvery ingredient has a purpose, and each one complements the other."
       }
     },
     "approach": {
